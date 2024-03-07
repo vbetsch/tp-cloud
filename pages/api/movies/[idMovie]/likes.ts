@@ -13,28 +13,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			like = await db.collection('likes').findOne({ idTMDB: idMovie });
 
 			if (like) {
-				resMongo = await db
-					.collection('likes')
-					.updateOne({ idTMDB: idMovie }, { $inc: { likeCounter: 1 } });
+				resMongo = await db.collection('likes').updateOne({ idTMDB: idMovie }, { $inc: { likeCounter: 1 } });
 				data = {
 					action: 'likeCounter incremented',
 					idMovie: idMovie,
 					matchedCount: resMongo.matchedCount,
 					modifiedCount: resMongo.modifiedCount,
 				};
-				res.status(201).json({ status: 201, data: data });
+				res.status(201).json({ status: 201, data });
 			} else {
-				resMongo = await db
-					.collection('likes')
-					.insertOne({ idTMDB: idMovie, likeCounter: 0 });
+				resMongo = await db.collection('likes').insertOne({ idTMDB: idMovie, likeCounter: 0 });
 				data = {
 					action: 'likeCounter created',
 					idMovie: idMovie,
 					insertedId: resMongo.insertedId,
 				};
-				res.status(201).json({ status: 201, data: data });
+				res.status(201).json({ status: 201, data });
 			}
-
 			break;
 
 		case 'GET':
@@ -44,5 +39,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		default:
 			res.status(405).json({ status: 405, error: 'Method Not Allowed' });
+			break;
 	}
 }

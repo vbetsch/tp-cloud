@@ -23,6 +23,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				.then(r => r.json())
 				.catch(err => console.error('error:' + err));
 
+			if (!movie) {
+				res.status(404).json({ status: 404, error: 'Not Found' });
+			}
+
 			likes = await db.collection('likes').findOne({ idTMDB: idMovie });
 
 			if (likes && likes.likeCounter) {
@@ -31,14 +35,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				movie.likes = 0;
 			}
 
-			if (movie) {
-				res.json({ status: 200, data: { movie: movie } });
-			} else {
-				res.status(404).json({ status: 404, error: 'Not Found' });
-			}
+			res.json({ status: 200, data: { movie } });
 			break;
-
 		default:
 			res.status(405).json({ status: 405, error: 'Method Not Allowed' });
+			break;
 	}
 }
