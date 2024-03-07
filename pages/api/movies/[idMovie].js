@@ -1,24 +1,44 @@
+import fetch from "node-fetch";
+import clientPromise from "/lib/mongodb";
+import {ConfigService} from "/services/config.service";
+
 export default async function handler(req, res) {
     const idMovie = parseInt(req.query.idMovie, 10);
-    const movies = [
-        {_id: 1, title: "The Batman"},
-        {_id: 2, title: "The Joker"},
-    ];
+    const url = ConfigService.themoviedb.urls.movie + '/' + idMovie;
+    // 'https://api.themoviedb.org/3/movie'
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            Authorization: 'Bearer ' + ConfigService.themoviedb.keys.API_TOKEN
+        }
+    };
+
+    const client = await clientPromise;
+    const db = client.db("cluster");
+
     switch (req.method) {
-        case "POST":
-            const {title} = req.body;
-            const newMovie = {_id: movies.length + 1, title: title};
-            movies.push(newMovie);
-            res.status(201).json({status: 201, data: {movie: newMovie}});
-            break;
+
         case "GET":
-            const movie = movies.find(({_id}) => _id === idMovie);
+            const movie = await fetch(url, options)
+                .then(r => r.json())
+                .catch(err => console.error('error:' + err));
+
+            const likes = await db.collection("likes").findOne({idTMDB: idMovie});
+
+            if (likes.likeCounter) {
+                movie.likes = likes.likeCounter;
+            } else {
+                movie.likes = 0;
+            }
+
             if (movie) {
                 res.json({status: 200, data: {movie: movie}});
             } else {
                 res.status(404).json({status: 404, error: "Not Found"});
             }
             break;
+
         default:
             res.status(405).json({status: 405, error: "Method Not Allowed"});
     }
