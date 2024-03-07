@@ -7,8 +7,8 @@ const Swagger = () => {
     return (
         <div>
             <Head>
-                <title>BrowserStack Demo API</title>
-                <meta name="description" content="BrowserStack Demo API Swagger"/>
+                <title>TP Cloud API</title>
+                <meta name="description" content="TP Cloud API Swagger"/>
             </Head>
             <SwaggerUI url="/api/doc"/>
         </div>
