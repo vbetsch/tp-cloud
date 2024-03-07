@@ -1,4 +1,4 @@
-import {NextApiRequest, NextApiResponse} from "next";
+import { NextApiRequest, NextApiResponse } from 'next';
 
 /**
  * @swagger
@@ -10,9 +10,9 @@ import {NextApiRequest, NextApiResponse} from "next";
  *         description: Hello Movies
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const movies = [
-        {_id: 1, title: "The Batman"},
-        {_id: 2, title: "The Joker"},
-    ];
-    res.json({status: 200, data: movies});
+	const movies = [
+		{ _id: 1, title: 'The Batman' },
+		{ _id: 2, title: 'The Joker' },
+	];
+	res.json({ status: 200, data: movies });
 }
