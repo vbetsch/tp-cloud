@@ -10,7 +10,7 @@ export default async function handler(req, res) {
         method: 'GET',
         headers: {
             accept: 'application/json',
-            Authorization: 'Bearer ' + ConfigService.themoviedb.keys.API_TOKEN
+            Authorization: 'Bearer ' + process.env.API_TOKEN
         }
     };
 
