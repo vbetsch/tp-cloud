@@ -1,8 +1,9 @@
-import clientPromise from "/lib/mongodb";
+import {NextApiRequest, NextApiResponse} from "next";
+import clientPromise from "../../../../lib/mongodb";
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
-    const idMovie = parseInt(req.query.idMovie, 10);
+    const idMovie = parseInt(req.query.idMovie as string, 10);
 
     const client = await clientPromise;
     const db = client.db("cluster");

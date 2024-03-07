@@ -1,11 +1,10 @@
-import fetch from "node-fetch";
-import clientPromise from "/lib/mongodb";
-import {ConfigService} from "/services/config.service";
+import {ConfigService} from "../../../services/config.service";
+import clientPromise from "../../../lib/mongodb";
+import {NextApiRequest, NextApiResponse} from "next";
 
-export default async function handler(req, res) {
-    const idMovie = parseInt(req.query.idMovie, 10);
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    const idMovie = parseInt(req.query.idMovie as string, 10);
     const url = ConfigService.themoviedb.urls.movie + '/' + idMovie;
-    // 'https://api.themoviedb.org/3/movie'
     const options = {
         method: 'GET',
         headers: {
@@ -18,7 +17,6 @@ export default async function handler(req, res) {
     const db = client.db("cluster");
 
     switch (req.method) {
-
         case "GET":
             const movie = await fetch(url, options)
                 .then(r => r.json())
@@ -26,7 +24,7 @@ export default async function handler(req, res) {
 
             const likes = await db.collection("likes").findOne({idTMDB: idMovie});
 
-            if (likes.likeCounter) {
+            if (likes && likes.likeCounter) {
                 movie.likes = likes.likeCounter;
             } else {
                 movie.likes = 0;
