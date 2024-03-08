@@ -3,7 +3,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "eslint": "eslint .",
+    "prettier": "prettier --write ."
   },
   "dependencies": {
     "btoa": "^1.2.1",
