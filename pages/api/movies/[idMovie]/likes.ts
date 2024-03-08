@@ -4,6 +4,38 @@ import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../q
 import { LikeType } from '../../../../types/firebase/LikeType';
 import { InsertOneResult, UpdateResult } from 'mongodb';
 
+/**
+ * @swagger
+ * /api/movies/{idMovie}/likes:
+ *   get:
+ *     description: Returns likes of movie
+ *     parameters:
+ *       - in: path
+ *         name: idMovie
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID movie
+ *     responses:
+ *       200:
+ *         description: Success Response
+ *       500:
+ *         description: Unable to get likes
+ *   patch:
+ *     description: Create or increment likes of movie
+ *     parameters:
+ *       - in: path
+ *         name: idMovie
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID movie
+ *     responses:
+ *       201:
+ *         description: Success Response
+ *       500:
+ *         description: Internal Server Error
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	const idMovie: number = parseInt(req.query.idMovie as string, 10);
 

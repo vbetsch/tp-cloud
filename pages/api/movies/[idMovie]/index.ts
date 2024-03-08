@@ -9,6 +9,26 @@ interface MovieOutputType extends MovieDetailsType {
 	likes?: number;
 }
 
+/**
+ * @swagger
+ * /api/movies/{idMovie}:
+ *   get:
+ *     description: Returns movie by given id
+ *     parameters:
+ *       - in: path
+ *         name: idMovie
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID movie
+ *     responses:
+ *       200:
+ *         description: Success Response
+ *       404:
+ *         description: Movie not found
+ *       500:
+ *         description: Unable to find a movie by id
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	const idMovie: number = parseInt(req.query.idMovie as string, 10);
 

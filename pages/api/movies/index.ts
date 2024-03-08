@@ -9,10 +9,10 @@ interface MovieTestType {
  * @swagger
  * /api/movies:
  *   get:
- *     description: Returns movies
+ *     description: Returns movies for example
  *     responses:
  *       200:
- *         description: Hello Movies
+ *         description: Success Response
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	const movies: MovieTestType[] = [

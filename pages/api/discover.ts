@@ -1,6 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getMoviesDiscover } from '../../queries/TheMovieDbQueries';
 
+/**
+ * @swagger
+ * /api/discover:
+ *   get:
+ *     description: Returns movies to discover
+ *     responses:
+ *       200:
+ *         description: Success Response
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	try {
 		return res.json({ status: 200, data: await getMoviesDiscover() });
