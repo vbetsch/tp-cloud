@@ -1,18 +1,10 @@
-import { ConfigService } from '../../../services/config.service';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethods } from '../../../types/HttpMethods';
 import { FirebaseCollections, getFirebaseDatabase } from '../../../firebase';
+import { getMovieById } from '../../../queries/TheMovieDbQueries';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const idMovie = parseInt(req.query.idMovie as string, 10);
-	const url = `${ConfigService.THEMOVIEDB.BASEURL}${ConfigService.THEMOVIEDB.URIS.MOVIE}/${idMovie}`;
-	const options = {
-		method: HttpMethods.GET,
-		headers: {
-			accept: 'application/json',
-			Authorization: `Bearer ${process.env.API_TOKEN}`,
-		},
-	};
 
 	const db = await getFirebaseDatabase();
 	if (!db) {
@@ -22,12 +14,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	let movie, likes;
 	switch (req.method) {
 		case HttpMethods.GET:
-			movie = await fetch(url, options)
-				.then(r => r.json())
-				.catch(err => console.error('error:' + err));
-
-			if (!movie) {
-				res.status(404).json({ status: 404, error: 'Not Found' });
+			try {
+				movie = await getMovieById(idMovie);
+				if (!movie) {
+					res.status(404).json({ status: 404, error: 'Not Found' });
+				}
+			} catch (e) {
+				res.status(500).json({ status: 500, error: 'Internal Server Error' });
 			}
 
 			likes = await db?.collection(FirebaseCollections.LIKES).findOne({ idTMDB: idMovie });
