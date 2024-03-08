@@ -17,19 +17,12 @@ interface ResponseDiscover {
 	total_results: number;
 }
 
-export const getMoviesDiscover = async (): Promise<MovieDiscoverType[] | undefined> => {
+export const getMoviesDiscover = async (): Promise<MovieDiscoverType[]> => {
 	const url: string = ConfigService.THEMOVIEDB.BASEURL + ConfigService.THEMOVIEDB.URIS.DISCOVER;
-	try {
-		const response: Response = await fetch(url, options);
-		const apiResponse: ResponseDiscover = await response.json();
-		return apiResponse.results;
-	} catch (e) {
-		if (e instanceof Error) {
-			console.error('Impossible to search for films to discover : ' + e.message);
-		} else {
-			console.error(e);
-		}
-	}
+	const response: Response = await fetch(url, options);
+	const apiResponse: ResponseDiscover = await response.json();
+	console.info('INFO: Get movies discover');
+	return apiResponse.results;
 };
 
 export const getMovieById = async (idMovie: number): Promise<MovieDetailsType | undefined> => {
