@@ -21,11 +21,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					const resMongo: UpdateResult | undefined = await updateOneLikeById(idMovie, {
 						$inc: { likeCounter: 1 },
 					});
+					if (!resMongo) {
+						res.status(500).json({ status: 500, error: 'Unable to update a like' });
+						return;
+					}
 					const data = {
 						action: 'likeCounter incremented',
 						idMovie: idMovie,
-						matchedCount: resMongo?.matchedCount,
-						modifiedCount: resMongo?.modifiedCount,
+						matchedCount: resMongo.matchedCount,
+						modifiedCount: resMongo.modifiedCount,
 					};
 					res.status(201).json({ status: 201, data });
 				} catch (e) {
@@ -37,10 +41,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 						idTMDB: idMovie,
 						likeCounter: 0,
 					});
+					if (!resMongo) {
+						res.status(500).json({ status: 500, error: 'Unable to insert a like' });
+						return;
+					}
 					const data = {
 						action: 'likeCounter created',
 						idMovie: idMovie,
-						insertedId: resMongo?.insertedId,
+						insertedId: resMongo.insertedId,
 					};
 					res.status(201).json({ status: 201, data });
 				} catch (e) {
