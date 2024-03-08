@@ -1,7 +1,7 @@
 import { ConfigService } from '../../../services/config.service';
-import clientPromise from '../../../lib/mongodb';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethods } from '../../../types/HttpMethods';
+import { FirebaseCollections, getFirebaseDatabase } from '../../../firebase';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const idMovie = parseInt(req.query.idMovie as string, 10);
@@ -14,8 +14,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		},
 	};
 
-	const client = await clientPromise;
-	const db = client.db('cluster');
+	const db = await getFirebaseDatabase();
+	if (!db) {
+		res.status(500).json({ status: 500, error: "Can't connect to database" });
+	}
 
 	let movie, likes;
 	switch (req.method) {
@@ -28,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				res.status(404).json({ status: 404, error: 'Not Found' });
 			}
 
-			likes = await db.collection('likes').findOne({ idTMDB: idMovie });
+			likes = await db?.collection(FirebaseCollections.LIKES).findOne({ idTMDB: idMovie });
 
 			if (likes && likes.likeCounter) {
 				movie.likes = likes.likeCounter;
