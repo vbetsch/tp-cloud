@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from '../../../../lib/mongodb';
+import { HttpMethods } from '../../../../types/HttpMethods';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const idMovie = parseInt(req.query.idMovie as string, 10);
@@ -9,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	let like, likes, resMongo, data;
 	switch (req.method) {
-		case 'PATCH':
+		case HttpMethods.PATCH:
 			like = await db.collection('likes').findOne({ idTMDB: idMovie });
 
 			if (like) {
@@ -32,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 			break;
 
-		case 'GET':
+		case HttpMethods.GET:
 			likes = await db.collection('likes').findOne({ idTMDB: idMovie });
 			res.json({ status: 200, data: { likes: likes } });
 			break;

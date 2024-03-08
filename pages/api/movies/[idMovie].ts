@@ -1,12 +1,13 @@
 import { ConfigService } from '../../../services/config.service';
 import clientPromise from '../../../lib/mongodb';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { HttpMethods } from '../../../types/HttpMethods';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const idMovie = parseInt(req.query.idMovie as string, 10);
 	const url = `${ConfigService.THEMOVIEDB.BASEURL}${ConfigService.THEMOVIEDB.URIS.MOVIE}/${idMovie}`;
 	const options = {
-		method: 'GET',
+		method: HttpMethods.GET,
 		headers: {
 			accept: 'application/json',
 			Authorization: `Bearer ${process.env.API_TOKEN}`,
@@ -18,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	let movie, likes;
 	switch (req.method) {
-		case 'GET':
+		case HttpMethods.GET:
 			movie = await fetch(url, options)
 				.then(r => r.json())
 				.catch(err => console.error('error:' + err));
