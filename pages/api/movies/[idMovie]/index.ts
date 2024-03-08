@@ -12,37 +12,32 @@ interface MovieOutputType extends MovieDetailsType {
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	const idMovie: number = parseInt(req.query.idMovie as string, 10);
 
-	let movie: MovieOutputType | undefined;
+	let movie: MovieOutputType;
 	let like: LikeType | undefined | null;
+	let errorMessage: string;
 	switch (req.method) {
 		case HttpMethods.GET:
 			try {
 				movie = await getMovieById(idMovie);
-				if (!movie) {
-					res.status(404).json({ status: 404, error: 'Not Found' });
-					return;
-				}
 			} catch (e) {
-				res.status(500).json({ status: 500, error: e });
-				return;
+				errorMessage = 'Movie not found';
+				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
+				return res.status(404).json({ status: 404, error: errorMessage });
 			}
 
 			try {
 				like = await findOneLikeById(idMovie);
 			} catch (e) {
-				res.status(500).json({ status: 500, error: e });
+				errorMessage = 'Unable to find a movie by id';
+				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
+				return res.status(500).json({ status: 500, error: errorMessage });
 			}
 
-			if (like && like.likeCounter) {
-				movie.likes = like.likeCounter;
-			} else {
-				movie.likes = 0;
-			}
-
-			res.json({ status: 200, data: { movie } });
-			break;
+			movie.likes = like && like.likeCounter ? like.likeCounter : 0;
+			return res.json({ status: 200, data: { movie } });
 		default:
-			res.status(405).json({ status: 405, error: 'Method Not Allowed' });
-			break;
+			errorMessage = 'Method Not Allowed';
+			console.error(`ERROR: ${errorMessage}`);
+			return res.status(405).json({ status: 405, error: errorMessage });
 	}
 }

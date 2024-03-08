@@ -7,67 +7,67 @@ import { InsertOneResult, UpdateResult } from 'mongodb';
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	const idMovie: number = parseInt(req.query.idMovie as string, 10);
 
-	let like: LikeType | undefined | null;
+	let like: LikeType | null;
+	let errorMessage: string;
 	switch (req.method) {
 		case HttpMethods.PATCH:
 			try {
 				like = await findOneLikeById(idMovie);
 			} catch (e) {
-				res.status(500).json({ status: 500, error: e });
+				errorMessage = 'Unable to search movie by id';
+				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
+				return res.status(500).json({ status: 500, error: errorMessage });
 			}
 
 			if (like) {
 				try {
-					const resMongo: UpdateResult | undefined = await updateOneLikeById(idMovie, {
+					const resMongo: UpdateResult = await updateOneLikeById(idMovie, {
 						$inc: { likeCounter: 1 },
 					});
-					if (!resMongo) {
-						res.status(500).json({ status: 500, error: 'Unable to update a like' });
-						return;
-					}
 					const data = {
 						action: 'likeCounter incremented',
 						idMovie: idMovie,
 						matchedCount: resMongo.matchedCount,
 						modifiedCount: resMongo.modifiedCount,
 					};
-					res.status(201).json({ status: 201, data });
+					return res.status(201).json({ status: 201, data });
 				} catch (e) {
-					res.status(500).json({ status: 500, error: e });
+					errorMessage = 'Unable to update like';
+					console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
+					return res.status(500).json({ status: 500, error: errorMessage });
 				}
 			} else {
 				try {
-					const resMongo: InsertOneResult<Document> | undefined = await insertOneLike({
+					const resMongo: InsertOneResult<Document> = await insertOneLike({
 						idTMDB: idMovie,
 						likeCounter: 0,
 					});
-					if (!resMongo) {
-						res.status(500).json({ status: 500, error: 'Unable to insert a like' });
-						return;
-					}
 					const data = {
 						action: 'likeCounter created',
 						idMovie: idMovie,
 						insertedId: resMongo.insertedId,
 					};
-					res.status(201).json({ status: 201, data });
+					return res.status(201).json({ status: 201, data });
 				} catch (e) {
-					res.status(500).json({ status: 500, error: e });
+					errorMessage = 'Unable to insert like';
+					console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
+					return res.status(500).json({ status: 500, error: errorMessage });
 				}
 			}
-			break;
 
 		case HttpMethods.GET:
 			try {
 				like = await findOneLikeById(idMovie);
-				res.json({ status: 200, data: { like } });
+				return res.json({ status: 200, data: { like } });
 			} catch (e) {
-				res.status(500).json({ status: 500, error: e });
+				errorMessage = 'Unable to get likes';
+				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
+				return res.status(500).json({ status: 500, error: errorMessage });
 			}
-			break;
 
 		default:
-			res.status(405).json({ status: 405, error: 'Method Not Allowed' });
-			break;
+			errorMessage = 'Method Not Allowed';
+			console.error(`ERROR: ${errorMessage}`);
+			return res.status(405).json({ status: 405, error: errorMessage });
 	}
 }
