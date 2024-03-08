@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { ConfigService } from '../../services/config.service';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	const url = ConfigService.themoviedb.baseUrl + ConfigService.themoviedb.uris.discover;
+	const url = ConfigService.THEMOVIEDB.BASEURL + ConfigService.THEMOVIEDB.URIS.DISCOVER;
 	const options = {
 		method: 'GET',
 		headers: {

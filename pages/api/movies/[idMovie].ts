@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const idMovie = parseInt(req.query.idMovie as string, 10);
-	const url = `${ConfigService.themoviedb.baseUrl}${ConfigService.themoviedb.uris.movie}/${idMovie}`;
+	const url = `${ConfigService.THEMOVIEDB.BASEURL}${ConfigService.THEMOVIEDB.URIS.MOVIE}/${idMovie}`;
 	const options = {
 		method: 'GET',
 		headers: {

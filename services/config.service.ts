@@ -1,9 +1,9 @@
 export const ConfigService = {
-	themoviedb: {
-		baseUrl: 'https://api.themoviedb.org/3',
-		uris: {
-			discover: '/discover/movie',
-			movie: '/movie',
+	THEMOVIEDB: {
+		BASEURL: 'https://api.themoviedb.org/3',
+		URIS: {
+			DISCOVER: '/discover/movie',
+			MOVIE: '/movie',
 		},
 	},
 };
