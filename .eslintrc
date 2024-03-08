@@ -17,7 +17,8 @@
     "plugins": [
         "@typescript-eslint",
         "react",
-        "prettier"
+        "prettier",
+        "jsdoc"
     ],
     "rules": {
         "prettier/prettier": "error",
@@ -27,5 +28,29 @@
         "react": {
             "version": "detect"
         }
-    }
+    },
+    "overrides": [
+        {
+            "files": [
+                "pages/api/**/*.ts"
+            ],
+            "plugins": [
+                "jsdoc"
+            ],
+            "rules": {
+                "jsdoc/no-missing-syntax": [
+                    "warn",
+                    {
+                        "contexts": [
+                            {
+                                "comment": "JsdocBlock:has(JsdocTag[tag=swagger])",
+                                "context": "any",
+                                "message": "@swagger documentation is required on each API. Check this out for syntax info: https://github.com/jellydn/next-swagger-doc"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
 }
