@@ -4,12 +4,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const idMovie = parseInt(req.query.idMovie as string, 10);
-	const url = ConfigService.themoviedb.urls.movie + '/' + idMovie;
+	const url = `${ConfigService.themoviedb.baseUrl}${ConfigService.themoviedb.uris.movie}/${idMovie}`;
 	const options = {
 		method: 'GET',
 		headers: {
 			accept: 'application/json',
-			Authorization: 'Bearer ' + process.env.API_TOKEN,
+			Authorization: `Bearer ${process.env.API_TOKEN}`,
 		},
 	};
 
