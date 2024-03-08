@@ -1,17 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethods } from '../../../types/HttpMethods';
-import { FirebaseCollections, getFirebaseDatabase } from '../../../firebase';
 import { getMovieById } from '../../../queries/TheMovieDbQueries';
+import { findOneLikeById } from '../../../queries/FirebaseQueries';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 	const idMovie = parseInt(req.query.idMovie as string, 10);
 
-	const db = await getFirebaseDatabase();
-	if (!db) {
-		res.status(500).json({ status: 500, error: "Can't connect to database" });
-	}
-
-	let movie, likes;
+	let movie, like;
 	switch (req.method) {
 		case HttpMethods.GET:
 			try {
@@ -23,10 +18,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				res.status(500).json({ status: 500, error: 'Internal Server Error' });
 			}
 
-			likes = await db?.collection(FirebaseCollections.LIKES).findOne({ idTMDB: idMovie });
+			try {
+				like = await findOneLikeById(idMovie);
+			} catch (e) {
+				console.error(e);
+			}
 
-			if (likes && likes.likeCounter) {
-				movie.likes = likes.likeCounter;
+			if (like && like.likeCounter) {
+				movie.likes = like.likeCounter;
 			} else {
 				movie.likes = 0;
 			}
