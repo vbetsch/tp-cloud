@@ -20,22 +20,28 @@ interface ResponseDiscover {
 export const getMoviesDiscover = async (): Promise<MovieDiscoverType[] | undefined> => {
 	const url: string = ConfigService.THEMOVIEDB.BASEURL + ConfigService.THEMOVIEDB.URIS.DISCOVER;
 	try {
-		const apiResponse: ResponseDiscover = await fetch(url, options)
-			.then(r => r.json())
-			.catch(err => console.error('error:' + err));
+		const response: Response = await fetch(url, options);
+		const apiResponse: ResponseDiscover = await response.json();
 		return apiResponse.results;
 	} catch (e) {
-		console.error(e);
+		if (e instanceof Error) {
+			console.error('Impossible to search for films to discover : ' + e.message);
+		} else {
+			console.error(e);
+		}
 	}
 };
 
 export const getMovieById = async (idMovie: number): Promise<MovieDetailsType | undefined> => {
 	const url: string = `${ConfigService.THEMOVIEDB.BASEURL}${ConfigService.THEMOVIEDB.URIS.MOVIE}/${idMovie}`;
 	try {
-		return await fetch(url, options)
-			.then(r => r.json())
-			.catch(err => console.error('error:' + err));
+		const response: Response = await fetch(url, options);
+		return (await response.json()) as MovieDetailsType;
 	} catch (e) {
-		console.error(e);
+		if (e instanceof Error) {
+			console.error('Unable to search for a film : ' + e.message);
+		} else {
+			console.error(e);
+		}
 	}
 };

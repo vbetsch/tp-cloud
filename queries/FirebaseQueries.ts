@@ -10,12 +10,16 @@ export const findOneLikeById = async (idTMDB: number): Promise<LikeType | null |
 	try {
 		const db: Db | undefined = await getFirebaseDatabase();
 		if (!db) {
-			console.error("Can't connect to Firebase database");
+			console.error('Firebase database not found');
 			return;
 		}
 		return await db.collection(FirebaseCollections.LIKES).findOne<LikeType>({ idTMDB: idTMDB });
 	} catch (e) {
-		console.error(e);
+		if (e instanceof Error) {
+			console.error('Unable to search for a like : ' + e.message);
+		} else {
+			console.error(e);
+		}
 	}
 };
 
@@ -26,12 +30,16 @@ export const updateOneLikeById = async (
 	try {
 		const db: Db | undefined = await getFirebaseDatabase();
 		if (!db) {
-			console.error("Can't connect to Firebase database");
+			console.error('Firebase database not found');
 			return;
 		}
 		return await db.collection(FirebaseCollections.LIKES).updateOne({ idTMDB: idTMDB }, update);
 	} catch (e) {
-		console.error(e);
+		if (e instanceof Error) {
+			console.error('Unable to update a like : ' + e.message);
+		} else {
+			console.error(e);
+		}
 	}
 };
 
@@ -39,11 +47,15 @@ export const insertOneLike = async (doc: OptionalId<Document>): Promise<undefine
 	try {
 		const db: Db | undefined = await getFirebaseDatabase();
 		if (!db) {
-			console.error("Can't connect to Firebase database");
+			console.error('Firebase database not found');
 			return;
 		}
 		return await db.collection(FirebaseCollections.LIKES).insertOne(doc);
 	} catch (e) {
-		console.error(e);
+		if (e instanceof Error) {
+			console.error('Unable to add a like : ' + e.message);
+		} else {
+			console.error(e);
+		}
 	}
 };

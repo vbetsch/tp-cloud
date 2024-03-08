@@ -7,6 +7,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		const results: MovieDiscoverType[] | undefined = await getMoviesDiscover();
 		res.json({ status: 200, data: results });
 	} catch (e) {
-		res.status(500).json({ status: 500, error: 'Internal Server Error' });
+		res.status(500).json({ status: 500, error: e });
 	}
 }

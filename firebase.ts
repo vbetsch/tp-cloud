@@ -10,6 +10,10 @@ export const getFirebaseDatabase = async (): Promise<Db | undefined> => {
 			return client.db(FIREBASE_DATABASE_NAME);
 		}
 	} catch (e) {
-		console.error(e);
+		if (e instanceof Error) {
+			console.error("Can't connect to Firebase database : " + e.message);
+		} else {
+			console.error(e);
+		}
 	}
 };

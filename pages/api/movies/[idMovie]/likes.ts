@@ -1,17 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethods } from '../../../../types/HttpMethods';
-import { getFirebaseDatabase } from '../../../../firebase';
 import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../queries/FirebaseQueries';
 import { LikeType } from '../../../../types/firebase/LikeType';
-import { Db, InsertOneResult, UpdateResult } from 'mongodb';
+import { InsertOneResult, UpdateResult } from 'mongodb';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	const idMovie: number = parseInt(req.query.idMovie as string, 10);
-
-	const db: Db | undefined = await getFirebaseDatabase();
-	if (!db) {
-		res.status(500).json({ status: 500, error: "Can't connect to database" });
-	}
 
 	let like: LikeType | undefined | null;
 	switch (req.method) {
@@ -19,8 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			try {
 				like = await findOneLikeById(idMovie);
 			} catch (e) {
-				console.error(e);
-				return;
+				res.status(500).json({ status: 500, error: e });
 			}
 
 			if (like) {
@@ -36,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					};
 					res.status(201).json({ status: 201, data });
 				} catch (e) {
-					console.error(e);
+					res.status(500).json({ status: 500, error: e });
 				}
 			} else {
 				try {
@@ -51,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					};
 					res.status(201).json({ status: 201, data });
 				} catch (e) {
-					console.error(e);
+					res.status(500).json({ status: 500, error: e });
 				}
 			}
 			break;
@@ -61,7 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				like = await findOneLikeById(idMovie);
 				res.json({ status: 200, data: { like } });
 			} catch (e) {
-				console.error(e);
+				res.status(500).json({ status: 500, error: e });
 			}
 			break;
 

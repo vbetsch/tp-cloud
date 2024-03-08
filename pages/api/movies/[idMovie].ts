@@ -23,14 +23,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					return;
 				}
 			} catch (e) {
-				res.status(500).json({ status: 500, error: 'Internal Server Error' });
+				res.status(500).json({ status: 500, error: e });
 				return;
 			}
 
 			try {
 				like = await findOneLikeById(idMovie);
 			} catch (e) {
-				console.error(e);
+				res.status(500).json({ status: 500, error: e });
 			}
 
 			if (like && like.likeCounter) {
