@@ -2,28 +2,33 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethods } from '../../../../types/HttpMethods';
 import { getFirebaseDatabase } from '../../../../firebase';
 import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../queries/FirebaseQueries';
+import { LikeType } from '../../../../types/firebase/LikeType';
+import { Db, InsertOneResult, UpdateResult } from 'mongodb';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-	const idMovie = parseInt(req.query.idMovie as string, 10);
+export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
+	const idMovie: number = parseInt(req.query.idMovie as string, 10);
 
-	const db = await getFirebaseDatabase();
+	const db: Db | undefined = await getFirebaseDatabase();
 	if (!db) {
 		res.status(500).json({ status: 500, error: "Can't connect to database" });
 	}
 
-	let like, resMongo, data;
+	let like: LikeType | undefined | null;
 	switch (req.method) {
 		case HttpMethods.PATCH:
 			try {
 				like = await findOneLikeById(idMovie);
 			} catch (e) {
 				console.error(e);
+				return;
 			}
 
 			if (like) {
 				try {
-					resMongo = await updateOneLikeById(idMovie, { $inc: { likeCounter: 1 } });
-					data = {
+					const resMongo: UpdateResult | undefined = await updateOneLikeById(idMovie, {
+						$inc: { likeCounter: 1 },
+					});
+					const data = {
 						action: 'likeCounter incremented',
 						idMovie: idMovie,
 						matchedCount: resMongo?.matchedCount,
@@ -35,8 +40,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				}
 			} else {
 				try {
-					resMongo = await insertOneLike({ idTMDB: idMovie, likeCounter: 0 });
-					data = {
+					const resMongo: InsertOneResult<Document> | undefined = await insertOneLike({
+						idTMDB: idMovie,
+						likeCounter: 0,
+					});
+					const data = {
 						action: 'likeCounter created',
 						idMovie: idMovie,
 						insertedId: resMongo?.insertedId,

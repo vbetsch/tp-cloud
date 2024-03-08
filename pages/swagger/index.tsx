@@ -3,7 +3,7 @@ import Head from 'next/head';
 import SwaggerUI from 'swagger-ui-react';
 import 'swagger-ui-react/swagger-ui.css';
 
-const Swagger = () => {
+const Swagger = (): JSX.Element => {
 	return (
 		<div>
 			<Head>

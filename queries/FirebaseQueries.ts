@@ -1,26 +1,30 @@
 import { getFirebaseDatabase } from '../firebase';
-import { UpdateFilter } from 'mongodb';
+import { Db, Document, InsertOneResult, OptionalId, UpdateFilter, UpdateResult } from 'mongodb';
+import { LikeType } from '../types/firebase/LikeType';
 
 enum FirebaseCollections {
 	LIKES = 'likes',
 }
 
-export const findOneLikeById = async (idTMDB: number) => {
+export const findOneLikeById = async (idTMDB: number): Promise<LikeType | null | undefined> => {
 	try {
-		const db = await getFirebaseDatabase();
+		const db: Db | undefined = await getFirebaseDatabase();
 		if (!db) {
 			console.error("Can't connect to Firebase database");
 			return;
 		}
-		return await db.collection(FirebaseCollections.LIKES).findOne({ idTMDB: idTMDB });
+		return await db.collection(FirebaseCollections.LIKES).findOne<LikeType>({ idTMDB: idTMDB });
 	} catch (e) {
 		console.error(e);
 	}
 };
 
-export const updateOneLikeById = async (idTMDB: number, update: Partial<Document> | UpdateFilter<Document>) => {
+export const updateOneLikeById = async (
+	idTMDB: number,
+	update: Partial<Document> | UpdateFilter<Document>,
+): Promise<undefined | UpdateResult> => {
 	try {
-		const db = await getFirebaseDatabase();
+		const db: Db | undefined = await getFirebaseDatabase();
 		if (!db) {
 			console.error("Can't connect to Firebase database");
 			return;
@@ -31,9 +35,9 @@ export const updateOneLikeById = async (idTMDB: number, update: Partial<Document
 	}
 };
 
-export const insertOneLike = async (doc: any) => {
+export const insertOneLike = async (doc: OptionalId<Document>): Promise<undefined | InsertOneResult> => {
 	try {
-		const db = await getFirebaseDatabase();
+		const db: Db | undefined = await getFirebaseDatabase();
 		if (!db) {
 			console.error("Can't connect to Firebase database");
 			return;
