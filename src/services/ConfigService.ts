@@ -7,6 +7,7 @@ export const ConfigService = {
 				BASE_URI: '/movie',
 				SUB_URIS: {
 					VIDEOS: '/videos',
+					RECOMMENDATIONS: '/recommendations',
 				},
 			},
 		},

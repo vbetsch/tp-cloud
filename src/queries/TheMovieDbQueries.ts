@@ -20,21 +20,9 @@ const getDataFromUrl = async (url: string, infoText: string) => {
 	return result;
 };
 
-interface ResponseMoviesDiscover {
-	page: number;
-	results: MovieDiscoverType[];
-	total_pages: number;
-	total_results: number;
-}
-
-export const getMoviesDiscover = async (page: number): Promise<ResponseMoviesDiscover> => {
-	const url: string = `${ConfigService.THEMOVIEDB.BASEURL}${ConfigService.THEMOVIEDB.URIS.DISCOVER}?page=${page}`;
-	return await getDataFromUrl(url, `Get all movies (page ${page})`);
-};
-
 export const getMovieById = async (idMovie: number): Promise<MovieDetailsType> => {
 	const url: string = `${movieBaseUrl}/${idMovie}`;
-	return await getDataFromUrl(url, 'Get movie by ID');
+	return await getDataFromUrl(url, `Get movie ${idMovie}`);
 };
 
 export interface ResponseVideosOfMovie {
@@ -44,5 +32,22 @@ export interface ResponseVideosOfMovie {
 
 export const getVideosOfMovie = async (idMovie: number): Promise<ResponseVideosOfMovie> => {
 	const url: string = `${movieBaseUrl}/${idMovie}${ConfigService.THEMOVIEDB.URIS.MOVIE.SUB_URIS.VIDEOS}`;
-	return await getDataFromUrl(url, 'Get videos of movie by ID movie');
+	return await getDataFromUrl(url, `Get videos of movie ${idMovie}`);
+};
+
+export interface ResponseMovies {
+	page: number;
+	results: MovieDiscoverType[];
+	total_pages: number;
+	total_results: number;
+}
+
+export const getMoviesDiscover = async (page: number): Promise<ResponseMovies> => {
+	const url: string = `${ConfigService.THEMOVIEDB.BASEURL}${ConfigService.THEMOVIEDB.URIS.DISCOVER}?page=${page}`;
+	return await getDataFromUrl(url, `Get all movies (page ${page})`);
+};
+
+export const getRecommendations = async (idMovie: number): Promise<ResponseMovies> => {
+	const url: string = `${movieBaseUrl}/${idMovie}${ConfigService.THEMOVIEDB.URIS.MOVIE.SUB_URIS.RECOMMENDATIONS}`;
+	return await getDataFromUrl(url, `Get recommendations of ${idMovie}`);
 };

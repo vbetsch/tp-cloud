@@ -6,6 +6,12 @@ enum FirebaseCollections {
 	LIKES = 'likes',
 }
 
+export const getAllIdMovies = async (): Promise<number[]> => {
+	const db: Db = await getFirebaseDatabase();
+	console.info('INFO: Get all id movies');
+	return db.collection(FirebaseCollections.LIKES).distinct('idTMDB');
+};
+
 export const findOneLikeById = async (idTMDB: number): Promise<LikeType | null> => {
 	const db: Db = await getFirebaseDatabase();
 	const result: LikeType | null = await db
