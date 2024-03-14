@@ -70,7 +70,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			if (like) {
 				if (!action) {
 					errorMessage = "Parameter 'action' is required";
-					console.error(`ERROR: ${errorMessage}`);
+					console.error('ERROR: ' + errorMessage);
 					return res.status(400).json({ error: errorMessage });
 				}
 				try {
@@ -84,7 +84,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 							break;
 						default:
 							errorMessage = 'Action not allowed';
-							console.error(`ERROR: ${errorMessage}`);
+							console.error('ERROR: ' + errorMessage);
 							return res.status(405).json({ error: errorMessage });
 					}
 					const resMongo: UpdateResult = await updateOneLikeById(idMovie, {
@@ -134,7 +134,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 		default:
 			errorMessage = 'Method Not Allowed';
-			console.error(`ERROR: ${errorMessage}`);
+			console.error('ERROR: ' + errorMessage);
 			return res.status(405).json({ error: errorMessage });
 	}
 }

@@ -57,7 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			return res.status(200).json(movie);
 		default:
 			errorMessage = 'Method Not Allowed';
-			console.error(`ERROR: ${errorMessage}`);
+			console.error('ERROR: ' + errorMessage);
 			return res.status(405).json({ error: errorMessage });
 	}
 }
