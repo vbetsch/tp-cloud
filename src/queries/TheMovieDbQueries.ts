@@ -10,13 +10,6 @@ const options: RequestInit = {
 	},
 };
 
-interface ResponseDiscover {
-	page: number;
-	results: MovieDiscoverType[];
-	total_pages: number;
-	total_results: number;
-}
-
 const getDataFromUrl = async (url: string, infoText: string) => {
 	const response: Response = await fetch(url, options);
 	const result = await response.json();
@@ -24,10 +17,9 @@ const getDataFromUrl = async (url: string, infoText: string) => {
 	return result;
 };
 
-export const getMoviesDiscover = async (): Promise<MovieDiscoverType[]> => {
-	const url: string = ConfigService.THEMOVIEDB.BASEURL + ConfigService.THEMOVIEDB.URIS.DISCOVER;
-	const apiResponse: ResponseDiscover = await getDataFromUrl(url, 'Get movies to discover');
-	return apiResponse.results;
+export const getMoviesDiscover = async (page: number): Promise<MovieDiscoverType[]> => {
+	const url: string = `${ConfigService.THEMOVIEDB.BASEURL}${ConfigService.THEMOVIEDB.URIS.DISCOVER}?page=${page}`;
+	return await getDataFromUrl(url, `Get all movies (page ${page})`);
 };
 
 export const getMovieById = async (idMovie: number): Promise<MovieDetailsType> => {
