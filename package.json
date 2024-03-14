@@ -1,24 +1,36 @@
 {
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "btoa": "^1.2.1",
-    "formdata-node": "^6.0.3",
-    "mongodb": "^4.8.1",
-    "next": "latest",
-    "next-swagger-doc": "^0.1.9",
-    "node-fetch": "^2.7.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "swagger-ui-react": "^3.52.3"
-  },
-  "devDependencies": {
-    "@types/node": "18.7.5",
-    "@types/react": "16.9.17",
-    "typescript": "4.6.3"
-  }
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start"
+    },
+    "dependencies": {
+        "@emotion/cache": "latest",
+        "@emotion/react": "latest",
+        "@emotion/server": "latest",
+        "@emotion/styled": "latest",
+        "@mui/icons-material": "latest",
+        "@mui/material": "latest",
+        "@mui/material-nextjs": "latest",
+        "bcrypt": "^5.1.1",
+        "btoa": "^1.2.1",
+        "cookie": "^0.6.0",
+        "formdata-node": "^6.0.3",
+        "js-cookie": "^3.0.5",
+        "jsonwebtoken": "^9.0.2",
+        "mongodb": "^4.8.1",
+        "next": "latest",
+        "next-swagger-doc": "^0.1.9",
+        "node-fetch": "^2.7.0",
+        "prop-types": "latest",
+        "react": "latest",
+        "react-dom": "latest",
+        "swagger-ui-react": "^3.52.3"
+    },
+    "devDependencies": {
+        "@types/node": "latest",
+        "@types/react": "latest",
+        "typescript": "4.6.3"
+    }
 }
