@@ -1,4 +1,4 @@
-import { ConfigService } from '../services/config.service';
+import { ConfigService } from '../services/ConfigService';
 import { HttpMethods } from '../types/HttpMethods';
 import { MovieDetailsType, MovieDiscoverType } from '../types/themoviedb/MovieTypes';
 
