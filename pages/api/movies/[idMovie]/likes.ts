@@ -91,7 +91,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		case HttpMethods.GET:
 			try {
 				like = await findOneLikeById(idMovie);
-				return res.json({ data: { like } });
+				return res.json(like);
 			} catch (e) {
 				errorMessage = 'Unable to get likes';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
