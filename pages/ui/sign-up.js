@@ -12,7 +12,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useAuth } from '../../src/contexts/auth.context';
 import { useRouter } from 'next/router';
 
 function Copyright(props) {
@@ -30,32 +29,28 @@ function Copyright(props) {
 
 export default function SignIn() {
 	const defaultTheme = createTheme();
-	const { login } = useAuth();
 	const router = useRouter();
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const formData = new FormData(event.currentTarget);
 		try {
-			const response = await fetch('/api/auth/signin', {
+			const response = await fetch('/api/auth/signup', {
 				method: 'POST',
 				body: JSON.stringify({
 					email: formData.get('email'),
 					password: formData.get('password'),
-					remember: formData.get('remember'),
 				}),
 				headers: {
 					'Content-Type': 'application/json',
 				},
 			});
 			if (response.status === 200) {
-				const data = await response.json();
-				login(data.userData, data.token);
-				await router.push('/ui/profile');
+				await router.push('/ui/sign-in');
 			} else {
-				console.error('Failed to sign in : ', response);
+				console.error('Failed to sign up : ', response);
 			}
 		} catch (error) {
-			console.error('Error signing in:', error);
+			console.error('Error signing up:', error);
 		}
 	};
 
@@ -75,7 +70,7 @@ export default function SignIn() {
 						<LockOutlinedIcon />
 					</Avatar>
 					<Typography component="h1" variant="h5">
-						Sign in
+						Sign up
 					</Typography>
 					<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
 						<TextField
@@ -98,17 +93,13 @@ export default function SignIn() {
 							id="password"
 							autoComplete="current-password"
 						/>
-						<FormControlLabel
-							control={<Checkbox value="remember" color="primary" />}
-							label="Remember me"
-						/>
 						<Button
 							type="submit"
 							fullWidth
 							variant="contained"
 							sx={{ mt: 3, mb: 2 }}
 						>
-							Sign In
+							Sign Up
 						</Button>
 						<Grid container>
 							<Grid item xs>
@@ -117,8 +108,8 @@ export default function SignIn() {
 								</Link>
 							</Grid>
 							<Grid item>
-								<Link href="/ui/sign-up" variant="body2">
-									{'Don\'t have an account? Sign Up'}
+								<Link href="/ui/sign-in" variant="body2">
+									{'Already an account? Sign In'}
 								</Link>
 							</Grid>
 						</Grid>
