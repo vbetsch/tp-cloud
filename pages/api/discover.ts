@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getMoviesDiscover } from '../../queries/TheMovieDbQueries';
+import { getMoviesDiscover } from '../../src/queries/TheMovieDbQueries';
 
 /**
  * @swagger

@@ -1,6 +1,6 @@
-import { getFirebaseDatabase } from '../firebase';
 import { Db, Document, InsertOneResult, OptionalId, UpdateFilter, UpdateResult } from 'mongodb';
 import { LikeType } from '../types/firebase/LikeType';
+import { getFirebaseDatabase } from '../../firebase';
 
 enum FirebaseCollections {
 	LIKES = 'likes',

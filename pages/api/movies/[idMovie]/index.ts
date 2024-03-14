@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { MovieDetailsType } from '../../../../types/themoviedb/MovieTypes';
-import { LikeType } from '../../../../types/firebase/LikeType';
-import { HttpMethods } from '../../../../types/HttpMethods';
-import { getMovieById } from '../../../../queries/TheMovieDbQueries';
-import { findOneLikeById } from '../../../../queries/FirebaseQueries';
+import { MovieDetailsType } from '../../../../src/types/themoviedb/MovieTypes';
+import { LikeType } from '../../../../src/types/firebase/LikeType';
+import { HttpMethods } from '../../../../src/types/HttpMethods';
+import { getMovieById } from '../../../../src/queries/TheMovieDbQueries';
+import { findOneLikeById } from '../../../../src/queries/FirebaseQueries';
 
 interface MovieOutputType extends MovieDetailsType {
 	likes?: number;

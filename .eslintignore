@@ -1,2 +1,2 @@
 lib/
-types/mongodb.d.ts
+src/types/mongodb.d.ts

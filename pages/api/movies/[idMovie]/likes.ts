@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { HttpMethods } from '../../../../types/HttpMethods';
-import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../queries/FirebaseQueries';
-import { LikeType } from '../../../../types/firebase/LikeType';
 import { InsertOneResult, UpdateResult } from 'mongodb';
+import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../src/queries/FirebaseQueries';
+import { LikeType } from '../../../../src/types/firebase/LikeType';
+import { HttpMethods } from '../../../../src/types/HttpMethods';
 
 /**
  * @swagger
