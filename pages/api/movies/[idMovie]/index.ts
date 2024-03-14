@@ -54,7 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 
 			movie.likes = like && like.likeCounter ? like.likeCounter : 0;
-			return res.json(movie);
+			return res.status(200).json(movie);
 		default:
 			errorMessage = 'Method Not Allowed';
 			console.error(`ERROR: ${errorMessage}`);
