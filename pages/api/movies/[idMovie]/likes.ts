@@ -56,13 +56,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					const resMongo: UpdateResult = await updateOneLikeById(idMovie, {
 						$inc: { likeCounter: 1 },
 					});
-					const data = {
+					if (resMongo.modifiedCount > 1) {
+						console.warn(`WARNING: ${resMongo.modifiedCount} items have been modified`);
+					}
+					return res.status(201).json({
 						action: 'likeCounter incremented',
 						idMovie: idMovie,
-						matchedCount: resMongo.matchedCount,
-						modifiedCount: resMongo.modifiedCount,
-					};
-					return res.status(201).json({ data });
+						previousValue: like.likeCounter,
+						newValue: like.likeCounter + 1,
+					});
 				} catch (e) {
 					errorMessage = 'Unable to update like';
 					console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
@@ -74,12 +76,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 						idTMDB: idMovie,
 						likeCounter: 0,
 					});
-					const data = {
+					return res.status(201).json({
 						action: 'likeCounter created',
-						idMovie: idMovie,
 						insertedId: resMongo.insertedId,
-					};
-					return res.status(201).json({ data });
+						idMovie: idMovie,
+					});
 				} catch (e) {
 					errorMessage = 'Unable to insert like';
 					console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
