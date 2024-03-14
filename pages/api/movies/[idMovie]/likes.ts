@@ -48,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			} catch (e) {
 				errorMessage = 'Unable to search movie by id';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-				return res.status(500).json({ status: 500, error: errorMessage });
+				return res.status(500).json({ error: errorMessage });
 			}
 
 			if (like) {
@@ -62,11 +62,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 						matchedCount: resMongo.matchedCount,
 						modifiedCount: resMongo.modifiedCount,
 					};
-					return res.status(201).json({ status: 201, data });
+					return res.status(201).json({ data });
 				} catch (e) {
 					errorMessage = 'Unable to update like';
 					console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-					return res.status(500).json({ status: 500, error: errorMessage });
+					return res.status(500).json({ error: errorMessage });
 				}
 			} else {
 				try {
@@ -79,27 +79,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 						idMovie: idMovie,
 						insertedId: resMongo.insertedId,
 					};
-					return res.status(201).json({ status: 201, data });
+					return res.status(201).json({ data });
 				} catch (e) {
 					errorMessage = 'Unable to insert like';
 					console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-					return res.status(500).json({ status: 500, error: errorMessage });
+					return res.status(500).json({ error: errorMessage });
 				}
 			}
 
 		case HttpMethods.GET:
 			try {
 				like = await findOneLikeById(idMovie);
-				return res.json({ status: 200, data: { like } });
+				return res.json({ data: { like } });
 			} catch (e) {
 				errorMessage = 'Unable to get likes';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-				return res.status(500).json({ status: 500, error: errorMessage });
+				return res.status(500).json({ error: errorMessage });
 			}
 
 		default:
 			errorMessage = 'Method Not Allowed';
 			console.error(`ERROR: ${errorMessage}`);
-			return res.status(405).json({ status: 405, error: errorMessage });
+			return res.status(405).json({ error: errorMessage });
 	}
 }

@@ -25,6 +25,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	} catch (e) {
 		const errorMessage: string = 'Unable to search movies to discover';
 		console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-		return res.status(500).json({ status: 500, error: errorMessage });
+		return res.status(500).json({ error: errorMessage });
 	}
 }

@@ -42,7 +42,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			} catch (e) {
 				errorMessage = 'Movie not found';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-				return res.status(404).json({ status: 404, error: errorMessage });
+				return res.status(404).json({ error: errorMessage });
 			}
 
 			try {
@@ -50,14 +50,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			} catch (e) {
 				errorMessage = 'Unable to find a movie by id';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-				return res.status(500).json({ status: 500, error: errorMessage });
+				return res.status(500).json({ error: errorMessage });
 			}
 
 			movie.likes = like && like.likeCounter ? like.likeCounter : 0;
-			return res.json({ status: 200, data: { movie } });
+			return res.json({ data: { movie } });
 		default:
 			errorMessage = 'Method Not Allowed';
 			console.error(`ERROR: ${errorMessage}`);
-			return res.status(405).json({ status: 405, error: errorMessage });
+			return res.status(405).json({ error: errorMessage });
 	}
 }
