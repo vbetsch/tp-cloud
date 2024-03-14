@@ -19,7 +19,7 @@ enum LikesActions {
  *         name: idMovie
  *         required: true
  *         schema:
- *           type: string
+ *           type: number
  *         description: ID movie
  *     responses:
  *       200:
@@ -33,7 +33,7 @@ enum LikesActions {
  *         name: idMovie
  *         required: true
  *         schema:
- *           type: string
+ *           type: number
  *         description: ID movie
  *       - in: query
  *         name: action

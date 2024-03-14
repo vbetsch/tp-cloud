@@ -19,7 +19,7 @@ interface MovieOutputType extends MovieDetailsType {
  *         name: idMovie
  *         required: true
  *         schema:
- *           type: string
+ *           type: number
  *         description: ID movie
  *     responses:
  *       200:
