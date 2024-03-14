@@ -3,7 +3,12 @@ export const ConfigService = {
 		BASEURL: 'https://api.themoviedb.org/3',
 		URIS: {
 			DISCOVER: '/discover/movie',
-			MOVIE: '/movie',
+			MOVIE: {
+				BASE_URI: '/movie',
+				SUB_URIS: {
+					VIDEOS: '/videos',
+				},
+			},
 		},
 	},
 };
