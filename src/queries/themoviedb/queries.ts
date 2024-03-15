@@ -1,6 +1,6 @@
-import { HttpMethods } from '../types/HttpMethods';
-import { MovieDetailsType, MovieDiscoverType } from '../types/themoviedb/MovieTypes';
-import { VideoType } from '../types/themoviedb/VideoType';
+import { HttpMethods } from '../../types/HttpMethods';
+import { MovieDetailsType, MovieDiscoverType } from '../../types/themoviedb/MovieTypes';
+import { VideoType } from '../../types/themoviedb/VideoType';
 
 const MOVIES = {
 	BASEURL: 'https://api.themoviedb.org/3',

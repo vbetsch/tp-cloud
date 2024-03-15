@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethods } from '../../../../src/types/HttpMethods';
-import { getVideosOfMovie, ResponseVideosOfMovie } from '../../../../src/queries/TheMovieDbQueries';
+import { getVideosOfMovie, ResponseVideosOfMovie } from '../../../../src/queries/themoviedb/queries';
 
 /**
  * @swagger

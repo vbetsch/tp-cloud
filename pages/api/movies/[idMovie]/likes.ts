@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { InsertOneResult, UpdateResult } from 'mongodb';
-import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../src/queries/FirebaseQueries';
 import { LikeType } from '../../../../src/types/firebase/LikeType';
 import { HttpMethods } from '../../../../src/types/HttpMethods';
+import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../src/queries/firebase/queries';
 
 enum LikesActions {
 	LIKE = 'like',

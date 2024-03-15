@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethods } from '../../../../src/types/HttpMethods';
-import { getAllIdMovies } from '../../../../src/queries/FirebaseQueries';
-import { getRecommendations, ResponsePaginatedMovies } from '../../../../src/queries/TheMovieDbQueries';
 import { MovieDiscoverType } from '../../../../src/types/themoviedb/MovieTypes';
+import { getAllIdMovies } from '../../../../src/queries/firebase/queries';
+import { getRecommendations, ResponsePaginatedMovies } from '../../../../src/queries/themoviedb/queries';
 
 /**
  * @swagger

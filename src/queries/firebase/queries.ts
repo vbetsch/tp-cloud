@@ -1,10 +1,6 @@
 import { Db, Document, InsertOneResult, OptionalId, UpdateFilter, UpdateResult } from 'mongodb';
-import { LikeType } from '../types/firebase/LikeType';
-import { getFirebaseDatabase } from '../firebase';
-
-enum FirebaseCollections {
-	LIKES = 'likes',
-}
+import { FirebaseCollections, getFirebaseDatabase } from './config';
+import { LikeType } from '../../types/firebase/LikeType';
 
 const getAllIdMovies = async (): Promise<number[]> => {
 	const db: Db = await getFirebaseDatabase();
