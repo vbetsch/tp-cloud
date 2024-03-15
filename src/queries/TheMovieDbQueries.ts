@@ -2,7 +2,7 @@ import { HttpMethods } from '../types/HttpMethods';
 import { MovieDetailsType, MovieDiscoverType } from '../types/themoviedb/MovieTypes';
 import { VideoType } from '../types/themoviedb/VideoType';
 
-const URLS = {
+const MOVIES = {
 	BASEURL: 'https://api.themoviedb.org/3',
 	URIS: {
 		DISCOVER: '/discover/movie',
@@ -17,7 +17,7 @@ const URLS = {
 	},
 };
 
-const movieBaseUrl: string = URLS.BASEURL + URLS.URIS.MOVIE.BASE_URI;
+const movieBaseUrl: string = MOVIES.BASEURL + MOVIES.URIS.MOVIE.BASE_URI;
 
 const options: RequestInit = {
 	method: HttpMethods.GET,
@@ -45,7 +45,7 @@ export interface ResponseVideosOfMovie {
 }
 
 const getVideosOfMovie = async (idMovie: number): Promise<ResponseVideosOfMovie> => {
-	const url: string = `${movieBaseUrl}/${idMovie}${URLS.URIS.MOVIE.SUB_URIS.VIDEOS}`;
+	const url: string = `${movieBaseUrl}/${idMovie}${MOVIES.URIS.MOVIE.SUB_URIS.VIDEOS}`;
 	return await getDataFromUrl(url, `Get videos of movie ${idMovie}`);
 };
 
@@ -57,17 +57,17 @@ export interface ResponsePaginatedMovies {
 }
 
 const getMoviesDiscover = async (page: number): Promise<ResponsePaginatedMovies> => {
-	const url: string = `${URLS.BASEURL}${URLS.URIS.DISCOVER}?page=${page}`;
+	const url: string = `${MOVIES.BASEURL}${MOVIES.URIS.DISCOVER}?page=${page}`;
 	return await getDataFromUrl(url, `Get all movies (page ${page})`);
 };
 
 const getRecommendations = async (idMovie: number): Promise<ResponsePaginatedMovies> => {
-	const url: string = `${movieBaseUrl}/${idMovie}${URLS.URIS.MOVIE.SUB_URIS.RECOMMENDATIONS}`;
+	const url: string = `${movieBaseUrl}/${idMovie}${MOVIES.URIS.MOVIE.SUB_URIS.RECOMMENDATIONS}`;
 	return await getDataFromUrl(url, `Get recommendations of ${idMovie}`);
 };
 
 const getTopRatedMovies = async (page: number): Promise<ResponsePaginatedMovies> => {
-	const url: string = `${movieBaseUrl}${URLS.URIS.MOVIE.SUB_URIS.TOP_RATED}?page=${page}`;
+	const url: string = `${movieBaseUrl}${MOVIES.URIS.MOVIE.SUB_URIS.TOP_RATED}?page=${page}`;
 	return await getDataFromUrl(url, `Get top rated movies (page ${page})`);
 };
 
