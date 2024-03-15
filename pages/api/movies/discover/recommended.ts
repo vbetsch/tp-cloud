@@ -4,6 +4,17 @@ import { getAllIdMovies } from '../../../../src/queries/FirebaseQueries';
 import { getRecommendations, ResponseMovies } from '../../../../src/queries/TheMovieDbQueries';
 import { MovieDiscoverType } from '../../../../src/types/themoviedb/MovieTypes';
 
+/**
+ * @swagger
+ * /api/movies/discover/recommended:
+ *   get:
+ *     description: Returns recommended movies
+ *     responses:
+ *       200:
+ *         description: Success Response
+ *       500:
+ *         description: Internal Server Error
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	let errorMessage: string;
 	let moviesIds: number[] = [];
