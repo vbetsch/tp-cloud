@@ -35,19 +35,19 @@ export const getVideosOfMovie = async (idMovie: number): Promise<ResponseVideosO
 	return await getDataFromUrl(url, `Get videos of movie ${idMovie}`);
 };
 
-export interface ResponseMovies {
+export interface ResponsePaginatedMovies {
 	page: number;
 	results: MovieDiscoverType[];
 	total_pages: number;
 	total_results: number;
 }
 
-export const getMoviesDiscover = async (page: number): Promise<ResponseMovies> => {
+export const getMoviesDiscover = async (page: number): Promise<ResponsePaginatedMovies> => {
 	const url: string = `${ConfigService.THEMOVIEDB.BASEURL}${ConfigService.THEMOVIEDB.URIS.DISCOVER}?page=${page}`;
 	return await getDataFromUrl(url, `Get all movies (page ${page})`);
 };
 
-export const getRecommendations = async (idMovie: number): Promise<ResponseMovies> => {
+export const getRecommendations = async (idMovie: number): Promise<ResponsePaginatedMovies> => {
 	const url: string = `${movieBaseUrl}/${idMovie}${ConfigService.THEMOVIEDB.URIS.MOVIE.SUB_URIS.RECOMMENDATIONS}`;
 	return await getDataFromUrl(url, `Get recommendations of ${idMovie}`);
 };

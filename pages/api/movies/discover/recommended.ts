@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethods } from '../../../../src/types/HttpMethods';
 import { getAllIdMovies } from '../../../../src/queries/FirebaseQueries';
-import { getRecommendations, ResponseMovies } from '../../../../src/queries/TheMovieDbQueries';
+import { getRecommendations, ResponsePaginatedMovies } from '../../../../src/queries/TheMovieDbQueries';
 import { MovieDiscoverType } from '../../../../src/types/themoviedb/MovieTypes';
 
 /**
@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	let errorMessage: string;
 	let moviesIds: number[] = [];
 	let results: MovieDiscoverType[] = [];
-	let response: ResponseMovies;
+	let response: ResponsePaginatedMovies;
 	let promises: Promise<void>[];
 
 	switch (req.method) {
