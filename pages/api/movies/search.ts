@@ -2,6 +2,30 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethods } from '../../../src/types/HttpMethods';
 import { getSearchMovies, ResponsePaginatedMovies } from '../../../src/queries/TheMovieDbQueries';
 
+/**
+ * @swagger
+ * /api/movies/search:
+ *   get:
+ *     description: Search a movie
+ *     parameters:
+ *       - in: query
+ *         name: query
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Search input
+ *       - in: query
+ *         name: page
+ *         required: false
+ *         schema:
+ *           type: number
+ *         description: Page number
+ *     responses:
+ *       200:
+ *         description: Success Response
+ *       500:
+ *         description: Internal Server Error
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	const query: string = (req.query.query as string) || '';
 	const page: number = parseInt(req.query.page as string, 10) || 1;
