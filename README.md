@@ -10,36 +10,36 @@ Emerging streaming platform specializing in movie recommendations based on user 
 
 ### Installation
 
-* Install Nodejs dependencies
+- Install Nodejs dependencies
   ```bash
   npm install
   ```
 
 ### Getting Started
 
-* Run Next app
-    ```bash
-    npm run dev
-    ```
+- Run Next app
+  ```bash
+  npm run dev
+  ```
 
 ### Linter & Formatter
 
-* Run ESLint
-    ```bash
-    npm run eslint
-    ```
-* Check Prettier
-    ```bash
-    npm run prettier:c
-    ```
-* Run Prettier
-    ```bash
-    npm run prettier:w
-    ```
+- Run ESLint
+  ```bash
+  npm run eslint
+  ```
+- Check Prettier
+  ```bash
+  npm run prettier:c
+  ```
+- Run Prettier
+  ```bash
+  npm run prettier:w
+  ```
 
 ### Build
 
-* Build Next app
+- Build Next app
   ```bash
   npm run build
   ```
