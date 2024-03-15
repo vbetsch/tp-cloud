@@ -1,4 +1,4 @@
-import clientPromise from './lib/mongodb';
+import clientPromise from '../lib/mongodb';
 import { Db, MongoClient } from 'mongodb';
 
 const FIREBASE_DATABASE_NAME: string = 'cluster';
