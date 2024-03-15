@@ -66,4 +66,9 @@ const getRecommendations = async (idMovie: number): Promise<ResponsePaginatedMov
 	return await getDataFromUrl(url, `Get recommendations of ${idMovie}`);
 };
 
-export { getMovieById, getVideosOfMovie, getMoviesDiscover, getRecommendations };
+const getTopRatedMovies = async (page: number): Promise<ResponsePaginatedMovies> => {
+	const url: string = `${movieBaseUrl}${URLS.URIS.MOVIE.SUB_URIS.TOP_RATED}?page=${page}`;
+	return await getDataFromUrl(url, `Get top rated movies (page ${page})`);
+};
+
+export { getMovieById, getVideosOfMovie, getMoviesDiscover, getRecommendations, getTopRatedMovies };
