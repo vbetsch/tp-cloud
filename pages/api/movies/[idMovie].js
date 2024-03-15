@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
-import clientPromise from "/lib/mongodb";
-import {ConfigService} from "/services/config.service";
+import clientPromise from '../../../lib/mongodb';
+import { ConfigService } from '../../../src/services/config.service';
 
 /**
  * @swagger
@@ -42,6 +42,10 @@ export default async function handler(req, res) {
                 .then(r => r.json())
                 .catch(err => console.error('error:' + err));
 
+            if (!movie.id) {
+                return res.status(404).json({error: "Not Found"});
+            }
+
             const likes = await db.collection("likes").findOne({idTMDB: idMovie});
 
             if (likes && likes.likeCounter) {
@@ -50,14 +54,10 @@ export default async function handler(req, res) {
                 movie.likes = 0;
             }
 
-            if (movie) {
-                res.json({status: 200, data: {movie: movie}});
-            } else {
-                res.status(404).json({status: 404, error: "Not Found"});
-            }
+            res.json({status: 200, data: {movie: movie}});
             break;
 
         default:
-            res.status(405).json({status: 405, error: "Method Not Allowed"});
+            res.status(405).json({error: "Method Not Allowed"});
     }
 }
