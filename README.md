@@ -15,6 +15,14 @@ Emerging streaming platform specializing in movie recommendations based on user 
   npm install
   ```
 
+- Copy the `.env.local.example` file to create your own `.env` file
+    ```dotenv
+    MONGODB_URI=your_mongodb_uri
+    MONGO_DATABASE=your_mongodb_database
+    API_TOKEN=your_tmdb_api_token
+    REACT_EDITOR=your_favorite_ide
+    ```
+
 ### Getting Started
 
 - Run Next app
