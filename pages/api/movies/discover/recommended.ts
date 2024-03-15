@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethods } from '../../../../src/types/HttpMethods';
 import { MovieDiscoverType } from '../../../../src/types/themoviedb/MovieTypes';
-import { getAllIdMovies } from '../../../../src/queries/firebase/queries';
+import { getAllIdMovies } from '../../../../src/queries/mongodb/queries';
 import { getRecommendations, ResponsePaginatedMovies } from '../../../../src/queries/themoviedb/queries';
 
 /**
