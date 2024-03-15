@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import Index from '../../pages/index';
 import { useAuth } from '../../src/contexts/auth.context';
-import { describe } from 'node:test';
 
 const useRouter = jest.spyOn(require('next/router'), 'useRouter');
 useRouter.mockImplementation(() => ({
