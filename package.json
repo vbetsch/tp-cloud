@@ -5,8 +5,8 @@
     "build": "next build",
     "start": "next start",
     "eslint": "eslint .",
-    "prettierc": "prettier --check .",
-    "prettierw": "prettier --write ."
+    "prettier:c": "prettier --check .",
+    "prettier:w": "prettier --write ."
   },
   "dependencies": {
     "btoa": "^1.2.1",

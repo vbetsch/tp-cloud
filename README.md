@@ -30,11 +30,11 @@ Emerging streaming platform specializing in movie recommendations based on user 
     ```
 * Check Prettier
     ```bash
-    npm run prettierc
+    npm run prettier:c
     ```
 * Run Prettier
     ```bash
-    npm run prettierw
+    npm run prettier:w
     ```
 
 ### Build
