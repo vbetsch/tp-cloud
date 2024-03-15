@@ -6,6 +6,7 @@ const MOVIES = {
 	BASEURL: 'https://api.themoviedb.org/3',
 	URIS: {
 		DISCOVER: '/discover/movie',
+		SEARCH: '/search/movie',
 		MOVIE: {
 			BASE_URI: '/movie',
 			SUB_URIS: {
@@ -71,4 +72,9 @@ const getTopRatedMovies = async (page: number): Promise<ResponsePaginatedMovies>
 	return await getDataFromUrl(url, `Get top rated movies (page ${page})`);
 };
 
-export { getMovieById, getVideosOfMovie, getMoviesDiscover, getRecommendations, getTopRatedMovies };
+const getSearchMovies = async (query: string, page: number): Promise<ResponsePaginatedMovies> => {
+	const url: string = `${MOVIES.BASEURL}${MOVIES.URIS.SEARCH}?query=${query}&page=${page}`;
+	return await getDataFromUrl(url, `Get movies by search of '${query}' (page ${page})`);
+};
+
+export { getMovieById, getVideosOfMovie, getMoviesDiscover, getRecommendations, getTopRatedMovies, getSearchMovies };
