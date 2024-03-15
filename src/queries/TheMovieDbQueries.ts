@@ -34,7 +34,7 @@ const getDataFromUrl = async (url: string, infoText: string) => {
 	return result;
 };
 
-export const getMovieById = async (idMovie: number): Promise<MovieDetailsType> => {
+const getMovieById = async (idMovie: number): Promise<MovieDetailsType> => {
 	const url: string = `${movieBaseUrl}/${idMovie}`;
 	return await getDataFromUrl(url, `Get movie ${idMovie}`);
 };
@@ -44,7 +44,7 @@ export interface ResponseVideosOfMovie {
 	results: VideoType[];
 }
 
-export const getVideosOfMovie = async (idMovie: number): Promise<ResponseVideosOfMovie> => {
+const getVideosOfMovie = async (idMovie: number): Promise<ResponseVideosOfMovie> => {
 	const url: string = `${movieBaseUrl}/${idMovie}${URLS.URIS.MOVIE.SUB_URIS.VIDEOS}`;
 	return await getDataFromUrl(url, `Get videos of movie ${idMovie}`);
 };
@@ -56,12 +56,14 @@ export interface ResponsePaginatedMovies {
 	total_results: number;
 }
 
-export const getMoviesDiscover = async (page: number): Promise<ResponsePaginatedMovies> => {
+const getMoviesDiscover = async (page: number): Promise<ResponsePaginatedMovies> => {
 	const url: string = `${URLS.BASEURL}${URLS.URIS.DISCOVER}?page=${page}`;
 	return await getDataFromUrl(url, `Get all movies (page ${page})`);
 };
 
-export const getRecommendations = async (idMovie: number): Promise<ResponsePaginatedMovies> => {
+const getRecommendations = async (idMovie: number): Promise<ResponsePaginatedMovies> => {
 	const url: string = `${movieBaseUrl}/${idMovie}${URLS.URIS.MOVIE.SUB_URIS.RECOMMENDATIONS}`;
 	return await getDataFromUrl(url, `Get recommendations of ${idMovie}`);
 };
+
+export { getMovieById, getVideosOfMovie, getMoviesDiscover, getRecommendations };
