@@ -25,7 +25,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 	let errorMessage: string;
 	let response: ResponsePaginatedMovies;
-
 	switch (req.method) {
 		case HttpMethods.GET:
 			try {
