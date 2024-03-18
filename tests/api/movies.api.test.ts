@@ -25,8 +25,6 @@ describe('[API] /movies', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		console.log(res);
-
 		expect(res._getStatusCode()).toBe(200);
 	});
 	it('should return 405 if method is not allowed', async () => {
