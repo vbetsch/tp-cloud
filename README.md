@@ -45,6 +45,12 @@ Emerging streaming platform specializing in movie recommendations based on user 
   npm run prettier:w
   ```
 
+### Test
+- Launch Jest
+  ```bash
+  npm run test 
+  ```
+
 ### Build
 
 - Build Next app
