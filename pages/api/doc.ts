@@ -10,7 +10,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
  *       200:
  *         description: Success Response
  */
-const swaggerHandler: () => (_req: NextApiRequest, res: NextApiResponse) => void = withSwagger({
+const swaggerHandler: () => (req: NextApiRequest, res: NextApiResponse) => void = withSwagger({
 	openApiVersion: '3.0.0',
 	apiFolder: 'pages/api',
 	title: 'TP Cloud API',
