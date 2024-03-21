@@ -1,6 +1,6 @@
 import { describe, it, expect } from '@jest/globals';
 import { NextApiRequest, NextApiResponse } from 'next';
-import handler from '../../pages/api/movies/index';
+import handler from '../../../pages/api/movies/index';
 import { createMocks } from 'node-mocks-http';
 
 jest.mock('../../src/queries/themoviedb/queries', () => ({
