@@ -1,9 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
 import { createMocks } from 'node-mocks-http';
-import handler from '../../pages/api/movies/discover/toprated';
+import handler from '../../../pages/api/movies/discover/toprated';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-jest.mock('../../src/queries/themoviedb/queries', () => ({
+jest.mock('../../../src/queries/themoviedb/queries', () => ({
 	getTopRatedMovies: jest.fn(),
 }));
 
