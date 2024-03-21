@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import handler from '../../../pages/api/movies/index';
 import { createMocks } from 'node-mocks-http';
 
-jest.mock('../../src/queries/themoviedb/queries', () => ({
+jest.mock('../../../src/queries/themoviedb/queries', () => ({
 	getMoviesDiscover: jest.fn(),
 }));
 
