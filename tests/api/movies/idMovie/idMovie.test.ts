@@ -1,9 +1,8 @@
-import { describe, expect } from '@jest/globals';
-import { createMocks } from 'node-mocks-http';
 import handler from '../../../../pages/api/movies/[idMovie]/index';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getMovieById } from '../../../../src/queries/themoviedb/queries';
 import { findOneLikeById } from '../../../../src/queries/mongodb/queries';
+import { createMocks } from 'node-mocks-http';
 
 const movieId: number = 123;
 const counterLike: number = 5;
