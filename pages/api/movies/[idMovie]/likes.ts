@@ -59,6 +59,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	let errorMessage: string;
 	switch (req.method) {
 		case HttpMethods.PATCH:
+			if (!action) {
+				errorMessage = "Parameter 'action' is required";
+				console.error('ERROR: ' + errorMessage);
+				return res.status(400).json({ error: errorMessage });
+			}
 			try {
 				like = await findOneLikeById(idMovie);
 			} catch (e) {
@@ -68,11 +73,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 
 			if (like) {
-				if (!action) {
-					errorMessage = "Parameter 'action' is required";
-					console.error('ERROR: ' + errorMessage);
-					return res.status(400).json({ error: errorMessage });
-				}
 				try {
 					let delta: number;
 					switch (action) {
