@@ -25,9 +25,9 @@ interface MovieOutputType extends MovieDetailsType {
  *       200:
  *         description: Success Response
  *       404:
- *         description: Movie not found
+ *         description: Error Response
  *       500:
- *         description: Unable to find a movie by id
+ *         description: Internal Server Error
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	const idMovie: number = parseInt(req.query.idMovie as string, 10);
@@ -40,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			try {
 				movie = await getMovieById(idMovie);
 			} catch (e) {
-				errorMessage = 'Unable to find a movie by id';
+				errorMessage = 'Internal Server Error';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 				return res.status(500).json({ error: errorMessage });
 			}
@@ -48,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			try {
 				like = await findOneLikeById(idMovie);
 			} catch (e) {
-				errorMessage = 'Unable to find like';
+				errorMessage = 'Internal Server Error';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 				return res.status(500).json({ error: errorMessage });
 			}
