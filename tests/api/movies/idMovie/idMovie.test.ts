@@ -41,7 +41,7 @@ describe('[API] /movies/{idMovie}', () => {
 		expect(responseData.id).toBe(movieId);
 		expect(responseData.likes).toBe(counterLike);
 	});
-	it("should don't return movie with 0 likes", async () => {
+	it('should return 404 with error and 0 likes', async () => {
 		const _error = {
 			success: false,
 			status_code: 34,
@@ -58,7 +58,7 @@ describe('[API] /movies/{idMovie}', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(200);
+		expect(res._getStatusCode()).toBe(404);
 
 		const { success, status_code, status_message } = _error;
 		const responseData = res._getJSONData();

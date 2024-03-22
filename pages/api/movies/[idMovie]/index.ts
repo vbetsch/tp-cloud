@@ -40,20 +40,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			try {
 				movie = await getMovieById(idMovie);
 			} catch (e) {
-				errorMessage = 'Movie not found';
-				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-				return res.status(404).json({ error: errorMessage });
-			}
-
-			try {
-				like = await findOneLikeById(idMovie);
-			} catch (e) {
 				errorMessage = 'Unable to find a movie by id';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 				return res.status(500).json({ error: errorMessage });
 			}
 
+			try {
+				like = await findOneLikeById(idMovie);
+			} catch (e) {
+				errorMessage = 'Unable to find like';
+				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
+				return res.status(500).json({ error: errorMessage });
+			}
+
 			movie.likes = like && like.likeCounter ? like.likeCounter : 0;
+
+			if (!movie.id) {
+				return res.status(404).json(movie);
+			}
+
 			return res.status(200).json(movie);
 		default:
 			errorMessage = 'Method Not Allowed';
