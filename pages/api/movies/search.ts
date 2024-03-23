@@ -23,6 +23,8 @@ import { getSearchMovies, ResponsePaginatedMovies } from '../../../src/queries/t
  *     responses:
  *       200:
  *         description: Success Response
+ *       404:
+ *         description: No movie was found
  *       500:
  *         description: Internal Server Error
  */
