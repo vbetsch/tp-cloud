@@ -42,6 +42,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				return res.status(500).json({ status: 500, error: errorMessage });
 			}
 
+			if (response.results && !response.results.length) {
+				errorMessage = 'No movie was found';
+				console.warn('WARN: ' + errorMessage);
+				return res.status(404).json({ message: errorMessage });
+			}
+
 			return res.status(200).json(response);
 		default:
 			errorMessage = 'Method Not Allowed';

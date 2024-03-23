@@ -52,7 +52,7 @@ describe('[API] /movies/{idMovie}/videos', () => {
 		expect(res.statusCode).toBe(_errorStatus);
 		expect(res._getJSONData()).toStrictEqual({
 			status: _errorStatus,
-			error: 'Cannot find videos of movie 41',
+			message: 'Cannot find videos of movie 41',
 		});
 	});
 	it('should return 405 if method is not allowed', async () => {

@@ -39,8 +39,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 			if (!response.results) {
 				const errorMessage: string = `Cannot find videos of movie ${idMovie}`;
-				console.error('ERROR: ' + errorMessage);
-				return res.status(404).json({ status: 404, error: errorMessage });
+				console.warn('WARN: ' + errorMessage);
+				return res.status(404).json({ status: 404, message: errorMessage });
 			}
 
 			return res.status(200).json(response.results);
