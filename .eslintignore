@@ -2,3 +2,5 @@ lib/
 .swc/
 .next/
 node_modules/
+
+jest.**.js
