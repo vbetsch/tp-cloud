@@ -72,9 +72,13 @@ Emerging streaming platform specializing in movie recommendations based on user 
   ```
 
 ### Test
-- Launch Jest
+- Launch all Jest tests
   ```bash
   npm run test 
+  ```
+- Run Jest coverage
+  ```bash
+  npm run test:coverage
   ```
 
 ### Build
