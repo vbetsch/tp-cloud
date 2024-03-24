@@ -91,7 +91,7 @@ describe('[API] /movies/discover/recommended', () => {
 			],
 		});
 	});
-	xit('should not return any recommended movie', async () => {
+	it('should not return any recommended movie', async () => {
 		const _idArray: Array<number> = [];
 
 		(getAllIdMovies as jest.Mock).mockResolvedValue(_idArray);
@@ -109,7 +109,7 @@ describe('[API] /movies/discover/recommended', () => {
 			movies: [],
 		});
 	});
-	xit('should return 405 if method is not allowed', async () => {
+	it('should return 405 if method is not allowed', async () => {
 		const { req, res } = createMocks({
 			method: 'PUT',
 		});
