@@ -43,6 +43,7 @@ describe('[API] /movies/{idMovie}/videos', () => {
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
 		expect(res.statusCode).toBe(400);
+		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'idMovie is required' });
 	});
 	it('GET - should return 404', async () => {
@@ -63,6 +64,7 @@ describe('[API] /movies/{idMovie}/videos', () => {
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
 		expect(res.statusCode).toBe(_errorStatus);
+		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({
 			message: 'Cannot find videos of movie 41',
 		});
@@ -77,6 +79,7 @@ describe('[API] /movies/{idMovie}/videos', () => {
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
 		expect(res._getStatusCode()).toBe(500);
+		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to get videos of movie' });
 	});
 	it('should return 405 if method is not allowed', async () => {
@@ -87,6 +90,7 @@ describe('[API] /movies/{idMovie}/videos', () => {
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
 		expect(res._getStatusCode()).toBe(405);
-		expect(res._getJSONData().error).toBe('Method Not Allowed');
+		expect(res._isEndCalled()).toBeTruthy();
+		expect(res._getJSONData()).toStrictEqual({ error: 'Method Not Allowed' });
 	});
 });

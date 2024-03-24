@@ -468,6 +468,7 @@ describe('[API] /movies/search', () => {
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
 		expect(res._getStatusCode()).toBe(500);
+		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to search movies' });
 	});
 	it('should return 405 if method is not allowed', async () => {
@@ -478,6 +479,7 @@ describe('[API] /movies/search', () => {
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
 		expect(res._getStatusCode()).toBe(405);
-		expect(res._getJSONData().error).toBe('Method Not Allowed');
+		expect(res._isEndCalled()).toBeTruthy();
+		expect(res._getJSONData()).toStrictEqual({ error: 'Method Not Allowed' });
 	});
 });

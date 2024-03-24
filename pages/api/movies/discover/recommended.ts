@@ -17,6 +17,7 @@ import { getRecommendations, ResponsePaginatedMovies } from '../../../../src/que
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	let errorMessage: string;
+	let warnMessage: string;
 	let moviesIds: number[] = [];
 	let results: MovieDiscoverType[] = [];
 	let response: ResponsePaginatedMovies;
@@ -55,7 +56,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 
 			if (!results.length) {
-				return res.status(404).json({ message: "You don't have any favorite movies yet" });
+				warnMessage = "You don't have any favorite movies yet";
+				console.warn('WARN: ' + warnMessage);
+				return res.status(404).json({ message: warnMessage });
 			}
 
 			return res.status(200).json({

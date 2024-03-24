@@ -27,7 +27,7 @@ interface MovieOutputType extends MovieDetailsType {
  *       400:
  *         description: idMovie is required
  *       404:
- *         description: Error Response
+ *         description: Movie not found
  *       500:
  *         description: Internal Server Error
  */
@@ -37,6 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	let movie: MovieOutputType;
 	let like: LikeType | undefined | null;
 	let errorMessage: string;
+	let warnMessage: string;
 	switch (req.method) {
 		case HttpMethods.GET:
 			try {
@@ -48,7 +49,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 
 			if (!movie) {
-				return res.status(400).json({ error: 'idMovie is required' });
+				errorMessage = 'idMovie is required';
+				console.error('ERROR: ' + errorMessage);
+				return res.status(400).json({ error: errorMessage });
 			}
 
 			try {
@@ -62,7 +65,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			movie.likes = like && like.likeCounter ? like.likeCounter : 0;
 
 			if (!movie.id) {
-				return res.status(404).json(movie);
+				warnMessage = 'Movie not found';
+				console.warn('WARN: ' + warnMessage);
+				return res.status(404).json({ message: warnMessage });
 			}
 
 			return res.status(200).json(movie);

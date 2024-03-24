@@ -22,6 +22,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
 		expect(res.statusCode).toBe(400);
+		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'idMovie is required' });
 	});
 	it('GET - should return null', async () => {
@@ -38,9 +39,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		expect(res.statusCode).toBe(200);
 		expect(res._isEndCalled()).toBeTruthy();
-
-		const responseData = res._getJSONData();
-		expect(responseData).toBe(null);
+		expect(res._getJSONData()).toBe(null);
 	});
 	it('GET - should return like of movie', async () => {
 		const movieId: number = 123;
@@ -61,9 +60,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		expect(res.statusCode).toBe(200);
 		expect(res._isEndCalled()).toBeTruthy();
-
-		const responseData = res._getJSONData();
-		expect(responseData).toStrictEqual(_like);
+		expect(res._getJSONData()).toStrictEqual(_like);
 	});
 	it('GET - should return 500 for findOneLikeById error', async () => {
 		(findOneLikeById as jest.Mock).mockRejectedValue(new Error('TEST'));
@@ -75,6 +72,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
 		expect(res._getStatusCode()).toBe(500);
+		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Unable to get likes' });
 	});
 	it('PATCH - should return 400', async () => {
@@ -87,6 +85,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
 		expect(res.statusCode).toBe(400);
+		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'idMovie is required' });
 	});
 	it('PATCH - should return like created', async () => {
@@ -110,9 +109,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		expect(res.statusCode).toBe(201);
 		expect(res._isEndCalled()).toBeTruthy();
-
-		const responseData = res._getJSONData();
-		expect(responseData).toStrictEqual({
+		expect(res._getJSONData()).toStrictEqual({
 			action: 'likeCounter created',
 			insertedId: '65fd8379baa9ac351e715755',
 			idMovie: _idMovie,
@@ -147,9 +144,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		expect(res.statusCode).toBe(201);
 		expect(res._isEndCalled()).toBeTruthy();
-
-		const responseData = res._getJSONData();
-		expect(responseData).toStrictEqual({
+		expect(res._getJSONData()).toStrictEqual({
 			action: 'likeCounter incremented',
 			idMovie: _idMovie,
 			previousValue: _originalCounterValue,
@@ -167,9 +162,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		expect(res.statusCode).toBe(400);
 		expect(res._isEndCalled()).toBeTruthy();
-
-		const responseData = res._getJSONData();
-		expect(responseData).toStrictEqual({
+		expect(res._getJSONData()).toStrictEqual({
 			error: "Parameter 'action' is required",
 		});
 	});
@@ -187,9 +180,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		expect(res.statusCode).toBe(405);
 		expect(res._isEndCalled()).toBeTruthy();
-
-		const responseData = res._getJSONData();
-		expect(responseData).toStrictEqual({
+		expect(res._getJSONData()).toStrictEqual({
 			error: 'Action not allowed',
 		});
 	});
@@ -206,6 +197,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
 		expect(res._getStatusCode()).toBe(500);
+		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Unable to search movie' });
 	});
 	it('PATCH - should return 500 for updateOneLikeById error', async () => {
@@ -230,6 +222,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
 		expect(res._getStatusCode()).toBe(500);
+		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Unable to update like' });
 	});
 	it('PATCH - should return 500 for insertOneLike error', async () => {
@@ -244,6 +237,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
 		expect(res._getStatusCode()).toBe(500);
+		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Unable to insert like' });
 	});
 	it('should return 405 if method is not allowed', async () => {
@@ -254,6 +248,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
 		expect(res._getStatusCode()).toBe(405);
-		expect(res._getJSONData().error).toBe('Method Not Allowed');
+		expect(res._isEndCalled()).toBeTruthy();
+		expect(res._getJSONData()).toStrictEqual({ error: 'Method Not Allowed' });
 	});
 });

@@ -27,6 +27,7 @@ import { getVideosOfMovie, ResponseVideosOfMovie } from '../../../../src/queries
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	const idMovie: number = parseInt(req.query.idMovie as string, 10);
 
+	let warnMessage: string;
 	let errorMessage: string;
 	let response: ResponseVideosOfMovie;
 	switch (req.method) {
@@ -34,21 +35,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			try {
 				response = await getVideosOfMovie(idMovie);
 			} catch (e) {
-				const errorMessage: string = 'Impossible to get videos of movie';
+				errorMessage = 'Impossible to get videos of movie';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 				return res.status(500).json({ error: errorMessage });
 			}
 
 			if (!response) {
-				const errorMessage: string = 'idMovie is required';
+				errorMessage = 'idMovie is required';
 				console.error('ERROR: ' + errorMessage);
 				return res.status(400).json({ error: errorMessage });
 			}
 
 			if (!response.results) {
-				const errorMessage: string = `Cannot find videos of movie ${idMovie}`;
-				console.warn('WARN: ' + errorMessage);
-				return res.status(404).json({ message: errorMessage });
+				warnMessage = `Cannot find videos of movie ${idMovie}`;
+				console.warn('WARN: ' + warnMessage);
+				return res.status(404).json({ message: warnMessage });
 			}
 
 			return res.status(200).json(response.results);

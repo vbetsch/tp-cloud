@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethods } from '../../../src/types/HttpMethods';
 import { getSearchMovies, ResponsePaginatedMovies } from '../../../src/queries/themoviedb/queries';
+import { resetWarningCache } from 'prop-types';
 
 /**
  * @swagger
@@ -33,6 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	const page: number = parseInt(req.query.page as string, 10) || 1;
 
 	let errorMessage: string;
+	let warnMessage: string;
 	let response: ResponsePaginatedMovies;
 	switch (req.method) {
 		case HttpMethods.GET:
@@ -45,9 +47,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 
 			if (response.results && !response.results.length) {
-				errorMessage = `No movie was found with '${query}'`;
-				console.warn('WARN: ' + errorMessage);
-				return res.status(404).json({ message: errorMessage });
+				warnMessage = `No movie was found with '${query}'`;
+				console.warn('WARN: ' + warnMessage);
+				return res.status(404).json({ message: warnMessage });
 			}
 
 			return res.status(200).json(response);
