@@ -36,6 +36,25 @@ jest.mock('../../../../src/queries/mongodb/queries', () => ({
 	getAllIdMovies: jest.fn(),
 }));
 
+const TEMPLATE_MOVIE = {
+	adult: false,
+	backdrop_path: '/1n00NlOGRFZVs8coBxyZLm5l4EC.jpg',
+	id: 123,
+	title: 'Transformers: The Last Knight',
+	original_language: 'en',
+	original_title: 'Transformers: The Last Knight',
+	overview:
+		'Autobots and Decepticons are at war, with humans on the sidelines. Optimus Prime is gone. The key to saving our future lies buried in the secrets of the past, in the hidden history of Transformers on Earth.',
+	poster_path: '/s5HQf2Gb3lIO2cRcFwNL9sn1o1o.jpg',
+	media_type: 'movie',
+	genre_ids: [12, 14, 28],
+	popularity: 60.552,
+	release_date: '2017-06-16',
+	video: false,
+	vote_average: 6.054,
+	vote_count: 5914,
+};
+
 describe('[API] /movies/discover/recommended', () => {
 	it('GET - should return recommended movies', async () => {
 		const _idArray: Array<number> = [123, 693134];
@@ -54,40 +73,12 @@ describe('[API] /movies/discover/recommended', () => {
 			total: _idArray.length,
 			movies: [
 				{
-					adult: false,
-					backdrop_path: '/1n00NlOGRFZVs8coBxyZLm5l4EC.jpg',
-					id: 123,
-					title: 'Transformers: The Last Knight',
-					original_language: 'en',
-					original_title: 'Transformers: The Last Knight',
-					overview:
-						'Autobots and Decepticons are at war, with humans on the sidelines. Optimus Prime is gone. The key to saving our future lies buried in the secrets of the past, in the hidden history of Transformers on Earth.',
-					poster_path: '/s5HQf2Gb3lIO2cRcFwNL9sn1o1o.jpg',
-					media_type: 'movie',
-					genre_ids: [12, 14, 28],
-					popularity: 60.552,
-					release_date: '2017-06-16',
-					video: false,
-					vote_average: 6.054,
-					vote_count: 5914,
+					...TEMPLATE_MOVIE,
+					id: _idArray[0],
 				},
 				{
-					adult: false,
-					backdrop_path: '/1n00NlOGRFZVs8coBxyZLm5l4EC.jpg',
-					id: 693134,
-					title: 'Transformers: The Last Knight',
-					original_language: 'en',
-					original_title: 'Transformers: The Last Knight',
-					overview:
-						'Autobots and Decepticons are at war, with humans on the sidelines. Optimus Prime is gone. The key to saving our future lies buried in the secrets of the past, in the hidden history of Transformers on Earth.',
-					poster_path: '/s5HQf2Gb3lIO2cRcFwNL9sn1o1o.jpg',
-					media_type: 'movie',
-					genre_ids: [12, 14, 28],
-					popularity: 60.552,
-					release_date: '2017-06-16',
-					video: false,
-					vote_average: 6.054,
-					vote_count: 5914,
+					...TEMPLATE_MOVIE,
+					id: _idArray[1],
 				},
 			],
 		});

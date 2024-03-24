@@ -8,9 +8,10 @@ jest.mock('../../../../src/queries/themoviedb/queries', () => ({
 	getVideosOfMovie: jest.fn(),
 }));
 
+const MOVIEID: number = 123;
+
 describe('[API] /movies/{idMovie}/videos', () => {
 	it('GET - should return videos', async () => {
-		const _idMovie: number = 123;
 		const _results = [
 			{
 				id: '640cd15401432500e39b3055',
@@ -18,13 +19,13 @@ describe('[API] /movies/{idMovie}/videos', () => {
 		];
 
 		(getVideosOfMovie as jest.Mock).mockResolvedValue({
-			id: _idMovie,
+			id: MOVIEID,
 			results: _results,
 		});
 
 		const { req, res } = createMocks({
 			method: 'GET',
-			query: { idMovie: _idMovie },
+			query: { idMovie: MOVIEID },
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -58,7 +59,7 @@ describe('[API] /movies/{idMovie}/videos', () => {
 
 		const { req, res } = createMocks({
 			method: 'GET',
-			query: { idMovie: 41 },
+			query: { idMovie: MOVIEID },
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -66,7 +67,7 @@ describe('[API] /movies/{idMovie}/videos', () => {
 		expect(res.statusCode).toBe(_errorStatus);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({
-			message: 'Cannot find videos of movie 41',
+			message: `Cannot find videos of movie ${MOVIEID}`,
 		});
 	});
 	it('GET - should return 500', async () => {

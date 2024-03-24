@@ -11,6 +11,9 @@ jest.mock('../../../../src/queries/mongodb/queries', () => ({
 	insertOneLike: jest.fn(),
 }));
 
+const MOVIEID: number = 123;
+const COUNTERLIKE: number = 5;
+
 describe('[API] /movies/{idMovie}/likes', () => {
 	it('GET - should return 400', async () => {
 		(findOneLikeById as jest.Mock).mockResolvedValue(undefined);
@@ -26,13 +29,11 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		expect(res._getJSONData()).toStrictEqual({ error: 'idMovie is required' });
 	});
 	it('GET - should return null', async () => {
-		const movieId: number = 41;
-
 		(findOneLikeById as jest.Mock).mockResolvedValue(null);
 
 		const { req, res } = createMocks({
 			method: 'GET',
-			query: { idMovie: movieId },
+			query: { idMovie: MOVIEID },
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -42,18 +43,16 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		expect(res._getJSONData()).toBe(null);
 	});
 	it('GET - should return like of movie', async () => {
-		const movieId: number = 123;
-		const counterLike: number = 5;
 		const _like = {
-			idTMDB: movieId,
-			likeCounter: counterLike,
+			idTMDB: MOVIEID,
+			likeCounter: COUNTERLIKE,
 		};
 
 		(findOneLikeById as jest.Mock).mockResolvedValue(_like);
 
 		const { req, res } = createMocks({
 			method: 'GET',
-			query: { idMovie: movieId },
+			query: { idMovie: MOVIEID },
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -89,18 +88,18 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		expect(res._getJSONData()).toStrictEqual({ error: 'idMovie is required' });
 	});
 	it('PATCH - should return like created', async () => {
-		const _idMovie: number = 456;
+		const _idLike: string = '65fd8379baa9ac351e715755';
 
 		(findOneLikeById as jest.Mock).mockResolvedValue(null);
 		(insertOneLike as jest.Mock).mockResolvedValue({
 			acknowledged: true,
-			insertedId: new ObjectId('65fd8379baa9ac351e715755'),
+			insertedId: new ObjectId(_idLike),
 		});
 
 		const { req, res } = createMocks({
 			method: 'PATCH',
 			query: {
-				idMovie: _idMovie,
+				idMovie: MOVIEID,
 				action: 'like',
 			},
 		});
@@ -111,16 +110,14 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({
 			action: 'likeCounter created',
-			insertedId: '65fd8379baa9ac351e715755',
-			idMovie: _idMovie,
+			insertedId: _idLike,
+			idMovie: MOVIEID,
 		});
 	});
 	it('PATCH - should return like incremented', async () => {
-		const _idMovie: number = 123;
-		const _originalCounterValue: number = 5;
 		const _like = {
-			idTMDB: _idMovie,
-			likeCounter: _originalCounterValue,
+			idTMDB: MOVIEID,
+			likeCounter: COUNTERLIKE,
 		};
 
 		(findOneLikeById as jest.Mock).mockResolvedValue(_like);
@@ -135,7 +132,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		const { req, res } = createMocks({
 			method: 'PATCH',
 			query: {
-				idMovie: _idMovie,
+				idMovie: MOVIEID,
 				action: 'like',
 			},
 		});
@@ -146,9 +143,9 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({
 			action: 'likeCounter incremented',
-			idMovie: _idMovie,
-			previousValue: _originalCounterValue,
-			newValue: _originalCounterValue + 1,
+			idMovie: MOVIEID,
+			previousValue: COUNTERLIKE,
+			newValue: COUNTERLIKE + 1,
 		});
 	});
 	it('PATCH - should return 400', async () => {
@@ -201,11 +198,9 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		expect(res._getJSONData()).toStrictEqual({ error: 'Unable to search movie' });
 	});
 	it('PATCH - should return 500 for updateOneLikeById error', async () => {
-		const _idMovie: number = 123;
-		const _originalCounterValue: number = 5;
 		const _like = {
-			idTMDB: _idMovie,
-			likeCounter: _originalCounterValue,
+			idTMDB: MOVIEID,
+			likeCounter: COUNTERLIKE,
 		};
 
 		(updateOneLikeById as jest.Mock).mockRejectedValue(new Error('TEST'));
@@ -214,7 +209,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		const { req, res } = createMocks({
 			method: 'PATCH',
 			query: {
-				idMovie: _idMovie,
+				idMovie: MOVIEID,
 				action: 'like',
 			},
 		});

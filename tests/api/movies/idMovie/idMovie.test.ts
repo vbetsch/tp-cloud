@@ -5,9 +5,6 @@ import { findOneLikeById } from '../../../../src/queries/mongodb/queries';
 import { createMocks } from 'node-mocks-http';
 import { expect, it } from '@jest/globals';
 
-const movieId: number = 123;
-const counterLike: number = 5;
-
 jest.mock('../../../../src/queries/themoviedb/queries', () => ({
 	getMovieById: jest.fn(),
 }));
@@ -15,21 +12,24 @@ jest.mock('../../../../src/queries/mongodb/queries', () => ({
 	findOneLikeById: jest.fn(),
 }));
 
+const MOVIEID: number = 123;
+const COUNTERLIKE: number = 5;
+
 describe('[API] /movies/{idMovie}', () => {
 	it('GET - should return movie with likes', async () => {
 		const _like = {
-			idTMDB: movieId,
-			likeCounter: counterLike,
+			idTMDB: MOVIEID,
+			likeCounter: COUNTERLIKE,
 		};
 
 		(getMovieById as jest.Mock).mockResolvedValue({
-			id: movieId,
+			id: MOVIEID,
 		});
 		(findOneLikeById as jest.Mock).mockResolvedValue(_like);
 
 		const { req, res } = createMocks({
 			method: 'GET',
-			query: { idMovie: movieId },
+			query: { idMovie: MOVIEID },
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -65,7 +65,7 @@ describe('[API] /movies/{idMovie}', () => {
 
 		const { req, res } = createMocks({
 			method: 'GET',
-			query: { idMovie: 41 },
+			query: { idMovie: MOVIEID },
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -89,7 +89,7 @@ describe('[API] /movies/{idMovie}', () => {
 	});
 	it('GET - should return 500 for findOneLikeById error', async () => {
 		(getMovieById as jest.Mock).mockResolvedValue({
-			id: movieId,
+			id: MOVIEID,
 		});
 		(findOneLikeById as jest.Mock).mockRejectedValue(new Error('TEST'));
 
