@@ -1,9 +1,10 @@
 import { createMocks } from 'node-mocks-http';
-import handler from '../../../../pages/api/movies/[idMovie]/likes';
+import handler, { LikesActions } from '../../../../pages/api/movies/[idMovie]/likes';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../src/queries/mongodb/queries';
 import { ObjectId } from 'bson';
 import { expect, it } from '@jest/globals';
+import { HttpMethods } from '../../../../src/types/HttpMethods';
 
 jest.mock('../../../../src/queries/mongodb/queries', () => ({
 	findOneLikeById: jest.fn(),
@@ -19,7 +20,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		(findOneLikeById as jest.Mock).mockResolvedValue(undefined);
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -32,7 +33,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		(findOneLikeById as jest.Mock).mockResolvedValue(null);
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 			query: { idMovie: MOVIEID },
 		});
 
@@ -51,7 +52,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		(findOneLikeById as jest.Mock).mockResolvedValue(_like);
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 			query: { idMovie: MOVIEID },
 		});
 
@@ -65,7 +66,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		(findOneLikeById as jest.Mock).mockRejectedValue(new Error('TEST'));
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -78,7 +79,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		(findOneLikeById as jest.Mock).mockResolvedValue(undefined);
 
 		const { req, res } = createMocks({
-			method: 'PATCH',
+			method: HttpMethods.PATCH,
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -97,10 +98,10 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		});
 
 		const { req, res } = createMocks({
-			method: 'PATCH',
+			method: HttpMethods.PATCH,
 			query: {
 				idMovie: MOVIEID,
-				action: 'like',
+				action: LikesActions.LIKE,
 			},
 		});
 
@@ -130,10 +131,10 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		});
 
 		const { req, res } = createMocks({
-			method: 'PATCH',
+			method: HttpMethods.PATCH,
 			query: {
 				idMovie: MOVIEID,
-				action: 'like',
+				action: LikesActions.LIKE,
 			},
 		});
 
@@ -152,7 +153,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		(findOneLikeById as jest.Mock).mockResolvedValue({});
 
 		const { req, res } = createMocks({
-			method: 'PATCH',
+			method: HttpMethods.PATCH,
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -167,7 +168,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		(findOneLikeById as jest.Mock).mockResolvedValue({});
 
 		const { req, res } = createMocks({
-			method: 'PATCH',
+			method: HttpMethods.PATCH,
 			query: {
 				action: 'azerty',
 			},
@@ -185,9 +186,9 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		(findOneLikeById as jest.Mock).mockRejectedValue(new Error('TEST'));
 
 		const { req, res } = createMocks({
-			method: 'PATCH',
+			method: HttpMethods.PATCH,
 			query: {
-				action: 'like',
+				action: LikesActions.LIKE,
 			},
 		});
 
@@ -207,10 +208,10 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		(findOneLikeById as jest.Mock).mockResolvedValue(_like);
 
 		const { req, res } = createMocks({
-			method: 'PATCH',
+			method: HttpMethods.PATCH,
 			query: {
 				idMovie: MOVIEID,
-				action: 'like',
+				action: LikesActions.LIKE,
 			},
 		});
 
@@ -225,8 +226,8 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		(insertOneLike as jest.Mock).mockRejectedValue(new Error('TEST'));
 
 		const { req, res } = createMocks({
-			method: 'PATCH',
-			query: { action: 'like' },
+			method: HttpMethods.PATCH,
+			query: { action: LikesActions.LIKE },
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -237,7 +238,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 	});
 	it('should return 405 if method is not allowed', async () => {
 		const { req, res } = createMocks({
-			method: 'PUT',
+			method: HttpMethods.PUT,
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);

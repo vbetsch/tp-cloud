@@ -3,6 +3,7 @@ import { createMocks } from 'node-mocks-http';
 import handler from '../../../pages/api/movies/search';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSearchMovies } from '../../../src/queries/themoviedb/queries';
+import { HttpMethods } from '../../../src/types/HttpMethods';
 
 jest.mock('../../../src/queries/themoviedb/queries', () => ({
 	getSearchMovies: jest.fn(),
@@ -39,7 +40,7 @@ describe('[API] /movies/search', () => {
 		(getSearchMovies as jest.Mock).mockResolvedValue(PAGINATED_RESULTS);
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 			query: { query: 'Dune: Part Two' },
 		});
 
@@ -58,7 +59,7 @@ describe('[API] /movies/search', () => {
 		(getSearchMovies as jest.Mock).mockResolvedValue(_response);
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 			query: {
 				query: 'chute',
 				page: PAGE,
@@ -80,7 +81,7 @@ describe('[API] /movies/search', () => {
 		(getSearchMovies as jest.Mock).mockResolvedValue(_response);
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -100,7 +101,7 @@ describe('[API] /movies/search', () => {
 		(getSearchMovies as jest.Mock).mockResolvedValue(_response);
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 			query: { page: PAGE },
 		});
 
@@ -116,7 +117,7 @@ describe('[API] /movies/search', () => {
 		(getSearchMovies as jest.Mock).mockRejectedValue(new Error('TEST'));
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -127,7 +128,7 @@ describe('[API] /movies/search', () => {
 	});
 	it('should return 405 if method is not allowed', async () => {
 		const { req, res } = createMocks({
-			method: 'PUT',
+			method: HttpMethods.PUT,
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);

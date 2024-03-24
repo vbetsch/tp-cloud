@@ -4,6 +4,7 @@ import { getMovieById } from '../../../../src/queries/themoviedb/queries';
 import { findOneLikeById } from '../../../../src/queries/mongodb/queries';
 import { createMocks } from 'node-mocks-http';
 import { expect, it } from '@jest/globals';
+import { HttpMethods } from '../../../../src/types/HttpMethods';
 
 jest.mock('../../../../src/queries/themoviedb/queries', () => ({
 	getMovieById: jest.fn(),
@@ -28,7 +29,7 @@ describe('[API] /movies/{idMovie}', () => {
 		(findOneLikeById as jest.Mock).mockResolvedValue(_like);
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 			query: { idMovie: MOVIEID },
 		});
 
@@ -46,7 +47,7 @@ describe('[API] /movies/{idMovie}', () => {
 		(findOneLikeById as jest.Mock).mockResolvedValue(undefined);
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -64,7 +65,7 @@ describe('[API] /movies/{idMovie}', () => {
 		(findOneLikeById as jest.Mock).mockResolvedValue(null);
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 			query: { idMovie: MOVIEID },
 		});
 
@@ -78,7 +79,7 @@ describe('[API] /movies/{idMovie}', () => {
 		(getMovieById as jest.Mock).mockRejectedValue(new Error('TEST'));
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -94,7 +95,7 @@ describe('[API] /movies/{idMovie}', () => {
 		(findOneLikeById as jest.Mock).mockRejectedValue(new Error('TEST'));
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -105,7 +106,7 @@ describe('[API] /movies/{idMovie}', () => {
 	});
 	it('should return 405 if method is not allowed', async () => {
 		const { req, res } = createMocks({
-			method: 'PUT',
+			method: HttpMethods.PUT,
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);

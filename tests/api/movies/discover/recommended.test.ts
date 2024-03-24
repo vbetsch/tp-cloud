@@ -4,6 +4,7 @@ import handler from '../../../../pages/api/movies/discover/recommended';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAllIdMovies } from '../../../../src/queries/mongodb/queries';
 import { getRecommendations } from '../../../../src/queries/themoviedb/queries';
+import { HttpMethods } from '../../../../src/types/HttpMethods';
 
 jest.mock('../../../../src/queries/themoviedb/queries', () => ({
 	getRecommendations: jest.fn((id: number) => ({
@@ -62,7 +63,7 @@ describe('[API] /movies/discover/recommended', () => {
 		(getAllIdMovies as jest.Mock).mockResolvedValue(_idArray);
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -89,7 +90,7 @@ describe('[API] /movies/discover/recommended', () => {
 		(getAllIdMovies as jest.Mock).mockResolvedValue(_idArray);
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -104,7 +105,7 @@ describe('[API] /movies/discover/recommended', () => {
 		(getAllIdMovies as jest.Mock).mockRejectedValue(new Error('TEST'));
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -122,7 +123,7 @@ describe('[API] /movies/discover/recommended', () => {
 		});
 
 		const { req, res } = createMocks({
-			method: 'GET',
+			method: HttpMethods.GET,
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
@@ -133,7 +134,7 @@ describe('[API] /movies/discover/recommended', () => {
 	});
 	it('should return 405 if method is not allowed', async () => {
 		const { req, res } = createMocks({
-			method: 'PUT',
+			method: HttpMethods.PUT,
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);

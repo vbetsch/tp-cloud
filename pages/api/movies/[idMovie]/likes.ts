@@ -4,7 +4,7 @@ import { LikeType } from '../../../../src/types/mongodb/LikeType';
 import { HttpMethods } from '../../../../src/types/HttpMethods';
 import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../src/queries/mongodb/queries';
 
-enum LikesActions {
+export enum LikesActions {
 	LIKE = 'like',
 	UNLIKE = 'unlike',
 }
