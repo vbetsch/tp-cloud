@@ -2,6 +2,7 @@ import { HttpMethods } from '../../types/HttpMethods';
 
 const TMDB_MOVIES = {
 	BASEURL: 'https://api.themoviedb.org/3',
+	IMAGEURL: 'https://image.tmdb.org/t/p',
 	URIS: {
 		DISCOVER: '/discover/movie',
 		SEARCH: '/search/movie',
