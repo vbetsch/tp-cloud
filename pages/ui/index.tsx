@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { getMovies } from '../../src/queries/api/queries';
 import { MovieDiscoverType } from '../../src/types/themoviedb/MovieTypes';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import ImageListItemBar from '@mui/material/ImageListItemBar';
 import { TMDB_MOVIES } from '../../src/queries/themoviedb/config';
+import { Box } from '@mui/material';
 
-export default function Home(): JSX.Element {
+export default function Home() {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [page, setPage] = useState<number>(1);
 	const [movies, setMovies] = useState<MovieDiscoverType[]>([]);
@@ -44,27 +48,31 @@ export default function Home(): JSX.Element {
 	}, [page]);
 
 	return (
-		<div>
+		<Box height="100vh" width="100%">
 			{loading && <p>Loading...</p>}
-			<div>
-				<div>
-					{movies &&
-						movies.map((movie: MovieDiscoverType, key: number) => (
-							<div key={key}>
-								<img
-									src={`${TMDB_MOVIES.IMAGEURL}/w200${movie.backdrop_path}`}
-									alt={'image of ' + movie.title}
-								/>
-								<p>{movie.title}</p>
-							</div>
-						))}
-				</div>
-				<div>
+			<Box height="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+				<ImageList sx={{ width: '50%', height: 800, margin: 0 }}>
+					{movies.map((movie: MovieDiscoverType, key: number) => (
+						<ImageListItem key={key}>
+							<img
+								src={`${TMDB_MOVIES.IMAGEURL}/w500${movie.backdrop_path}`}
+								alt={movie.title}
+								loading="lazy"
+							/>
+							<ImageListItemBar
+								title={movie.title}
+								subtitle={<span>Released in {movie.release_date}</span>}
+								position="below"
+							/>
+						</ImageListItem>
+					))}
+				</ImageList>
+				<Box display="flex" alignItems="center" justifyContent="center">
 					<button onClick={clickToPreviousPage}>Previous</button>
 					<p>{page}</p>
 					<button onClick={clickToNextPage}>Next</button>
-				</div>
-			</div>
-		</div>
+				</Box>
+			</Box>
+		</Box>
 	);
 }

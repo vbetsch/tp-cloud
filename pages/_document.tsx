@@ -13,7 +13,7 @@ export default function MyDocument(props: React.JSX.IntrinsicAttributes & Docume
 				<meta name="emotion-insertion-point" content="" />
 				<DocumentHeadTags {...props} />
 			</Head>
-			<body>
+			<body style={{ margin: 0 }}>
 				<Main />
 				<NextScript />
 			</body>
