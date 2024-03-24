@@ -20,7 +20,14 @@
         "node-fetch": "^2.7.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "swagger-ui-react": "^3.52.3"
+        "swagger-ui-react": "^3.52.3",
+        "@emotion/cache": "latest",
+        "@emotion/react": "latest",
+        "@emotion/server": "latest",
+        "@emotion/styled": "latest",
+        "@mui/icons-material": "latest",
+        "@mui/material": "latest",
+        "@mui/material-nextjs": "latest"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.24.0",
@@ -30,7 +37,7 @@
         "@testing-library/user-event": "^14.5.2",
         "@types/jest": "^29.5.12",
         "@types/node": "18.7.5",
-        "@types/react": "16.9.17",
+        "@types/react": "latest",
         "@types/swagger-ui-react": "^4.18.3",
         "@typescript-eslint/eslint-plugin": "^7.1.1",
         "@typescript-eslint/parser": "^7.1.1",
