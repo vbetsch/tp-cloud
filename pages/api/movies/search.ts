@@ -24,9 +24,9 @@ import { getSearchMovies, ResponsePaginatedMovies } from '../../../src/queries/t
  *       200:
  *         description: Success Response
  *       404:
- *         description: No movie was found
+ *         description: No movie was found with '${query}'
  *       500:
- *         description: Internal Server Error
+ *         description: Impossible to search movies
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	const query: string = (req.query.query as string) || '';
@@ -39,13 +39,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			try {
 				response = await getSearchMovies(query, page);
 			} catch (e) {
-				const errorMessage: string = 'Internal Server Error';
+				const errorMessage: string = 'Impossible to search movies';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-				return res.status(500).json({ status: 500, error: errorMessage });
+				return res.status(500).json({ error: errorMessage });
 			}
 
 			if (response.results && !response.results.length) {
-				errorMessage = 'No movie was found';
+				errorMessage = `No movie was found with '${query}'`;
 				console.warn('WARN: ' + errorMessage);
 				return res.status(404).json({ message: errorMessage });
 			}

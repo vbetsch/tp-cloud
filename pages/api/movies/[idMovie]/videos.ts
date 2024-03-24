@@ -20,7 +20,7 @@ import { getVideosOfMovie, ResponseVideosOfMovie } from '../../../../src/queries
  *       404:
  *         description: Cannot find videos of movie {idMovie}
  *       500:
- *         description: Internal Server Error
+ *         description: Impossible to get videos of movie
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	const idMovie: number = parseInt(req.query.idMovie as string, 10);
@@ -32,9 +32,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			try {
 				response = await getVideosOfMovie(idMovie);
 			} catch (e) {
-				const errorMessage: string = 'Internal Server Error';
+				const errorMessage: string = 'Impossible to get videos of movie';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-				return res.status(500).json({ status: 500, error: errorMessage });
+				return res.status(500).json({ error: errorMessage });
 			}
 
 			if (!response.results) {

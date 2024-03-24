@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getMovieById } from '../../../../src/queries/themoviedb/queries';
 import { findOneLikeById } from '../../../../src/queries/mongodb/queries';
 import { createMocks } from 'node-mocks-http';
+import { expect, it } from '@jest/globals';
 
 const movieId: number = 123;
 const counterLike: number = 5;
@@ -10,7 +11,6 @@ const counterLike: number = 5;
 jest.mock('../../../../src/queries/themoviedb/queries', () => ({
 	getMovieById: jest.fn(),
 }));
-
 jest.mock('../../../../src/queries/mongodb/queries', () => ({
 	findOneLikeById: jest.fn(),
 }));
@@ -76,5 +76,32 @@ describe('[API] /movies/{idMovie}', () => {
 
 		expect(res._getStatusCode()).toBe(405);
 		expect(res._getJSONData().error).toBe('Method Not Allowed');
+	});
+	it('should return 500 for getMovieById error', async () => {
+		(getMovieById as jest.Mock).mockRejectedValue(new Error('TEST'));
+
+		const { req, res } = createMocks({
+			method: 'GET',
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res._getStatusCode()).toBe(500);
+		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to get movie' });
+	});
+	it('should return 500 for findOneLikeById error', async () => {
+		(getMovieById as jest.Mock).mockResolvedValue({
+			id: movieId,
+		});
+		(findOneLikeById as jest.Mock).mockRejectedValue(new Error('TEST'));
+
+		const { req, res } = createMocks({
+			method: 'GET',
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res._getStatusCode()).toBe(500);
+		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to find like' });
 	});
 });

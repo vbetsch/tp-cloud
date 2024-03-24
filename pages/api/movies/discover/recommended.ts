@@ -21,31 +21,38 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	let results: MovieDiscoverType[] = [];
 	let response: ResponsePaginatedMovies;
 	let promises: Promise<void>[];
+	let settledPromises: PromiseSettledResult<void>[];
 
 	switch (req.method) {
 		case HttpMethods.GET:
 			try {
 				moviesIds = await getAllIdMovies();
 			} catch (e) {
-				const errorMessage: string = 'Internal Server Error';
+				const errorMessage: string = 'Impossible to get all id movies';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-				return res.status(500).json({ status: 500, error: errorMessage });
+				return res.status(500).json({ error: errorMessage });
 			}
 
 			promises = moviesIds.map(async (id: number) => {
 				try {
 					response = await getRecommendations(id);
+					if (response?.results) {
+						results = [...results, ...response.results];
+					}
 				} catch (e) {
-					const errorMessage: string = 'Internal Server Error';
+					const errorMessage: string = 'Impossible to get recommendations';
 					console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-					return res.status(500).json({ status: 500, error: errorMessage });
-				}
-				if (response?.results) {
-					results = [...results, ...response.results];
+					return Promise.reject({ error: errorMessage });
 				}
 			});
 
-			await Promise.all(promises);
+			settledPromises = await Promise.allSettled(promises);
+
+			for (const settledPromise of settledPromises) {
+				if (settledPromise.status === 'rejected') {
+					return res.status(500).json(settledPromise.reason);
+				}
+			}
 
 			return res.status(200).json({
 				total: results.length,

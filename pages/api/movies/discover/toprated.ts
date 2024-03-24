@@ -18,7 +18,7 @@ import { getTopRatedMovies, ResponsePaginatedMovies } from '../../../../src/quer
  *       200:
  *         description: Success Response
  *       500:
- *         description: Internal Server Error
+ *         description: Impossible to get toprated movies
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	const page: number = parseInt(req.query.page as string, 10) || 1;
@@ -30,9 +30,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			try {
 				response = await getTopRatedMovies(page);
 			} catch (e) {
-				const errorMessage: string = 'Internal Server Error';
+				const errorMessage: string = 'Impossible to get toprated movies';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-				return res.status(500).json({ status: 500, error: errorMessage });
+				return res.status(500).json({ error: errorMessage });
 			}
 
 			return res.status(200).json(response);

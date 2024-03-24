@@ -3,6 +3,7 @@ import handler from '../../../../pages/api/movies/[idMovie]/likes';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../src/queries/mongodb/queries';
 import { ObjectId } from 'bson';
+import { expect, it } from '@jest/globals';
 
 jest.mock('../../../../src/queries/mongodb/queries', () => ({
 	findOneLikeById: jest.fn(),
@@ -51,6 +52,18 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		const responseData = res._getJSONData();
 		expect(responseData).toStrictEqual(_like);
+	});
+	it('GET - should return 500 for findOneLikeById error', async () => {
+		(findOneLikeById as jest.Mock).mockRejectedValue(new Error('TEST'));
+
+		const { req, res } = createMocks({
+			method: 'GET',
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res._getStatusCode()).toBe(500);
+		expect(res._getJSONData()).toStrictEqual({ error: 'Unable to get likes' });
 	});
 	it('PATCH - should return like created', async () => {
 		const _idMovie: number = 456;
@@ -155,6 +168,59 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		expect(responseData).toStrictEqual({
 			error: 'Action not allowed',
 		});
+	});
+	it('PATCH - should return 500 for findOneLikeById error', async () => {
+		(findOneLikeById as jest.Mock).mockRejectedValue(new Error('TEST'));
+
+		const { req, res } = createMocks({
+			method: 'PATCH',
+			query: {
+				action: 'like',
+			},
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res._getStatusCode()).toBe(500);
+		expect(res._getJSONData()).toStrictEqual({ error: 'Unable to search movie' });
+	});
+	it('PATCH - should return 500 for updateOneLikeById error', async () => {
+		const _idMovie: number = 123;
+		const _originalCounterValue: number = 5;
+		const _like = {
+			idTMDB: _idMovie,
+			likeCounter: _originalCounterValue,
+		};
+
+		(updateOneLikeById as jest.Mock).mockRejectedValue(new Error('TEST'));
+		(findOneLikeById as jest.Mock).mockResolvedValue(_like);
+
+		const { req, res } = createMocks({
+			method: 'PATCH',
+			query: {
+				idMovie: _idMovie,
+				action: 'like',
+			},
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res._getStatusCode()).toBe(500);
+		expect(res._getJSONData()).toStrictEqual({ error: 'Unable to update like' });
+	});
+	it('PATCH - should return 500 for insertOneLike error', async () => {
+		(findOneLikeById as jest.Mock).mockResolvedValue(null);
+		(insertOneLike as jest.Mock).mockRejectedValue(new Error('TEST'));
+
+		const { req, res } = createMocks({
+			method: 'PATCH',
+			query: { action: 'like' },
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res._getStatusCode()).toBe(500);
+		expect(res._getJSONData()).toStrictEqual({ error: 'Unable to insert like' });
 	});
 	it('should return 405 if method is not allowed', async () => {
 		const { req, res } = createMocks({

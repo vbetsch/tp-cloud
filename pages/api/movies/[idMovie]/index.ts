@@ -40,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			try {
 				movie = await getMovieById(idMovie);
 			} catch (e) {
-				errorMessage = 'Internal Server Error';
+				errorMessage = 'Impossible to get movie';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 				return res.status(500).json({ error: errorMessage });
 			}
@@ -48,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			try {
 				like = await findOneLikeById(idMovie);
 			} catch (e) {
-				errorMessage = 'Internal Server Error';
+				errorMessage = 'Impossible to find like';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 				return res.status(500).json({ error: errorMessage });
 			}

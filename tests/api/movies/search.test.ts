@@ -432,7 +432,7 @@ describe('[API] /movies/search', () => {
 		expect(res._getStatusCode()).toBe(404);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({
-			message: 'No movie was found',
+			message: "No movie was found with ''",
 		});
 	});
 	it('should return 405 if method is not allowed', async () => {
@@ -444,5 +444,17 @@ describe('[API] /movies/search', () => {
 
 		expect(res._getStatusCode()).toBe(405);
 		expect(res._getJSONData().error).toBe('Method Not Allowed');
+	});
+	it('should return 500', async () => {
+		(getSearchMovies as jest.Mock).mockRejectedValue(new Error('TEST'));
+
+		const { req, res } = createMocks({
+			method: 'GET',
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res._getStatusCode()).toBe(500);
+		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to search movies' });
 	});
 });

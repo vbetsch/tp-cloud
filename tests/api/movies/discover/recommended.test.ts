@@ -3,6 +3,7 @@ import { createMocks } from 'node-mocks-http';
 import handler from '../../../../pages/api/movies/discover/recommended';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAllIdMovies } from '../../../../src/queries/mongodb/queries';
+import { getRecommendations } from '../../../../src/queries/themoviedb/queries';
 
 jest.mock('../../../../src/queries/themoviedb/queries', () => ({
 	getRecommendations: jest.fn((id: number) => ({
@@ -118,5 +119,34 @@ describe('[API] /movies/discover/recommended', () => {
 
 		expect(res._getStatusCode()).toBe(405);
 		expect(res._getJSONData().error).toBe('Method Not Allowed');
+	});
+	it('should return 500 for getAllIdMovies error', async () => {
+		(getAllIdMovies as jest.Mock).mockRejectedValue(new Error('TEST'));
+
+		const { req, res } = createMocks({
+			method: 'GET',
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res._getStatusCode()).toBe(500);
+		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to get all id movies' });
+	});
+	it('should return 500 for getRecommendations error', async () => {
+		const _idArray: Array<number> = [123];
+
+		(getAllIdMovies as jest.Mock).mockResolvedValue(_idArray);
+		(getRecommendations as jest.Mock).mockImplementationOnce(() => {
+			throw new Error('TEST');
+		});
+
+		const { req, res } = createMocks({
+			method: 'GET',
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res._getStatusCode()).toBe(500);
+		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to get recommendations' });
 	});
 });

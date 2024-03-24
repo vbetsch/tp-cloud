@@ -58,6 +58,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	let like: LikeType | null;
 	let errorMessage: string;
 	switch (req.method) {
+		case HttpMethods.GET:
+			try {
+				like = await findOneLikeById(idMovie);
+				return res.status(200).json(like);
+			} catch (e) {
+				errorMessage = 'Unable to get likes';
+				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
+				return res.status(500).json({ error: errorMessage });
+			}
+
 		case HttpMethods.PATCH:
 			if (!action) {
 				errorMessage = "Parameter 'action' is required";
@@ -67,7 +77,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			try {
 				like = await findOneLikeById(idMovie);
 			} catch (e) {
-				errorMessage = 'Unable to search movie by id';
+				errorMessage = 'Unable to search movie';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 				return res.status(500).json({ error: errorMessage });
 			}
@@ -120,16 +130,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 					return res.status(500).json({ error: errorMessage });
 				}
-			}
-
-		case HttpMethods.GET:
-			try {
-				like = await findOneLikeById(idMovie);
-				return res.status(200).json(like);
-			} catch (e) {
-				errorMessage = 'Unable to get likes';
-				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-				return res.status(500).json({ error: errorMessage });
 			}
 
 		default:
