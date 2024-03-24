@@ -9,7 +9,7 @@ jest.mock('../../../../src/queries/themoviedb/queries', () => ({
 }));
 
 describe('[API] /movies/discover/toprated', () => {
-	it('should return paginated movies with default page value', async () => {
+	it('GET - should return paginated movies without page value', async () => {
 		const { req, res } = createMocks({
 			method: 'GET',
 		});
@@ -18,7 +18,7 @@ describe('[API] /movies/discover/toprated', () => {
 
 		expect(res._getStatusCode()).toBe(200);
 	});
-	it('should return paginated movies with specified page value', async () => {
+	it('GET - should return paginated movies with specified page value', async () => {
 		const { req, res } = createMocks({
 			method: 'GET',
 			query: { page: 17 },
@@ -28,17 +28,7 @@ describe('[API] /movies/discover/toprated', () => {
 
 		expect(res._getStatusCode()).toBe(200);
 	});
-	it('should return 405 if method is not allowed', async () => {
-		const { req, res } = createMocks({
-			method: 'PUT',
-		});
-
-		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
-
-		expect(res._getStatusCode()).toBe(405);
-		expect(res._getJSONData().error).toBe('Method Not Allowed');
-	});
-	it('should return 500', async () => {
+	it('GET - should return 500', async () => {
 		(getTopRatedMovies as jest.Mock).mockRejectedValue(new Error('TEST'));
 
 		const { req, res } = createMocks({
@@ -49,5 +39,15 @@ describe('[API] /movies/discover/toprated', () => {
 
 		expect(res._getStatusCode()).toBe(500);
 		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to get toprated movies' });
+	});
+	it('should return 405 if method is not allowed', async () => {
+		const { req, res } = createMocks({
+			method: 'PUT',
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res._getStatusCode()).toBe(405);
+		expect(res._getJSONData().error).toBe('Method Not Allowed');
 	});
 });

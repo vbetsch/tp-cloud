@@ -61,19 +61,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		case HttpMethods.GET:
 			try {
 				like = await findOneLikeById(idMovie);
-				return res.status(200).json(like);
 			} catch (e) {
 				errorMessage = 'Unable to get likes';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 				return res.status(500).json({ error: errorMessage });
 			}
-
-		case HttpMethods.PATCH:
-			if (!action) {
-				errorMessage = "Parameter 'action' is required";
+			if (like === undefined) {
+				errorMessage = 'idMovie is required';
 				console.error('ERROR: ' + errorMessage);
 				return res.status(400).json({ error: errorMessage });
+			} else {
+				return res.status(200).json(like);
 			}
+
+		case HttpMethods.PATCH:
 			try {
 				like = await findOneLikeById(idMovie);
 			} catch (e) {
@@ -82,54 +83,67 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				return res.status(500).json({ error: errorMessage });
 			}
 
+			if (like === undefined) {
+				errorMessage = 'idMovie is required';
+				console.error('ERROR: ' + errorMessage);
+				return res.status(400).json({ error: errorMessage });
+			}
+
 			if (like) {
+				if (!action) {
+					errorMessage = "Parameter 'action' is required";
+					console.error('ERROR: ' + errorMessage);
+					return res.status(400).json({ error: errorMessage });
+				}
+				let delta: number;
+				let resMongo: UpdateResult;
+				switch (action) {
+					case LikesActions.LIKE:
+						delta = 1;
+						break;
+					case LikesActions.UNLIKE:
+						delta = -1;
+						break;
+					default:
+						errorMessage = 'Action not allowed';
+						console.error('ERROR: ' + errorMessage);
+						return res.status(405).json({ error: errorMessage });
+				}
 				try {
-					let delta: number;
-					switch (action) {
-						case LikesActions.LIKE:
-							delta = 1;
-							break;
-						case LikesActions.UNLIKE:
-							delta = -1;
-							break;
-						default:
-							errorMessage = 'Action not allowed';
-							console.error('ERROR: ' + errorMessage);
-							return res.status(405).json({ error: errorMessage });
-					}
-					const resMongo: UpdateResult = await updateOneLikeById(idMovie, {
+					resMongo = await updateOneLikeById(idMovie, {
 						$inc: { likeCounter: delta },
-					});
-					if (resMongo.modifiedCount > 1) {
-						console.warn(`WARNING: ${resMongo.modifiedCount} items have been modified`);
-					}
-					return res.status(201).json({
-						action: 'likeCounter incremented',
-						idMovie: idMovie,
-						previousValue: like.likeCounter,
-						newValue: like.likeCounter + delta,
 					});
 				} catch (e) {
 					errorMessage = 'Unable to update like';
 					console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 					return res.status(500).json({ error: errorMessage });
 				}
+				if (resMongo.modifiedCount > 1) {
+					console.warn(`WARNING: ${resMongo.modifiedCount} items have been modified`);
+				}
+				return res.status(201).json({
+					action: 'likeCounter incremented',
+					idMovie: idMovie,
+					previousValue: like.likeCounter,
+					newValue: like.likeCounter + delta,
+				});
 			} else {
+				let resMongo: InsertOneResult<Document>;
 				try {
-					const resMongo: InsertOneResult<Document> = await insertOneLike({
+					resMongo = await insertOneLike({
 						idTMDB: idMovie,
 						likeCounter: 0,
-					});
-					return res.status(201).json({
-						action: 'likeCounter created',
-						insertedId: resMongo.insertedId,
-						idMovie: idMovie,
 					});
 				} catch (e) {
 					errorMessage = 'Unable to insert like';
 					console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 					return res.status(500).json({ error: errorMessage });
 				}
+				return res.status(201).json({
+					action: 'likeCounter created',
+					insertedId: resMongo.insertedId,
+					idMovie: idMovie,
+				});
 			}
 
 		default:

@@ -37,7 +37,7 @@ jest.mock('../../../../src/queries/mongodb/queries', () => ({
 }));
 
 describe('[API] /movies/discover/recommended', () => {
-	it('should return recommended movies', async () => {
+	it('GET - should return recommended movies', async () => {
 		const _idArray: Array<number> = [123, 693134];
 
 		(getAllIdMovies as jest.Mock).mockResolvedValue(_idArray);
@@ -92,7 +92,7 @@ describe('[API] /movies/discover/recommended', () => {
 			],
 		});
 	});
-	it('should not return any recommended movie', async () => {
+	it('GET - should not return any recommended movie', async () => {
 		const _idArray: Array<number> = [];
 
 		(getAllIdMovies as jest.Mock).mockResolvedValue(_idArray);
@@ -103,24 +103,10 @@ describe('[API] /movies/discover/recommended', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res.statusCode).toBe(200);
-		expect(res._isEndCalled()).toBeTruthy();
-		expect(res._getJSONData()).toStrictEqual({
-			total: 0,
-			movies: [],
-		});
+		expect(res._getStatusCode()).toBe(404);
+		expect(res._getJSONData().message).toBe("You don't have any favorite movies yet");
 	});
-	it('should return 405 if method is not allowed', async () => {
-		const { req, res } = createMocks({
-			method: 'PUT',
-		});
-
-		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
-
-		expect(res._getStatusCode()).toBe(405);
-		expect(res._getJSONData().error).toBe('Method Not Allowed');
-	});
-	it('should return 500 for getAllIdMovies error', async () => {
+	it('GET - should return 500 for getAllIdMovies error', async () => {
 		(getAllIdMovies as jest.Mock).mockRejectedValue(new Error('TEST'));
 
 		const { req, res } = createMocks({
@@ -132,7 +118,7 @@ describe('[API] /movies/discover/recommended', () => {
 		expect(res._getStatusCode()).toBe(500);
 		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to get all id movies' });
 	});
-	it('should return 500 for getRecommendations error', async () => {
+	it('GET - should return 500 for getRecommendations error', async () => {
 		const _idArray: Array<number> = [123];
 
 		(getAllIdMovies as jest.Mock).mockResolvedValue(_idArray);
@@ -148,5 +134,15 @@ describe('[API] /movies/discover/recommended', () => {
 
 		expect(res._getStatusCode()).toBe(500);
 		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to get recommendations' });
+	});
+	it('should return 405 if method is not allowed', async () => {
+		const { req, res } = createMocks({
+			method: 'PUT',
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res._getStatusCode()).toBe(405);
+		expect(res._getJSONData().error).toBe('Method Not Allowed');
 	});
 });

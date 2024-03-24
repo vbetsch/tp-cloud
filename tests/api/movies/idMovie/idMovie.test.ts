@@ -16,7 +16,7 @@ jest.mock('../../../../src/queries/mongodb/queries', () => ({
 }));
 
 describe('[API] /movies/{idMovie}', () => {
-	it('should return movie with likes', async () => {
+	it('GET - should return movie with likes', async () => {
 		(getMovieById as jest.Mock).mockResolvedValue({
 			id: movieId,
 		});
@@ -40,7 +40,20 @@ describe('[API] /movies/{idMovie}', () => {
 		expect(responseData.id).toBe(movieId);
 		expect(responseData.likes).toBe(counterLike);
 	});
-	it('should return 404 with error and 0 likes', async () => {
+	it('GET - should return 400', async () => {
+		(getMovieById as jest.Mock).mockResolvedValue(undefined);
+		(findOneLikeById as jest.Mock).mockResolvedValue(undefined);
+
+		const { req, res } = createMocks({
+			method: 'GET',
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res.statusCode).toBe(400);
+		expect(res._getJSONData()).toStrictEqual({ error: 'idMovie is required' });
+	});
+	it('GET - should return 404 with error and 0 likes', async () => {
 		const _error = {
 			success: false,
 			status_code: 34,
@@ -67,17 +80,7 @@ describe('[API] /movies/{idMovie}', () => {
 		expect(responseData.status_message).toBe(status_message);
 		expect(responseData.likes).toBe(0);
 	});
-	it('should return 405 if method is not allowed', async () => {
-		const { req, res } = createMocks({
-			method: 'PUT',
-		});
-
-		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
-
-		expect(res._getStatusCode()).toBe(405);
-		expect(res._getJSONData().error).toBe('Method Not Allowed');
-	});
-	it('should return 500 for getMovieById error', async () => {
+	it('GET - should return 500 for getMovieById error', async () => {
 		(getMovieById as jest.Mock).mockRejectedValue(new Error('TEST'));
 
 		const { req, res } = createMocks({
@@ -89,7 +92,7 @@ describe('[API] /movies/{idMovie}', () => {
 		expect(res._getStatusCode()).toBe(500);
 		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to get movie' });
 	});
-	it('should return 500 for findOneLikeById error', async () => {
+	it('GET - should return 500 for findOneLikeById error', async () => {
 		(getMovieById as jest.Mock).mockResolvedValue({
 			id: movieId,
 		});
@@ -103,5 +106,15 @@ describe('[API] /movies/{idMovie}', () => {
 
 		expect(res._getStatusCode()).toBe(500);
 		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to find like' });
+	});
+	it('should return 405 if method is not allowed', async () => {
+		const { req, res } = createMocks({
+			method: 'PUT',
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res._getStatusCode()).toBe(405);
+		expect(res._getJSONData().error).toBe('Method Not Allowed');
 	});
 });

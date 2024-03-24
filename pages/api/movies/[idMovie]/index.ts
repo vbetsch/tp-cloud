@@ -24,6 +24,8 @@ interface MovieOutputType extends MovieDetailsType {
  *     responses:
  *       200:
  *         description: Success Response
+ *       400:
+ *         description: idMovie is required
  *       404:
  *         description: Error Response
  *       500:
@@ -43,6 +45,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				errorMessage = 'Impossible to get movie';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 				return res.status(500).json({ error: errorMessage });
+			}
+
+			if (!movie) {
+				return res.status(400).json({ error: 'idMovie is required' });
 			}
 
 			try {

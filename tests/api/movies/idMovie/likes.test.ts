@@ -12,6 +12,18 @@ jest.mock('../../../../src/queries/mongodb/queries', () => ({
 }));
 
 describe('[API] /movies/{idMovie}/likes', () => {
+	it('GET - should return 400', async () => {
+		(findOneLikeById as jest.Mock).mockResolvedValue(undefined);
+
+		const { req, res } = createMocks({
+			method: 'GET',
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res.statusCode).toBe(400);
+		expect(res._getJSONData()).toStrictEqual({ error: 'idMovie is required' });
+	});
 	it('GET - should return null', async () => {
 		const movieId: number = 41;
 
@@ -64,6 +76,18 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		expect(res._getStatusCode()).toBe(500);
 		expect(res._getJSONData()).toStrictEqual({ error: 'Unable to get likes' });
+	});
+	it('PATCH - should return 400', async () => {
+		(findOneLikeById as jest.Mock).mockResolvedValue(undefined);
+
+		const { req, res } = createMocks({
+			method: 'PATCH',
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res.statusCode).toBe(400);
+		expect(res._getJSONData()).toStrictEqual({ error: 'idMovie is required' });
 	});
 	it('PATCH - should return like created', async () => {
 		const _idMovie: number = 456;

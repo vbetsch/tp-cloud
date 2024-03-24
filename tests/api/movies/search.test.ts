@@ -9,7 +9,7 @@ jest.mock('../../../src/queries/themoviedb/queries', () => ({
 }));
 
 describe('[API] /movies/search', () => {
-	it('should return results movies', async () => {
+	it('GET - should return results movies', async () => {
 		const _response = {
 			page: 1,
 			results: [
@@ -48,7 +48,7 @@ describe('[API] /movies/search', () => {
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual(_response);
 	});
-	it('should return results movies with specified page value', async () => {
+	it('GET - should return results movies with specified page value', async () => {
 		const _response = {
 			page: 7,
 			results: [
@@ -413,7 +413,7 @@ describe('[API] /movies/search', () => {
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual(_response);
 	});
-	it('should return 404', async () => {
+	it('GET - should return 404', async () => {
 		const _response = {
 			page: 1,
 			results: [],
@@ -435,17 +435,30 @@ describe('[API] /movies/search', () => {
 			message: "No movie was found with ''",
 		});
 	});
-	it('should return 405 if method is not allowed', async () => {
+	it('GET - should return 404 with specified page value', async () => {
+		const _response = {
+			page: 1,
+			results: [],
+			total_pages: 1,
+			total_results: 0,
+		};
+
+		(getSearchMovies as jest.Mock).mockResolvedValue(_response);
+
 		const { req, res } = createMocks({
-			method: 'PUT',
+			method: 'GET',
+			query: { page: 7 },
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(405);
-		expect(res._getJSONData().error).toBe('Method Not Allowed');
+		expect(res._getStatusCode()).toBe(404);
+		expect(res._isEndCalled()).toBeTruthy();
+		expect(res._getJSONData()).toStrictEqual({
+			message: "No movie was found with ''",
+		});
 	});
-	it('should return 500', async () => {
+	it('GET - should return 500', async () => {
 		(getSearchMovies as jest.Mock).mockRejectedValue(new Error('TEST'));
 
 		const { req, res } = createMocks({
@@ -456,5 +469,15 @@ describe('[API] /movies/search', () => {
 
 		expect(res._getStatusCode()).toBe(500);
 		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to search movies' });
+	});
+	it('should return 405 if method is not allowed', async () => {
+		const { req, res } = createMocks({
+			method: 'PUT',
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res._getStatusCode()).toBe(405);
+		expect(res._getJSONData().error).toBe('Method Not Allowed');
 	});
 });

@@ -17,6 +17,8 @@ import { getVideosOfMovie, ResponseVideosOfMovie } from '../../../../src/queries
  *     responses:
  *       200:
  *         description: Success Response
+ *       400:
+ *         description: idMovie is required
  *       404:
  *         description: Cannot find videos of movie {idMovie}
  *       500:
@@ -37,10 +39,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				return res.status(500).json({ error: errorMessage });
 			}
 
+			if (!response) {
+				const errorMessage: string = 'idMovie is required';
+				console.error('ERROR: ' + errorMessage);
+				return res.status(400).json({ error: errorMessage });
+			}
+
 			if (!response.results) {
 				const errorMessage: string = `Cannot find videos of movie ${idMovie}`;
 				console.warn('WARN: ' + errorMessage);
-				return res.status(404).json({ status: 404, message: errorMessage });
+				return res.status(404).json({ message: errorMessage });
 			}
 
 			return res.status(200).json(response.results);

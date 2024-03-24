@@ -36,13 +36,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			promises = moviesIds.map(async (id: number) => {
 				try {
 					response = await getRecommendations(id);
-					if (response?.results) {
-						results = [...results, ...response.results];
-					}
 				} catch (e) {
 					const errorMessage: string = 'Impossible to get recommendations';
 					console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 					return Promise.reject({ error: errorMessage });
+				}
+				if (response?.results) {
+					results = [...results, ...response.results];
 				}
 			});
 
@@ -52,6 +52,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				if (settledPromise.status === 'rejected') {
 					return res.status(500).json(settledPromise.reason);
 				}
+			}
+
+			if (!results.length) {
+				return res.status(404).json({ message: "You don't have any favorite movies yet" });
 			}
 
 			return res.status(200).json({
