@@ -12,6 +12,8 @@ import { getRecommendations, ResponsePaginatedMovies } from '../../../../src/que
  *     responses:
  *       200:
  *         description: Success Response
+ *       404:
+ *         description: You don't have any favorite movies yet
  *       500:
  *         description: Internal Server Error
  */

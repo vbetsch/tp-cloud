@@ -24,6 +24,8 @@ export enum LikesActions {
  *     responses:
  *       200:
  *         description: Success Response
+ *       400:
+ *         description: idMovie is required
  *       500:
  *         description: Unable to get likes
  *   patch:
@@ -45,7 +47,7 @@ export enum LikesActions {
  *       201:
  *         description: Success Response
  *       400:
- *         description: Parameter 'action' is required
+ *         description: Invalid request
  *       405:
  *         description: Action not allowed
  *       500:
