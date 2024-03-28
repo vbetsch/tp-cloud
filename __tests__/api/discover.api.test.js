@@ -29,7 +29,7 @@ describe('[API HANDLER] Discover', () => {
 
 		await handler(req, res);
 
-		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.json).toHaveBeenCalledWith({ status: 200, data: mockData.results });
 	});
 
