@@ -2,8 +2,14 @@ version: 2.1
 orbs:
   node: circleci/node@5
 jobs:
-  test-node:
-    # Install node dependencies and run tests
+  # First job declared is for building things..
+  build:
+    executor: node/default
+    steps:
+      - checkout
+      - run: echo "Building things..."
+  # Second job declared is for launching unit tests with Jest
+  unit-tests:
     executor: node/default
     environment:
       JEST_JUNIT_OUTPUT_DIR: ./test-results/
@@ -19,6 +25,11 @@ jobs:
       - store_test_results:
           path: ./test-results/
 workflows:
-  build-and-test:
+  version: 2
+  build_and_test:
     jobs:
-      - test-node
+      - build
+      - unit-tests:
+          requires:
+            - build
+```
