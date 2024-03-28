@@ -32,3 +32,4 @@ workflows:
       - unit-tests:
           requires:
             - build
+            - unit-tests
