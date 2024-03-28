@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run: echo "Building things..."
 
-  unit-tests:
+  unit_tests:
     executor: node/default
     environment:
       JEST_JUNIT_OUTPUT_DIR: ./test-results/
