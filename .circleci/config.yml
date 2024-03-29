@@ -9,7 +9,7 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          name: Run prettier
+          name: Run formatter
           command: npm run prettier:w
       - run:
           name: Run linter

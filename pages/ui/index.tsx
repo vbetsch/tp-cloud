@@ -4,12 +4,17 @@ import { MovieDiscoverType } from '../../src/types/themoviedb/MovieTypes';
 import { Box, Button, ImageList, ImageListItem, ImageListItemBar, Typography } from '@mui/material';
 import { TMDB_MOVIES } from '../../src/queries/themoviedb/config';
 import Skeleton from '@mui/material/Skeleton';
+import Image from 'next/image';
 
 export default function Home() {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [page, setPage] = useState<number>(1);
 	const [movies, setMovies] = useState<MovieDiscoverType[]>([]);
 	const [totalPages, setTotalPages] = useState<number>(0);
+	const imageSize = {
+		width: 500,
+		height: 300,
+	};
 
 	const getData = () => {
 		setLoading(true);
@@ -52,18 +57,25 @@ export default function Home() {
 					{movies.map((movie: MovieDiscoverType, key: number) =>
 						loading ? (
 							<ImageListItem key={key}>
-								<Skeleton key={key} variant="rectangular" height="200px" />
+								<Skeleton
+									key={key}
+									variant="rectangular"
+									width={`${imageSize.width}px`}
+									height={`${imageSize.height}px`}
+								/>
 							</ImageListItem>
 						) : (
 							<ImageListItem key={key}>
-								<img
+								<Image
 									src={`${TMDB_MOVIES.IMAGEURL}/w500${movie.backdrop_path}`}
 									alt={movie.title}
 									loading="lazy"
+									width={imageSize.width}
+									height={imageSize.height}
 								/>
 								<ImageListItemBar
 									title={movie.title}
-									subtitle={<span>Released in {movie.release_date}</span>}
+									subtitle={`Released in ${movie.release_date}`}
 									position="below"
 								/>
 							</ImageListItem>
