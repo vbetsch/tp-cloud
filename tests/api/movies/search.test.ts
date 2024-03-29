@@ -3,7 +3,8 @@ import { createMocks } from 'node-mocks-http';
 import handler from '../../../pages/api/movies/search';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSearchMovies } from '../../../src/queries/themoviedb/queries';
-import { HttpMethods } from '../../../src/types/HttpMethods';
+import { HttpCodeStatus } from '../../../src/types/http/HttpCodeStatus';
+import { HttpMethods } from '../../../src/types/http/HttpMethods';
 
 jest.mock('../../../src/queries/themoviedb/queries', () => ({
 	getSearchMovies: jest.fn(),
@@ -46,7 +47,7 @@ describe('[API] /movies/search', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(200);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.OK);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual(PAGINATED_RESULTS);
 	});
@@ -68,7 +69,7 @@ describe('[API] /movies/search', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(200);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.OK);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual(_response);
 	});
@@ -86,7 +87,7 @@ describe('[API] /movies/search', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(404);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.NOT_FOUND);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({
 			message: "No movie was found with ''",
@@ -107,7 +108,7 @@ describe('[API] /movies/search', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(404);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.NOT_FOUND);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({
 			message: "No movie was found with ''",
@@ -122,7 +123,7 @@ describe('[API] /movies/search', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(500);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.INTERNAL_SERVER_ERROR);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to search movies' });
 	});
@@ -133,7 +134,7 @@ describe('[API] /movies/search', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(405);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.METHOD_NOT_ALLOWED);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Method Not Allowed' });
 	});

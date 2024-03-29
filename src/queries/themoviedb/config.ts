@@ -1,5 +1,5 @@
-import { HttpMethods } from '../../types/HttpMethods';
 import { fetchJsonByUrl } from '../fetch';
+import { HttpMethods } from '../../types/http/HttpMethods';
 
 const TMDB_MOVIES = {
 	BASEURL: 'https://api.themoviedb.org/3',

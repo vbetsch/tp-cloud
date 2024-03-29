@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { InsertOneResult, UpdateResult } from 'mongodb';
 import { LikeType } from '../../../../src/types/mongodb/LikeType';
-import { HttpMethods } from '../../../../src/types/HttpMethods';
 import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../src/queries/mongodb/queries';
+import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
+import { HttpMethods } from '../../../../src/types/http/HttpMethods';
 
 export enum LikesActions {
 	LIKE = 'like',
@@ -66,14 +67,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			} catch (e) {
 				errorMessage = 'Unable to get likes';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-				return res.status(500).json({ error: errorMessage });
+				return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
 			}
 			if (like === undefined) {
 				errorMessage = 'idMovie is required';
 				console.error('ERROR: ' + errorMessage);
-				return res.status(400).json({ error: errorMessage });
+				return res.status(HttpCodeStatus.BAD_REQUEST).json({ error: errorMessage });
 			} else {
-				return res.status(200).json(like);
+				return res.status(HttpCodeStatus.OK).json(like);
 			}
 
 		case HttpMethods.PATCH:
@@ -82,20 +83,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			} catch (e) {
 				errorMessage = 'Unable to search movie';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-				return res.status(500).json({ error: errorMessage });
+				return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
 			}
 
 			if (like === undefined) {
 				errorMessage = 'idMovie is required';
 				console.error('ERROR: ' + errorMessage);
-				return res.status(400).json({ error: errorMessage });
+				return res.status(HttpCodeStatus.BAD_REQUEST).json({ error: errorMessage });
 			}
 
 			if (like) {
 				if (!action) {
 					errorMessage = "Parameter 'action' is required";
 					console.error('ERROR: ' + errorMessage);
-					return res.status(400).json({ error: errorMessage });
+					return res.status(HttpCodeStatus.BAD_REQUEST).json({ error: errorMessage });
 				}
 				let delta: number;
 				let resMongo: UpdateResult;
@@ -109,7 +110,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					default:
 						errorMessage = 'Action not allowed';
 						console.error('ERROR: ' + errorMessage);
-						return res.status(405).json({ error: errorMessage });
+						return res.status(HttpCodeStatus.METHOD_NOT_ALLOWED).json({ error: errorMessage });
 				}
 				try {
 					resMongo = await updateOneLikeById(idMovie, {
@@ -118,12 +119,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				} catch (e) {
 					errorMessage = 'Unable to update like';
 					console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-					return res.status(500).json({ error: errorMessage });
+					return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
 				}
 				if (resMongo.modifiedCount > 1) {
 					console.warn(`WARNING: ${resMongo.modifiedCount} items have been modified`);
 				}
-				return res.status(201).json({
+				return res.status(HttpCodeStatus.CREATED).json({
 					action: 'likeCounter incremented',
 					idMovie: idMovie,
 					previousValue: like.likeCounter,
@@ -139,9 +140,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				} catch (e) {
 					errorMessage = 'Unable to insert like';
 					console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-					return res.status(500).json({ error: errorMessage });
+					return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
 				}
-				return res.status(201).json({
+				return res.status(HttpCodeStatus.CREATED).json({
 					action: 'likeCounter created',
 					insertedId: resMongo.insertedId,
 					idMovie: idMovie,
@@ -151,6 +152,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 		default:
 			errorMessage = 'Method Not Allowed';
 			console.error('ERROR: ' + errorMessage);
-			return res.status(405).json({ error: errorMessage });
+			return res.status(HttpCodeStatus.METHOD_NOT_ALLOWED).json({ error: errorMessage });
 	}
 }

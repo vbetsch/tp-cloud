@@ -4,7 +4,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../src/queries/mongodb/queries';
 import { ObjectId } from 'bson';
 import { expect, it } from '@jest/globals';
-import { HttpMethods } from '../../../../src/types/HttpMethods';
+import { HttpMethods } from '../../../../src/types/http/HttpMethods';
+import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 
 jest.mock('../../../../src/queries/mongodb/queries', () => ({
 	findOneLikeById: jest.fn(),
@@ -25,7 +26,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res.statusCode).toBe(400);
+		expect(res.statusCode).toBe(HttpCodeStatus.BAD_REQUEST);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'idMovie is required' });
 	});
@@ -39,7 +40,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res.statusCode).toBe(200);
+		expect(res.statusCode).toBe(HttpCodeStatus.OK);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toBe(null);
 	});
@@ -58,7 +59,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res.statusCode).toBe(200);
+		expect(res.statusCode).toBe(HttpCodeStatus.OK);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual(_like);
 	});
@@ -71,7 +72,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(500);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.INTERNAL_SERVER_ERROR);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Unable to get likes' });
 	});
@@ -84,7 +85,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res.statusCode).toBe(400);
+		expect(res.statusCode).toBe(HttpCodeStatus.BAD_REQUEST);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'idMovie is required' });
 	});
@@ -107,7 +108,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res.statusCode).toBe(201);
+		expect(res.statusCode).toBe(HttpCodeStatus.CREATED);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({
 			action: 'likeCounter created',
@@ -140,7 +141,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res.statusCode).toBe(201);
+		expect(res.statusCode).toBe(HttpCodeStatus.CREATED);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({
 			action: 'likeCounter incremented',
@@ -158,7 +159,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res.statusCode).toBe(400);
+		expect(res.statusCode).toBe(HttpCodeStatus.BAD_REQUEST);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({
 			error: "Parameter 'action' is required",
@@ -176,7 +177,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res.statusCode).toBe(405);
+		expect(res.statusCode).toBe(HttpCodeStatus.METHOD_NOT_ALLOWED);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({
 			error: 'Action not allowed',
@@ -194,7 +195,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(500);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.INTERNAL_SERVER_ERROR);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Unable to search movie' });
 	});
@@ -217,7 +218,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(500);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.INTERNAL_SERVER_ERROR);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Unable to update like' });
 	});
@@ -232,7 +233,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(500);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.INTERNAL_SERVER_ERROR);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Unable to insert like' });
 	});
@@ -243,7 +244,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(405);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.METHOD_NOT_ALLOWED);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Method Not Allowed' });
 	});

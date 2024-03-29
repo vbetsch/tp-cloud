@@ -3,7 +3,8 @@ import { createMocks } from 'node-mocks-http';
 import handler from '../../../../pages/api/movies/discover/toprated';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getTopRatedMovies } from '../../../../src/queries/themoviedb/queries';
-import { HttpMethods } from '../../../../src/types/HttpMethods';
+import { HttpMethods } from '../../../../src/types/http/HttpMethods';
+import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 
 jest.mock('../../../../src/queries/themoviedb/queries', () => ({
 	getTopRatedMovies: jest.fn(),
@@ -82,7 +83,7 @@ describe('[API] /movies/discover/toprated', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(200);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.OK);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual(_results);
 	});
@@ -102,7 +103,7 @@ describe('[API] /movies/discover/toprated', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(200);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.OK);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual(_results);
 	});
@@ -115,7 +116,7 @@ describe('[API] /movies/discover/toprated', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(500);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.INTERNAL_SERVER_ERROR);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to get toprated movies' });
 	});
@@ -126,7 +127,7 @@ describe('[API] /movies/discover/toprated', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(405);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.METHOD_NOT_ALLOWED);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Method Not Allowed' });
 	});

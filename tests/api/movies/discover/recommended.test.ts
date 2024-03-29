@@ -4,7 +4,8 @@ import handler from '../../../../pages/api/movies/discover/recommended';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getAllIdMovies } from '../../../../src/queries/mongodb/queries';
 import { getRecommendations } from '../../../../src/queries/themoviedb/queries';
-import { HttpMethods } from '../../../../src/types/HttpMethods';
+import { HttpMethods } from '../../../../src/types/http/HttpMethods';
+import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 
 jest.mock('../../../../src/queries/themoviedb/queries', () => ({
 	getRecommendations: jest.fn((id: number) => ({
@@ -68,7 +69,7 @@ describe('[API] /movies/discover/recommended', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res.statusCode).toBe(200);
+		expect(res.statusCode).toBe(HttpCodeStatus.OK);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({
 			total: _idArray.length,
@@ -95,7 +96,7 @@ describe('[API] /movies/discover/recommended', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(404);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.NOT_FOUND);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({
 			message: "You don't have any favorite movies yet",
@@ -110,7 +111,7 @@ describe('[API] /movies/discover/recommended', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(500);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.INTERNAL_SERVER_ERROR);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to get all id movies' });
 	});
@@ -128,7 +129,7 @@ describe('[API] /movies/discover/recommended', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(500);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.INTERNAL_SERVER_ERROR);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to get recommendations' });
 	});
@@ -139,7 +140,7 @@ describe('[API] /movies/discover/recommended', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(405);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.METHOD_NOT_ALLOWED);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Method Not Allowed' });
 	});

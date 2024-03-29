@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { HttpMethods } from '../../../../src/types/HttpMethods';
+import { HttpMethods } from '../../../../src/types/http/HttpMethods';
 import { MovieDiscoverType } from '../../../../src/types/themoviedb/MovieTypes';
 import { getAllIdMovies } from '../../../../src/queries/mongodb/queries';
 import { getRecommendations, ResponsePaginatedMovies } from '../../../../src/queries/themoviedb/queries';
+import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 
 /**
  * @swagger
@@ -33,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			} catch (e) {
 				const errorMessage: string = 'Impossible to get all id movies';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-				return res.status(500).json({ error: errorMessage });
+				return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
 			}
 
 			promises = moviesIds.map(async (id: number) => {
@@ -53,23 +54,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 			for (const settledPromise of settledPromises) {
 				if (settledPromise.status === 'rejected') {
-					return res.status(500).json(settledPromise.reason);
+					return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json(settledPromise.reason);
 				}
 			}
 
 			if (!results.length) {
 				warnMessage = "You don't have any favorite movies yet";
 				console.warn('WARN: ' + warnMessage);
-				return res.status(404).json({ message: warnMessage });
+				return res.status(HttpCodeStatus.NOT_FOUND).json({ message: warnMessage });
 			}
 
-			return res.status(200).json({
+			return res.status(HttpCodeStatus.OK).json({
 				total: results.length,
 				movies: results,
 			});
 		default:
 			errorMessage = 'Method Not Allowed';
 			console.error('ERROR: ' + errorMessage);
-			return res.status(405).json({ error: errorMessage });
+			return res.status(HttpCodeStatus.METHOD_NOT_ALLOWED).json({ error: errorMessage });
 	}
 }

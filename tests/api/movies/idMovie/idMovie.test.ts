@@ -4,7 +4,8 @@ import { getMovieById } from '../../../../src/queries/themoviedb/queries';
 import { findOneLikeById } from '../../../../src/queries/mongodb/queries';
 import { createMocks } from 'node-mocks-http';
 import { expect, it } from '@jest/globals';
-import { HttpMethods } from '../../../../src/types/HttpMethods';
+import { HttpMethods } from '../../../../src/types/http/HttpMethods';
+import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 
 jest.mock('../../../../src/queries/themoviedb/queries', () => ({
 	getMovieById: jest.fn(),
@@ -35,7 +36,7 @@ describe('[API] /movies/{idMovie}', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res.statusCode).toBe(200);
+		expect(res.statusCode).toBe(HttpCodeStatus.OK);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({
 			id: 123,
@@ -52,7 +53,7 @@ describe('[API] /movies/{idMovie}', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res.statusCode).toBe(400);
+		expect(res.statusCode).toBe(HttpCodeStatus.BAD_REQUEST);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'idMovie is required' });
 	});
@@ -71,7 +72,7 @@ describe('[API] /movies/{idMovie}', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(404);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.NOT_FOUND);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ message: 'Movie not found' });
 	});
@@ -84,7 +85,7 @@ describe('[API] /movies/{idMovie}', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(500);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.INTERNAL_SERVER_ERROR);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to get movie' });
 	});
@@ -100,7 +101,7 @@ describe('[API] /movies/{idMovie}', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(500);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.INTERNAL_SERVER_ERROR);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Impossible to find like' });
 	});
@@ -111,7 +112,7 @@ describe('[API] /movies/{idMovie}', () => {
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
-		expect(res._getStatusCode()).toBe(405);
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.METHOD_NOT_ALLOWED);
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual({ error: 'Method Not Allowed' });
 	});

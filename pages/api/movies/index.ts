@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { HttpMethods } from '../../../src/types/HttpMethods';
 import { getMoviesDiscover, ResponsePaginatedMovies } from '../../../src/queries/themoviedb/queries';
+import { HttpCodeStatus } from '../../../src/types/http/HttpCodeStatus';
+import { HttpMethods } from '../../../src/types/http/HttpMethods';
 
 /**
  * @swagger
@@ -32,13 +33,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			} catch (e) {
 				const errorMessage: string = 'Unable to search movies to discover';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-				return res.status(500).json({ error: errorMessage });
+				return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
 			}
 
-			return res.status(200).json(response);
+			return res.status(HttpCodeStatus.OK).json(response);
 		default:
 			errorMessage = 'Method Not Allowed';
 			console.error('ERROR: ' + errorMessage);
-			return res.status(405).json({ error: errorMessage });
+			return res.status(HttpCodeStatus.METHOD_NOT_ALLOWED).json({ error: errorMessage });
 	}
 }

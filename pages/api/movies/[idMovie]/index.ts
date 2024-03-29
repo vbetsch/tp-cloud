@@ -1,9 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { MovieDetailsType } from '../../../../src/types/themoviedb/MovieTypes';
 import { LikeType } from '../../../../src/types/mongodb/LikeType';
-import { HttpMethods } from '../../../../src/types/HttpMethods';
 import { findOneLikeById } from '../../../../src/queries/mongodb/queries';
 import { getMovieById } from '../../../../src/queries/themoviedb/queries';
+import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
+import { HttpMethods } from '../../../../src/types/http/HttpMethods';
 
 interface MovieOutputType extends MovieDetailsType {
 	likes?: number;
@@ -45,13 +46,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			} catch (e) {
 				errorMessage = 'Impossible to get movie';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-				return res.status(500).json({ error: errorMessage });
+				return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
 			}
 
 			if (!movie) {
 				errorMessage = 'idMovie is required';
 				console.error('ERROR: ' + errorMessage);
-				return res.status(400).json({ error: errorMessage });
+				return res.status(HttpCodeStatus.BAD_REQUEST).json({ error: errorMessage });
 			}
 
 			try {
@@ -59,7 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			} catch (e) {
 				errorMessage = 'Impossible to find like';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
-				return res.status(500).json({ error: errorMessage });
+				return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
 			}
 
 			movie.likes = like && like.likeCounter ? like.likeCounter : 0;
@@ -67,13 +68,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			if (!movie.id) {
 				warnMessage = 'Movie not found';
 				console.warn('WARN: ' + warnMessage);
-				return res.status(404).json({ message: warnMessage });
+				return res.status(HttpCodeStatus.NOT_FOUND).json({ message: warnMessage });
 			}
 
-			return res.status(200).json(movie);
+			return res.status(HttpCodeStatus.OK).json(movie);
 		default:
 			errorMessage = 'Method Not Allowed';
 			console.error('ERROR: ' + errorMessage);
-			return res.status(405).json({ error: errorMessage });
+			return res.status(HttpCodeStatus.METHOD_NOT_ALLOWED).json({ error: errorMessage });
 	}
 }
