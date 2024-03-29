@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   node: circleci/node@5
 jobs:
-  prepare:
+  build:
     executor: node/default
     steps:
       - checkout
@@ -14,16 +14,12 @@ jobs:
       - run:
           name: Run linter
           command: npm run eslint:ci
-
-  build:
-    executor: node/default
-    steps:
-      - checkout
-      - node/install-packages:
-          pkg-manager: npm
       - run:
           name: Run build
           command: npm run build
+      - store_artifacts:
+          path: /tmp/artifact-1
+          destination: artifact-file
 
   tests:
     executor: node/default
