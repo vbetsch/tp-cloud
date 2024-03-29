@@ -1,12 +1,12 @@
 import { MovieDetailsType, MovieDiscoverType } from '../../types/themoviedb/MovieTypes';
-import { getDataFromUrl, TMDB_MOVIES } from './config';
+import { getTMDBDataFromUrl, TMDB_MOVIES } from './config';
 import { VideoType } from '../../types/themoviedb/VideoType';
 
 const movieBaseUrl: string = TMDB_MOVIES.BASEURL + TMDB_MOVIES.URIS.MOVIE.BASE_URI;
 
 const getMovieById = async (idMovie: number): Promise<MovieDetailsType> => {
 	const url: string = `${movieBaseUrl}/${idMovie}`;
-	return await getDataFromUrl(url, `Get movie ${idMovie}`);
+	return await getTMDBDataFromUrl(url, `Get movie ${idMovie}`);
 };
 
 export interface ResponseVideosOfMovie {
@@ -16,7 +16,7 @@ export interface ResponseVideosOfMovie {
 
 const getVideosOfMovie = async (idMovie: number): Promise<ResponseVideosOfMovie> => {
 	const url: string = `${movieBaseUrl}/${idMovie}${TMDB_MOVIES.URIS.MOVIE.SUB_URIS.VIDEOS}`;
-	return await getDataFromUrl(url, `Get videos of movie ${idMovie}`);
+	return await getTMDBDataFromUrl(url, `Get videos of movie ${idMovie}`);
 };
 
 export interface ResponsePaginatedMovies {
@@ -28,22 +28,22 @@ export interface ResponsePaginatedMovies {
 
 const getMoviesDiscover = async (page: number): Promise<ResponsePaginatedMovies> => {
 	const url: string = `${TMDB_MOVIES.BASEURL}${TMDB_MOVIES.URIS.DISCOVER}?page=${page}`;
-	return await getDataFromUrl(url, `Get all movies (page ${page})`);
+	return await getTMDBDataFromUrl(url, `Get all movies (page ${page})`);
 };
 
 const getRecommendations = async (idMovie: number): Promise<ResponsePaginatedMovies> => {
 	const url: string = `${movieBaseUrl}/${idMovie}${TMDB_MOVIES.URIS.MOVIE.SUB_URIS.RECOMMENDATIONS}`;
-	return await getDataFromUrl(url, `Get recommendations of ${idMovie}`);
+	return await getTMDBDataFromUrl(url, `Get recommendations of ${idMovie}`);
 };
 
 const getTopRatedMovies = async (page: number): Promise<ResponsePaginatedMovies> => {
 	const url: string = `${movieBaseUrl}${TMDB_MOVIES.URIS.MOVIE.SUB_URIS.TOP_RATED}?page=${page}`;
-	return await getDataFromUrl(url, `Get top rated movies (page ${page})`);
+	return await getTMDBDataFromUrl(url, `Get top rated movies (page ${page})`);
 };
 
 const getSearchMovies = async (query: string, page: number): Promise<ResponsePaginatedMovies> => {
 	const url: string = `${TMDB_MOVIES.BASEURL}${TMDB_MOVIES.URIS.SEARCH}?query=${query}&page=${page}`;
-	return await getDataFromUrl(url, `Get movies by search of '${query}' (page ${page})`);
+	return await getTMDBDataFromUrl(url, `Get movies by search of '${query}' (page ${page})`);
 };
 
 export { getMovieById, getVideosOfMovie, getMoviesDiscover, getRecommendations, getTopRatedMovies, getSearchMovies };

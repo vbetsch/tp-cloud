@@ -1,4 +1,5 @@
 import { HttpMethods } from '../../types/HttpMethods';
+import { fetchJsonByUrl } from '../fetch';
 
 const TMDB_MOVIES = {
 	BASEURL: 'https://api.themoviedb.org/3',
@@ -17,19 +18,17 @@ const TMDB_MOVIES = {
 	},
 };
 
-const options: RequestInit = {
-	method: HttpMethods.GET,
-	headers: {
-		accept: 'application/json',
-		Authorization: 'Bearer ' + process.env.API_TOKEN,
-	},
-};
-
-const getDataFromUrl = async (url: string, infoText: string) => {
-	const response: Response = await fetch(url, options);
-	const result = await response.json();
+const getTMDBDataFromUrl = async (url: string, infoText: string) => {
+	const options: RequestInit = {
+		method: HttpMethods.GET,
+		headers: {
+			accept: 'application/json',
+			Authorization: 'Bearer ' + process.env.API_TOKEN,
+		},
+	};
+	const result = await fetchJsonByUrl(url, options);
 	console.info('INFO: ' + infoText);
 	return result;
 };
 
-export { TMDB_MOVIES, getDataFromUrl };
+export { TMDB_MOVIES, getTMDBDataFromUrl };

@@ -1,4 +1,5 @@
 import { HttpMethods } from '../../types/HttpMethods';
+import { fetchJsonByUrl } from '../fetch';
 
 const API = {
 	BASEURL: 'http://localhost:3000/api',
@@ -10,18 +11,16 @@ const API = {
 	},
 };
 
-const options: RequestInit = {
-	method: HttpMethods.GET,
-	headers: {
-		accept: 'application/json',
-	},
-};
-
-const getDataFromUrl = async (url: string, infoText: string) => {
-	const response: Response = await fetch(url, options);
-	const result = await response.json();
+const getAPIDataFromUrl = async (url: string, infoText: string) => {
+	const options: RequestInit = {
+		method: HttpMethods.GET,
+		headers: {
+			accept: 'application/json',
+		},
+	};
+	const result = await fetchJsonByUrl(url, options);
 	console.info('INFO: ' + infoText);
 	return result;
 };
 
-export { API, getDataFromUrl };
+export { API, getAPIDataFromUrl };
