@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethods } from '../../../../src/types/http/HttpMethods';
-import { getTopRatedMovies, ResponsePaginatedMovies } from '../../../../src/queries/themoviedb/queries';
+import { getTopRatedMovies } from '../../../../src/queries/themoviedb/queries';
 import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
+import { ResponsePaginatedMovies } from '../../../../src/types/themoviedb/queries/ResponsePaginatedMovies';
 
 /**
  * @swagger

@@ -1,6 +1,7 @@
-import { MovieDetailsType, MovieDiscoverType } from '../../types/themoviedb/MovieTypes';
+import { MovieDetailsType } from '../../types/themoviedb/MovieTypes';
 import { getTMDBDataFromUrl, TMDB_MOVIES } from './config';
-import { VideoType } from '../../types/themoviedb/VideoType';
+import { ResponsePaginatedMovies } from '../../types/themoviedb/queries/ResponsePaginatedMovies';
+import { ResponseVideosOfMovie } from '../../types/themoviedb/queries/ResponseVideosOfMovie';
 
 const movieBaseUrl: string = TMDB_MOVIES.BASEURL + TMDB_MOVIES.URIS.MOVIE.BASE_URI;
 
@@ -9,22 +10,10 @@ const getMovieById = async (idMovie: number): Promise<MovieDetailsType> => {
 	return await getTMDBDataFromUrl(url, `Get movie ${idMovie}`);
 };
 
-export interface ResponseVideosOfMovie {
-	id: number;
-	results: VideoType[];
-}
-
 const getVideosOfMovie = async (idMovie: number): Promise<ResponseVideosOfMovie> => {
 	const url: string = `${movieBaseUrl}/${idMovie}${TMDB_MOVIES.URIS.MOVIE.SUB_URIS.VIDEOS}`;
 	return await getTMDBDataFromUrl(url, `Get videos of movie ${idMovie}`);
 };
-
-export interface ResponsePaginatedMovies {
-	page: number;
-	results: MovieDiscoverType[];
-	total_pages: number;
-	total_results: number;
-}
 
 const getMoviesDiscover = async (page: number): Promise<ResponsePaginatedMovies> => {
 	const url: string = `${TMDB_MOVIES.BASEURL}${TMDB_MOVIES.URIS.DISCOVER}?page=${page}`;

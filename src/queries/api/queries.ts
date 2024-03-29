@@ -1,5 +1,5 @@
 import { API, getAPIDataFromUrl } from './config';
-import { ResponsePaginatedMovies } from '../themoviedb/queries';
+import { ResponsePaginatedMovies } from '../../types/themoviedb/queries/ResponsePaginatedMovies';
 
 const getMovies = async (page: number): Promise<ResponsePaginatedMovies> => {
 	const url: string = `${API.BASEURL}${API.URIS.MOVIES.BASE_URI}?page=${page}`;
