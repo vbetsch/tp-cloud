@@ -1,5 +1,5 @@
-import { HttpMethods } from '../../types/HttpMethods';
 import { fetchJsonByUrl } from '../fetch';
+import { HttpMethods } from '../../types/http/HttpMethods';
 
 const API = {
 	BASEURL: 'http://localhost:3000/api',
