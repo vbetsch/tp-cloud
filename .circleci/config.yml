@@ -6,8 +6,16 @@ jobs:
     executor: node/default
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
       - node/install-packages:
           pkg-manager: npm
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
       - run:
           name: Run formatter
           command: npm run prettier:w
@@ -17,9 +25,12 @@ jobs:
       - run:
           name: Run build
           command: npm run build
+      - persist_to_workspace:
+          root: .next
+          paths:
+            - .next
       - store_artifacts:
-          path: /tmp/artifact-1
-          destination: artifact-file
+          path: .next
 
   tests:
     executor: node/default
