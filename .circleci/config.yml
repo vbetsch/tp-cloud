@@ -57,7 +57,10 @@ jobs:
       - run:
           name: Run build
           command: npm run build
-
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .next
 
 workflows:
   version: 2
@@ -89,6 +92,9 @@ workflows:
             branches:
               only:
                 - main
+      - store_artifacts:
+          path: .next
+          when: on_success
 #      - deploy:
 #          requires:
 #            - tests
