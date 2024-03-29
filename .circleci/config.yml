@@ -38,9 +38,9 @@ jobs:
       - run:
           name: Run API tests
           command: npm run test:api
-#      - run:
-#          name: Run UI tests
-#          command: npm run test:ui
+      #      - run:
+      #          name: Run UI tests
+      #          command: npm run test:ui
       - run:
           name: Run coverage
           command: npm run test:coverage
@@ -52,7 +52,9 @@ workflows:
   build-and-test:
     jobs:
       - prepare
-      - build
+      - build:
+          requires:
+            - prepare
       - tests:
           requires:
             - build
