@@ -13,6 +13,7 @@ Emerging streaming platform specializing in movie recommendations based on user 
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
 ![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white)
+![CircleCI](https://img.shields.io/badge/circle%20ci-%23161616.svg?style=for-the-badge&logo=circleci&logoColor=white)
 
 ## Roadmap
 - [X]  Create API routes
@@ -62,6 +63,10 @@ Emerging streaming platform specializing in movie recommendations based on user 
   ```bash
   npm run eslint
   ```
+- Run ESLint in quiet mode
+  ```bash
+  npm run eslint:quiet
+  ```
 - Check Prettier
   ```bash
   npm run prettier:c
@@ -75,6 +80,14 @@ Emerging streaming platform specializing in movie recommendations based on user 
 - Launch all Jest tests
   ```bash
   npm run test 
+  ```
+- Launch API Jest tests
+  ```bash
+  npm run test:api
+  ```
+- Launch UI Jest tests
+  ```bash
+  npm run test:ui
   ```
 - Run Jest coverage
   ```bash
