@@ -2,12 +2,13 @@ version: 2.1
 orbs:
   node: circleci/node@5
 jobs:
-  prepare:
+  quality:
     executor: node/default
     steps:
       - checkout
       - node/install-packages:
           pkg-manager: npm
+          cache-key: v1-dependencies-{{ checksum "package.json" }}
       - run:
           name: Run formatter
           command: npm run prettier:w
@@ -21,6 +22,8 @@ jobs:
       JEST_JUNIT_OUTPUT_DIR: ./test-results/
     steps:
       - checkout
+      - node/restore-cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
       - node/install-packages:
           pkg-manager: npm
       - run:
@@ -41,6 +44,8 @@ jobs:
     executor: node/default
     steps:
       - checkout
+      - node/restore-cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
       - node/install-packages:
           pkg-manager: npm
       - run:
@@ -51,10 +56,10 @@ workflows:
   version: 2
   build-and-test:
     jobs:
-      - prepare
+      - quality
       - tests:
           requires:
-            - prepare
+            - quality
       - build:
           requires:
             - tests
