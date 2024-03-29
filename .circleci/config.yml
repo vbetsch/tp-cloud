@@ -2,6 +2,19 @@ version: 2.1
 orbs:
   node: circleci/node@5
 jobs:
+  prepare:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Run prettier
+          command: npm run prettier:w
+      - run:
+          name: Run linter
+          command: npm run eslint:ci
+
   build:
     executor: node/default
     steps:
@@ -11,12 +24,6 @@ jobs:
       - run:
           name: Run build
           command: npm run build
-      - run:
-          name: Run linter
-          command: npm run eslint:ci
-      - run:
-          name: Run prettier
-          command: npm run prettier:w
 
   tests:
     executor: node/default
@@ -42,8 +49,9 @@ jobs:
 
 workflows:
   version: 2
-  build-test-deploy:
+  build-and-test:
     jobs:
+      - prepare
       - build
       - tests:
           requires:
