@@ -8,13 +8,16 @@ jobs:
       - checkout
       - node/install-packages:
           pkg-manager: npm
-          cache: v1-dependencies-{{ checksum "package.json" }}
       - run:
           name: Run formatter
           command: npm run prettier:w
       - run:
           name: Run linter
           command: npm run eslint:ci
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
 
   tests:
     executor: node/default
@@ -22,11 +25,8 @@ jobs:
       JEST_JUNIT_OUTPUT_DIR: ./test-results/
     steps:
       - checkout
-      - node/restore-cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-      - node/install-packages:
-          pkg-manager: npm
-          cache: v1-dependencies-{{ checksum "package.json" }}
+      - attach_workspace:
+          at: .
       - run:
           command: npm install jest-junit
       - run:
@@ -45,11 +45,8 @@ jobs:
     executor: node/default
     steps:
       - checkout
-      - node/restore-cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-      - node/install-packages:
-          pkg-manager: npm
-          cache: v1-dependencies-{{ checksum "package.json" }}
+      - attach_workspace:
+          at: .
       - run:
           name: Run build
           command: npm run build
