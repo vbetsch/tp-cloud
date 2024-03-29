@@ -61,6 +61,8 @@ jobs:
           root: .
           paths:
             - .next
+      - store_artifacts:
+          path: .next
 
 workflows:
   version: 2
@@ -92,9 +94,6 @@ workflows:
             branches:
               only:
                 - main
-      - store_artifacts:
-          path: .next
-          when: on_success
 #      - deploy:
 #          requires:
 #            - tests
