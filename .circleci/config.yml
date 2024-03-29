@@ -8,7 +8,7 @@ jobs:
       - checkout
       - node/install-packages:
           pkg-manager: npm
-          cache-key: v1-dependencies-{{ checksum "package.json" }}
+          cache: v1-dependencies-{{ checksum "package.json" }}
       - run:
           name: Run formatter
           command: npm run prettier:w
@@ -26,6 +26,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
       - node/install-packages:
           pkg-manager: npm
+          cache: v1-dependencies-{{ checksum "package.json" }}
       - run:
           command: npm install jest-junit
       - run:
@@ -48,6 +49,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
       - node/install-packages:
           pkg-manager: npm
+          cache: v1-dependencies-{{ checksum "package.json" }}
       - run:
           name: Run build
           command: npm run build
