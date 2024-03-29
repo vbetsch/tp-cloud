@@ -10,7 +10,7 @@
         "test:watch": "jest --watch",
         "test:coverage": "jest --coverage",
         "eslint": "eslint .",
-        "eslint:ci": "eslint --quiet .",
+        "eslint:quiet": "eslint --quiet .",
         "prettier:c": "prettier --check .",
         "prettier:w": "prettier --write ."
     },
