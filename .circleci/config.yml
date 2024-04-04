@@ -69,22 +69,34 @@ jobs:
       - image: cimg/node:20.5.0
     steps:
       - checkout
+#      - run:
+#          name: Install Vercel CLI
+#          command: sudo npm install --global vercel@latest
+#      - run:
+#          name: Pull Vercel Environment Information
+#          command: sudo vercel pull --yes --environment=production --token=$VERCEL_TOKEN --team-id=$VERCEL_ORG_ID --project-id=$VERCEL_PROJECT_ID
       - run:
           name: Install Vercel CLI
           command: sudo npm install --global vercel@latest
       - run:
-          name: Pull Vercel Environment Information
-          command: sudo vercel pull --yes --environment=production --token=$VERCEL_TOKEN --team-id=$VERCEL_ORG_ID --project-id=$VERCEL_PROJECT_ID
+          name: Link Vercel Project
+          command: sudo vercel link --team-id=$VERCEL_ORG_ID --project-id=$VERCEL_PROJECT_ID --token=$VERCEL_TOKEN
       - run:
           command: cat .vercel/.env.production.local
       - run:
           command: cat /home/circleci/project/.vercel/project.json
+#      - run:
+#          name: Build Project Artifacts
+#          command: sudo vercel build --prod --token=$VERCEL_TOKEN
+#      - run:
+#          name: Deploy Project Artifacts to Vercel
+#          command: sudo vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN --team-id=$VERCEL_ORG_ID --project-id=$VERCEL_PROJECT_ID
       - run:
           name: Build Project Artifacts
           command: sudo vercel build --prod --token=$VERCEL_TOKEN
       - run:
           name: Deploy Project Artifacts to Vercel
-          command: sudo vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN --team-id=$VERCEL_ORG_ID --project-id=$VERCEL_PROJECT_ID
+          command: sudo vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
 
 workflows:
   version: 2
