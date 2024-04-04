@@ -67,13 +67,9 @@ jobs:
   deploy_prod:
     docker:
       - image: cimg/node:20.5.0
-    environment:
-      TESTTST: << pipeline.parameters.workingdir >>
-    working_directory: << pipeline.parameters.workingdir >>
+    working_directory: tpcloud
     steps:
       - checkout
-      - run:
-          command: echo $TESTTST
       - run:
           name: Install Vercel CLI
           command: sudo npm install --global vercel@latest
