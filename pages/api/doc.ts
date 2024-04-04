@@ -12,7 +12,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
  */
 const swaggerHandler: () => (req: NextApiRequest, res: NextApiResponse) => void = withSwagger({
 	openApiVersion: '3.0.0',
-	apiFolder: 'src/pages/api',
+	apiFolder: 'pages/api',
 	title: 'TP Cloud API',
 	version: '1.0.0',
 });
