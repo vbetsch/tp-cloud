@@ -68,7 +68,7 @@ jobs:
     docker:
       - image: cimg/node:20.5.0
     environment:
-      VERCEL_PROJECT_NAME: $VERCEL_PROJECT_NAME
+      VERCEL_PROJECT_NAME: fichtre
     working_directory: $VERCEL_PROJECT_NAME
     steps:
       - checkout
