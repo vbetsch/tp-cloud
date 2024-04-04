@@ -68,8 +68,8 @@ jobs:
     docker:
       - image: cimg/node:20.5.0
     environment:
-      TESTTST: azerty
-    working_directory: $TESTTST
+      TESTTST: << pipeline.parameters.workingdir >>
+    working_directory: << pipeline.parameters.workingdir >>
     steps:
       - checkout
       - run:
