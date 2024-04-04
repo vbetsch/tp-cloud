@@ -67,7 +67,7 @@ jobs:
   deploy_prod:
     docker:
       - image: cimg/node:20.5.0
-    working_directory: tpcloud
+    working_directory: tp-cloud
     steps:
       - checkout
       - run:
