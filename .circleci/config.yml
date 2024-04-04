@@ -38,13 +38,13 @@ jobs:
           command: npm install jest-junit
       - run:
           name: Run API tests
-          command: jest --ci
+          command: npm run test:api:ci
       #      - run:
       #          name: Run UI tests
-      #          command: npm run test:ui
+      #          command: npm run test:ui:ci
       - run:
           name: Run coverage
-          command: npm run test:coverage
+          command: npm run test:coverage:ci
       - store_test_results:
           path: ./test-results/
 
