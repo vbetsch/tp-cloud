@@ -80,7 +80,7 @@ jobs:
           command: sudo npm install --global vercel@latest
       - run:
           name: Link Vercel Project
-          command: sudo vercel link --team-id=$VERCEL_ORG_ID --project-id=$VERCEL_PROJECT_ID --token=$VERCEL_TOKEN
+          command: sudo vercel link --project=tp-cloud --token=$VERCEL_TOKEN
       - run:
           command: cat .vercel/.env.production.local
       - run:
