@@ -67,13 +67,11 @@ jobs:
   deploy_prod:
     docker:
       - image: cimg/node:20.5.0
-    environment:
-      VERCEL_PROJECT_NAME: fichtre
     working_directory: $VERCEL_PROJECT_NAME
     steps:
       - checkout
       - run:
-          command: echo $CIRCLE_WORKING_DIRECTORY
+          command: echo $CIRCLE_PROJECT_REPONAME
       - run:
           name: Install Vercel CLI
           command: sudo npm install --global vercel@latest
