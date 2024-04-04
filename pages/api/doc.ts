@@ -1,5 +1,5 @@
-import { withSwagger } from 'next-swagger-doc';
 import { NextApiRequest, NextApiResponse } from 'next';
+import swaggerSpec from '../../src/swagger';
 
 /**
  * @swagger
@@ -10,10 +10,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
  *       200:
  *         description: Success Response
  */
-const swaggerHandler: () => (req: NextApiRequest, res: NextApiResponse) => void = withSwagger({
-	openApiVersion: '3.0.0',
-	apiFolder: 'pages/api',
-	title: 'TP Cloud API',
-	version: '1.0.0',
-});
-export default swaggerHandler();
+const swaggerHandler = (req: NextApiRequest, res: NextApiResponse) => {
+	res.setHeader('Content-Type', 'application/json');
+	res.status(200).json(swaggerSpec);
+};
+
+export default swaggerHandler;
