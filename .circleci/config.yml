@@ -71,6 +71,8 @@ jobs:
     steps:
       - checkout
       - run:
+          command: echo $CIRCLE_WORKING_DIRECTORY
+      - run:
           name: Install Vercel CLI
           command: sudo npm install --global vercel@latest
       - run:
