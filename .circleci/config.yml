@@ -114,8 +114,8 @@ workflows:
 #              only:
 #                - main
       - deploy_prod:
-          requires:
-            - build
+#          requires:
+#            - build
           filters:
             branches:
               only:
