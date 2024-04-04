@@ -38,7 +38,7 @@ jobs:
           command: npm install jest-junit
       - run:
           name: Run API tests
-          command: npm run test:api
+          command: jest --ci
       #      - run:
       #          name: Run UI tests
       #          command: npm run test:ui
@@ -66,25 +66,28 @@ jobs:
 
   deploy_prod:
     docker:
-      - image: cimg/node:20.5.0
+      - image: circleci/node:latest
+    environment:
+      VERCEL_ORG_ID: $VERCEL_ORG_ID
+      VERCEL_PROJECT_ID: $VERCEL_PROJECT_ID
     steps:
       - checkout
       - run:
-          command: echo ${VERCEL_TOKEN}
+          command: echo $VERCEL_ORG_ID
+      - run:
+          command: echo $VERCEL_PROJECT_ID
       - run:
           name: Install Vercel CLI
-          command: sudo npm install --global vercel@latest
+          command: npm install --global vercel@latest
       - run:
           name: Pull Vercel Environment Information
-          command: sudo vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+          command: vercel pull --yes --environment=production --token=$VERCEL_TOKEN
       - run:
           name: Build Project Artifacts
-          command: |
-            node --version
-            sudo vercel build --prod --token=$VERCEL_TOKEN
+          command: vercel build --prod --token=$VERCEL_TOKEN
       - run:
           name: Deploy Project Artifacts to Vercel
-          command: sudo vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+          command: vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
 
 workflows:
   version: 2
@@ -109,16 +112,16 @@ workflows:
             branches:
               ignore:
                 - lesson
-      - build:
-          requires:
-            - unit_tests
-          filters:
-            branches:
-              only:
-                - main
+      #      - build:
+      #          requires:
+      #            - unit_tests
+      #          filters:
+      #            branches:
+      #              only:
+      #                - main
       - deploy_prod:
           requires:
-            - build
+            - unit_tests
           filters:
             branches:
               only:
