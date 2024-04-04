@@ -2,7 +2,7 @@ import { fetchJsonByUrl } from '../fetch';
 import { HttpMethods } from '../../types/http/HttpMethods';
 
 const API = {
-	BASEURL: 'http://localhost:3000/api',
+	BASEURL: '/api',
 	URIS: {
 		MOVIES: {
 			BASE_URI: '/movies',
