@@ -70,6 +70,12 @@ jobs:
     steps:
       - checkout
       - run:
+          command: echo $VERCEL_TOKEN
+      - run:
+          command: echo $VERCEL_ORG_ID
+      - run:
+          command: echo $VERCEL_PROJECT_ID
+      - run:
           name: Install Vercel CLI
           command: sudo npm install --global vercel@latest
       - run:
