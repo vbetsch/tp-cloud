@@ -79,9 +79,9 @@ jobs:
           name: Pull Vercel Environment Information
           command: sudo vercel pull --yes --environment=production --token=$VERCEL_TOKEN
       - run:
-          command: ls --color=auto -Ap --group-directories-first node_modules
+          command: ls --color=auto -Ap --group-directories-first
 #      - run:
-#          command: ls --color=auto -Ap --group-directories-first ./node_modules/.bin/
+#          command: ls --color=auto -Ap --group-directories-first node_modules
       - run:
           name: Build Project Artifacts
           command: sudo vercel build --prod --token=$VERCEL_TOKEN
