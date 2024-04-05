@@ -48,23 +48,23 @@ jobs:
       - store_test_results:
           path: ./test-results/
 
-  build:
-    executor: node/default
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - run:
-          name: Run build
-          command: npm run build
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .next
-      - store_artifacts:
-          path: .next
+  #  build:
+  #    executor: node/default
+  #    steps:
+  #      - checkout
+  #      - attach_workspace:
+  #          at: .
+  #      - run:
+  #          name: Run build
+  #          command: npm run build
+  #      - persist_to_workspace:
+  #          root: .
+  #          paths:
+  #            - .next
+  #      - store_artifacts:
+  #          path: .next
 
-  deploy_prod:
+  build_prod:
     docker:
       - image: cimg/node:20.5.0
     working_directory: ~/tp-cloud
@@ -79,6 +79,22 @@ jobs:
       - run:
           name: Build Project Artifacts
           command: sudo vercel build --prod --token=$VERCEL_TOKEN
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
+            - .vercel
+      - store_artifacts:
+          path: .vercel/output
+
+  deploy_prod:
+    docker:
+      - image: cimg/node:20.5.0
+    working_directory: ~/tp-cloud
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
       - run:
           name: Deploy Project Artifacts to Vercel
           command: sudo vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
@@ -87,35 +103,42 @@ workflows:
   version: 2
   build-test-deploy:
     jobs:
-#      - install_dependencies:
-#          filters:
-#            branches:
-#              ignore:
-#                - lesson
-#      - check_linter:
-#          requires:
-#            - install_dependencies
-#          filters:
-#            branches:
-#              ignore:
-#                - lesson
-#      - unit_tests:
-#          requires:
-#            - check_linter
-#          filters:
-#            branches:
-#              ignore:
-#                - lesson
-#      - build:
-#          requires:
-#            - unit_tests
-#          filters:
-#            branches:
-#              only:
-#                - main
+      #      - install_dependencies:
+      #          filters:
+      #            branches:
+      #              ignore:
+      #                - lesson
+      #      - check_linter:
+      #          requires:
+      #            - install_dependencies
+      #          filters:
+      #            branches:
+      #              ignore:
+      #                - lesson
+      #      - unit_tests:
+      #          requires:
+      #            - check_linter
+      #          filters:
+      #            branches:
+      #              ignore:
+      #                - lesson
+      #            - build:
+      #                requires:
+      #                  - unit_tests
+      #                filters:
+      #                  branches:
+      #                    only:
+      #                      - main
+      - build_prod:
+          #          requires:
+          #            - unit_tests
+          filters:
+            branches:
+              only:
+                - main
       - deploy_prod:
-#          requires:
-#            - build
+          requires:
+            - build_prod
           filters:
             branches:
               only:
