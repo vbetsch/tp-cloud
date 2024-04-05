@@ -65,7 +65,7 @@ jobs:
           command: sudo vercel build --prod --token=$VERCEL_TOKEN
       - run:
           name: Deploy Project Artifacts to Vercel
-          command: sudo vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN --skip-domain --scope vbet/tp-cloud
+          command: sudo vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN --skip-domain --scope tp-cloud
 
 workflows:
   version: 2
