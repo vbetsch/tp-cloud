@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { getMovies } from '../src/queries/api/queries';
 import { MovieDiscoverType } from '../src/types/themoviedb/MovieTypes';
 import { TMDB_MOVIES } from '../src/queries/themoviedb/config';
+import Head from 'next/head';
 
 export default function Home() {
 	const [loading, setLoading] = useState<boolean>(false);
@@ -52,45 +53,50 @@ export default function Home() {
 	}, [page]);
 
 	return (
-		<Box height="100vh" width="100%">
-			<Box height="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-				<Link href="/api/movies">API</Link>
-				<Link href="/docs">Swagger</Link>
-				<ImageList sx={{ width: '50%', height: 800, margin: 0 }}>
-					{movies.map((movie: MovieDiscoverType, key: number) =>
-						loading ? (
-							<ImageListItem key={key}>
-								<Skeleton
-									key={key}
-									variant="rectangular"
-									width={`${imageSize.width}px`}
-									height={`${imageSize.height}px`}
-								/>
-							</ImageListItem>
-						) : (
-							<ImageListItem key={key}>
-								<Image
-									src={`${TMDB_MOVIES.IMAGEURL}/w500${movie.backdrop_path}`}
-									alt={movie.title}
-									loading="lazy"
-									width={imageSize.width}
-									height={imageSize.height}
-								/>
-								<ImageListItemBar
-									title={movie.title}
-									subtitle={`Released in ${movie.release_date}`}
-									position="below"
-								/>
-							</ImageListItem>
-						),
-					)}
-				</ImageList>
-				<Box display="flex" alignItems="center" justifyContent="center">
-					<Button onClick={clickToPreviousPage}>Previous</Button>
-					<Typography>{page}</Typography>
-					<Button onClick={clickToNextPage}>Next</Button>
+		<>
+			<Head>
+				<title>TP Cloud</title>
+			</Head>
+			<Box height="100vh" width="100%">
+				<Box height="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+					<Link href="/api/movies">API</Link>
+					<Link href="/docs">Swagger</Link>
+					<ImageList sx={{ width: '50%', height: 800, margin: 0 }}>
+						{movies.map((movie: MovieDiscoverType, key: number) =>
+							loading ? (
+								<ImageListItem key={key}>
+									<Skeleton
+										key={key}
+										variant="rectangular"
+										width={`${imageSize.width}px`}
+										height={`${imageSize.height}px`}
+									/>
+								</ImageListItem>
+							) : (
+								<ImageListItem key={key}>
+									<Image
+										src={`${TMDB_MOVIES.IMAGEURL}/w500${movie.backdrop_path}`}
+										alt={movie.title}
+										loading="lazy"
+										width={imageSize.width}
+										height={imageSize.height}
+									/>
+									<ImageListItemBar
+										title={movie.title}
+										subtitle={`Released in ${movie.release_date}`}
+										position="below"
+									/>
+								</ImageListItem>
+							),
+						)}
+					</ImageList>
+					<Box display="flex" alignItems="center" justifyContent="center">
+						<Button onClick={clickToPreviousPage}>Previous</Button>
+						<Typography>{page}</Typography>
+						<Button onClick={clickToNextPage}>Next</Button>
+					</Box>
 				</Box>
 			</Box>
-		</Box>
+		</>
 	);
 }

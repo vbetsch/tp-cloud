@@ -1,15 +1,20 @@
 import * as React from 'react';
-import { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
+import { DocumentContext, Html, Head, Main, NextScript } from 'next/document';
 import { documentGetInitialProps, DocumentHeadTags, DocumentHeadTagsProps } from '@mui/material-nextjs/v14-pagesRouter';
 import theme from '../src/theme/theme';
 
-export default function MyDocument(props: React.JSX.IntrinsicAttributes & DocumentHeadTagsProps) {
+export default function Document(props: React.JSX.IntrinsicAttributes & DocumentHeadTagsProps) {
 	return (
 		<Html lang="en">
 			<Head>
-				{/* PWA primary color */}
 				<meta name="theme-color" content={theme.palette.primary.main} />
 				<meta name="emotion-insertion-point" content="" />
+				<link
+					id="favicon"
+					rel="shortcut icon"
+					href="https://files.readme.io/6dc6435-small-favicon.png"
+					type="image/png"
+				/>
 				<DocumentHeadTags {...props} />
 			</Head>
 			<body style={{ margin: 0 }}>
@@ -20,6 +25,6 @@ export default function MyDocument(props: React.JSX.IntrinsicAttributes & Docume
 	);
 }
 
-MyDocument.getInitialProps = async (ctx: DocumentContext) => {
+Document.getInitialProps = async (ctx: DocumentContext) => {
 	return await documentGetInitialProps(ctx);
 };
