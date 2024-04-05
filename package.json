@@ -35,7 +35,8 @@
         "react-dom": "^18.2.0",
         "swagger-jsdoc": "^6.2.8",
         "swagger-ui-react": "^3.52.3",
-        "types-ramda": "0.29.9"
+        "types-ramda": "0.29.9",
+        "vercel": "^33.6.3"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.24.0",

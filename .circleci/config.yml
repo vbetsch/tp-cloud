@@ -74,17 +74,15 @@ jobs:
       - checkout
       - run:
           name: Install Vercel CLI
-          command: npm install vercel@latest
+          command: sudo npm install --global vercel@latest
+      - run:
+          command: ls --color=auto -Ap --group-directories-first node_modules/.bin
       - run:
           name: Pull Vercel Environment Information
           command: sudo vercel pull --yes --environment=production --token=$VERCEL_TOKEN
       - run:
           name: Build Project Artifacts
           command: sudo vercel build --prod --token=$VERCEL_TOKEN
-      - run:
-          command: ls --color=auto -Ap --group-directories-first node_modules/
-      - run:
-          command: ls --color=auto -Ap --group-directories-first .vercel/
       - persist_to_workspace:
           root: .
           paths:
@@ -102,9 +100,7 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          command: ls --color=auto -Ap --group-directories-first node_modules/
-      - run:
-          command: ls --color=auto -Ap --group-directories-first .vercel/
+          command: ls --color=auto -Ap --group-directories-first node_modules/.bin
       - run:
           name: Deploy Project Artifacts to Vercel
           command: sudo vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
