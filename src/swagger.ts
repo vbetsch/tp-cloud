@@ -8,7 +8,7 @@ const swaggerDefinition = {
 	},
 	servers: [
 		{
-			url: '/api',
+			url: '/',
 		},
 	],
 };
