@@ -94,35 +94,35 @@ workflows:
   version: 2
   build-test-deploy:
     jobs:
-      #      - install_dependencies:
-      #          filters:
-      #            branches:
-      #              ignore:
-      #                - lesson
-      #      - check_linter:
-      #          requires:
-      #            - install_dependencies
-      #          filters:
-      #            branches:
-      #              ignore:
-      #                - lesson
-      #      - unit_tests:
-      #          requires:
-      #            - check_linter
-      #          filters:
-      #            branches:
-      #              ignore:
-      #                - lesson
+      - install_dependencies:
+          filters:
+            branches:
+              ignore:
+                - lesson
+      - check_linter:
+          requires:
+            - install_dependencies
+          filters:
+            branches:
+              ignore:
+                - lesson
+      - unit_tests:
+          requires:
+            - check_linter
+          filters:
+            branches:
+              ignore:
+                - lesson
       - build_and_deploy_dev:
-          #          requires:
-          #            - unit_tests
+          requires:
+            - unit_tests
           filters:
             branches:
               only:
                 - develop
       - build_and_deploy_prod:
-          #          requires:
-          #            - unit_tests
+          requires:
+            - unit_tests
           filters:
             branches:
               only:
