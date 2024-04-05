@@ -1,18 +1,26 @@
 import React from 'react';
-import Head from 'next/head';
-import SwaggerUI from 'swagger-ui-react';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import { createSwaggerSpec } from 'next-swagger-doc';
+import dynamic from 'next/dynamic';
 import 'swagger-ui-react/swagger-ui.css';
 
-const Swagger = (): JSX.Element => {
-	return (
-		<div>
-			<Head>
-				<title>TP Cloud API</title>
-				<meta name="description" content="TP Cloud API Swagger" />
-			</Head>
-			<SwaggerUI url="/api/doc" />
-		</div>
-	);
+const SwaggerUI = dynamic(() => import('swagger-ui-react'), { ssr: false });
+
+export const getStaticProps: GetStaticProps = async () => {
+	const spec = createSwaggerSpec({
+		openApiVersion: '3.0.0',
+		title: 'TP Cloud API',
+		version: '1.0.0',
+		apiFolder: 'pages/api',
+	});
+
+	return {
+		props: {
+			spec,
+		},
+	};
 };
 
-export default Swagger;
+export default function ApiDoc({ spec }: InferGetStaticPropsType<typeof getStaticProps>) {
+	return <SwaggerUI spec={spec} />;
+}
