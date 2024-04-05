@@ -1,16 +1,16 @@
 import handler from '../../../../pages/api/movies/[idMovie]/index';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getMovieById } from '../../../../src/queries/themoviedb/queries';
-import { findOneLikeById } from '../../../../src/queries/mongodb/queries';
+import { getMovieById } from '../../../../src/queries/themoviedb';
+import { findOneLikeById } from '../../../../src/queries/mongodb';
 import { createMocks } from 'node-mocks-http';
 import { expect, it } from '@jest/globals';
 import { HttpMethods } from '../../../../src/types/http/HttpMethods';
 import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 
-jest.mock('../../../../src/queries/themoviedb/queries', () => ({
+jest.mock('../../../../src/queries/themoviedb', () => ({
 	getMovieById: jest.fn(),
 }));
-jest.mock('../../../../src/queries/mongodb/queries', () => ({
+jest.mock('../../../../src/queries/mongodb', () => ({
 	findOneLikeById: jest.fn(),
 }));
 

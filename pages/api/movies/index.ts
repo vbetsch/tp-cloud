@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpCodeStatus } from '../../../src/types/http/HttpCodeStatus';
 import { HttpMethods } from '../../../src/types/http/HttpMethods';
 import { ResponsePaginatedMovies } from '../../../src/types/themoviedb/queries/ResponsePaginatedMovies';
-import { getMoviesDiscover } from '../../../src/queries/themoviedb/queries';
+import { getMoviesDiscover } from '../../../src/queries/themoviedb';
 
 /**
  * @swagger

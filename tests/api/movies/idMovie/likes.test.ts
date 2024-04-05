@@ -1,13 +1,13 @@
 import { createMocks } from 'node-mocks-http';
 import handler, { LikesActions } from '../../../../pages/api/movies/[idMovie]/likes';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../src/queries/mongodb/queries';
+import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../src/queries/mongodb';
 import { ObjectId } from 'bson';
 import { expect, it } from '@jest/globals';
 import { HttpMethods } from '../../../../src/types/http/HttpMethods';
 import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 
-jest.mock('../../../../src/queries/mongodb/queries', () => ({
+jest.mock('../../../../src/queries/mongodb', () => ({
 	findOneLikeById: jest.fn(),
 	updateOneLikeById: jest.fn(),
 	insertOneLike: jest.fn(),

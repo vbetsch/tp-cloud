@@ -2,11 +2,11 @@ import { describe, expect, it } from '@jest/globals';
 import { createMocks } from 'node-mocks-http';
 import handler from '../../../../pages/api/movies/discover/toprated';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getTopRatedMovies } from '../../../../src/queries/themoviedb/queries';
+import { getTopRatedMovies } from '../../../../src/queries/themoviedb';
 import { HttpMethods } from '../../../../src/types/http/HttpMethods';
 import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 
-jest.mock('../../../../src/queries/themoviedb/queries', () => ({
+jest.mock('../../../../src/queries/themoviedb', () => ({
 	getTopRatedMovies: jest.fn(),
 }));
 

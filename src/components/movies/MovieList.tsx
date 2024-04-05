@@ -2,8 +2,8 @@ import React from 'react';
 import { ImageList, ImageListItem } from '@mui/material';
 import { MovieDiscoverType } from '../../types/themoviedb/MovieTypes';
 import Skeleton from '@mui/material/Skeleton';
-import { TMDB_MOVIES } from '../../queries/themoviedb/config';
 import MovieItem from './MovieItem';
+import { TMDB_MOVIES } from '../../config/themoviedb';
 
 export interface MoviesListProperties {
 	movies: MovieDiscoverType[];

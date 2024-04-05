@@ -1,5 +1,5 @@
-import { fetchJsonByUrl } from '../fetch';
-import { HttpMethods } from '../../types/http/HttpMethods';
+import { HttpMethods } from '../types/http/HttpMethods';
+import { fetchJsonByUrl } from '../queries/fetch';
 
 const API = {
 	BASEURL: '/api',

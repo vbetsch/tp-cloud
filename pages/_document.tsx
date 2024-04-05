@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DocumentContext, Html, Head, Main, NextScript } from 'next/document';
 import { documentGetInitialProps, DocumentHeadTags, DocumentHeadTagsProps } from '@mui/material-nextjs/v14-pagesRouter';
-import theme from '../src/theme/theme';
+import theme from '../src/config/theme';
 
 export default function Document(props: React.JSX.IntrinsicAttributes & DocumentHeadTagsProps) {
 	return (

@@ -2,12 +2,12 @@ import { describe, expect, it } from '@jest/globals';
 import { createMocks } from 'node-mocks-http';
 import handler from '../../../../pages/api/movies/discover/recommended';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getAllIdMovies } from '../../../../src/queries/mongodb/queries';
-import { getRecommendations } from '../../../../src/queries/themoviedb/queries';
+import { getAllIdMovies } from '../../../../src/queries/mongodb';
+import { getRecommendations } from '../../../../src/queries/themoviedb';
 import { HttpMethods } from '../../../../src/types/http/HttpMethods';
 import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 
-jest.mock('../../../../src/queries/themoviedb/queries', () => ({
+jest.mock('../../../../src/queries/themoviedb', () => ({
 	getRecommendations: jest.fn((id: number) => ({
 		page: 1,
 		results: [
@@ -34,7 +34,7 @@ jest.mock('../../../../src/queries/themoviedb/queries', () => ({
 		total_results: 1,
 	})),
 }));
-jest.mock('../../../../src/queries/mongodb/queries', () => ({
+jest.mock('../../../../src/queries/mongodb', () => ({
 	getAllIdMovies: jest.fn(),
 }));
 

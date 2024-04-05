@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { MovieDetailsType } from '../../../../src/types/themoviedb/MovieTypes';
 import { LikeType } from '../../../../src/types/mongodb/LikeType';
-import { findOneLikeById } from '../../../../src/queries/mongodb/queries';
-import { getMovieById } from '../../../../src/queries/themoviedb/queries';
 import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 import { HttpMethods } from '../../../../src/types/http/HttpMethods';
+import { getMovieById } from '../../../../src/queries/themoviedb';
+import { findOneLikeById } from '../../../../src/queries/mongodb';
 
 interface MovieOutputType extends MovieDetailsType {
 	likes?: number;

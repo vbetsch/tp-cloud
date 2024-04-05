@@ -1,7 +1,7 @@
-import { MovieDetailsType } from '../../types/themoviedb/MovieTypes';
-import { getTMDBDataFromUrl, TMDB_MOVIES } from './config';
-import { ResponsePaginatedMovies } from '../../types/themoviedb/queries/ResponsePaginatedMovies';
-import { ResponseVideosOfMovie } from '../../types/themoviedb/queries/ResponseVideosOfMovie';
+import { getTMDBDataFromUrl, TMDB_MOVIES } from '../config/themoviedb';
+import { MovieDetailsType } from '../types/themoviedb/MovieTypes';
+import { ResponseVideosOfMovie } from '../types/themoviedb/queries/ResponseVideosOfMovie';
+import { ResponsePaginatedMovies } from '../types/themoviedb/queries/ResponsePaginatedMovies';
 
 const movieBaseUrl: string = TMDB_MOVIES.BASEURL + TMDB_MOVIES.URIS.MOVIE.BASE_URI;
 
