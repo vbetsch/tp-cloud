@@ -113,11 +113,11 @@ workflows:
   version: 2
   build-test-deploy:
     jobs:
-      - install_dependencies:
-          filters:
-            branches:
-              ignore:
-                - lesson
+      #      - install_dependencies:
+      #          filters:
+      #            branches:
+      #              ignore:
+      #                - lesson
       #      - check_linter:
       #          requires:
       #            - install_dependencies
