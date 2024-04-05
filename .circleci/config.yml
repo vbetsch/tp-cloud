@@ -79,6 +79,8 @@ jobs:
       - run:
           name: Build Project Artifacts
           command: sudo vercel build --prod --token=$VERCEL_TOKEN
+      - run:
+          command: ls --color=auto -Ap --group-directories-first
       - persist_to_workspace:
           root: .
           paths:
@@ -95,6 +97,8 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
+      - run:
+          command: ls --color=auto -Ap --group-directories-first
       - run:
           name: Deploy Project Artifacts to Vercel
           command: sudo vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
