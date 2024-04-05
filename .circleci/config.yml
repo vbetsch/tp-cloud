@@ -76,12 +76,12 @@ jobs:
           name: Install Vercel CLI
           command: sudo npm install --global vercel@latest
       - run:
+          name: Pull Vercel Environment Information
+          command: sudo vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+      - run:
           command: ls --color=auto -Ap --group-directories-first node_modules
 #      - run:
 #          command: ls --color=auto -Ap --group-directories-first ./node_modules/.bin/
-      - run:
-          name: Pull Vercel Environment Information
-          command: sudo vercel pull --yes --environment=production --token=$VERCEL_TOKEN
       - run:
           name: Build Project Artifacts
           command: sudo vercel build --prod --token=$VERCEL_TOKEN
