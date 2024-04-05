@@ -6,7 +6,7 @@ import { ResponsePaginatedMovies } from '../../../../src/types/themoviedb/querie
 
 /**
  * @swagger
- * /movies/discover/toprated:
+ * /api/movies/discover/toprated:
  *   get:
  *     description: Returns top rated movies
  *     parameters:
