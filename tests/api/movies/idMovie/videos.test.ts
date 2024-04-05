@@ -1,12 +1,12 @@
 import { createMocks } from 'node-mocks-http';
 import handler from '../../../../pages/api/movies/[idMovie]/videos';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getVideosOfMovie } from '../../../../src/queries/themoviedb/queries';
+import { getVideosOfMovie } from '../../../../src/queries/themoviedb';
 import { expect, it } from '@jest/globals';
 import { HttpMethods } from '../../../../src/types/http/HttpMethods';
 import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 
-jest.mock('../../../../src/queries/themoviedb/queries', () => ({
+jest.mock('../../../../src/queries/themoviedb', () => ({
 	getVideosOfMovie: jest.fn(),
 }));
 

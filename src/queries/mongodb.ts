@@ -1,6 +1,6 @@
 import { Db, Document, InsertOneResult, OptionalId, UpdateFilter, UpdateResult } from 'mongodb';
-import { LikeType } from '../../types/mongodb/LikeType';
-import { DatabaseCollections, getMongoDatabase } from './config';
+import { DatabaseCollections, getMongoDatabase } from '../config/mongodb';
+import { LikeType } from '../types/mongodb/LikeType';
 
 const getAllIdMovies = async (): Promise<number[]> => {
 	const db: Db = await getMongoDatabase();

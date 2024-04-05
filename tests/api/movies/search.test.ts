@@ -2,11 +2,11 @@ import { describe, expect, it } from '@jest/globals';
 import { createMocks } from 'node-mocks-http';
 import handler from '../../../pages/api/movies/search';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSearchMovies } from '../../../src/queries/themoviedb/queries';
+import { getSearchMovies } from '../../../src/queries/themoviedb';
 import { HttpCodeStatus } from '../../../src/types/http/HttpCodeStatus';
 import { HttpMethods } from '../../../src/types/http/HttpMethods';
 
-jest.mock('../../../src/queries/themoviedb/queries', () => ({
+jest.mock('../../../src/queries/themoviedb', () => ({
 	getSearchMovies: jest.fn(),
 }));
 

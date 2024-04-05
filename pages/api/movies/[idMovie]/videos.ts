@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getVideosOfMovie } from '../../../../src/queries/themoviedb/queries';
 import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 import { HttpMethods } from '../../../../src/types/http/HttpMethods';
 import { ResponseVideosOfMovie } from '../../../../src/types/themoviedb/queries/ResponseVideosOfMovie';
+import { getVideosOfMovie } from '../../../../src/queries/themoviedb';
 
 /**
  * @swagger

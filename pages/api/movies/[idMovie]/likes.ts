@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { InsertOneResult, UpdateResult } from 'mongodb';
 import { LikeType } from '../../../../src/types/mongodb/LikeType';
-import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../src/queries/mongodb/queries';
 import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 import { HttpMethods } from '../../../../src/types/http/HttpMethods';
+import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../src/queries/mongodb';
 
 export enum LikesActions {
 	LIKE = 'like',

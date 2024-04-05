@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getSearchMovies } from '../../../src/queries/themoviedb/queries';
 import { HttpCodeStatus } from '../../../src/types/http/HttpCodeStatus';
 import { HttpMethods } from '../../../src/types/http/HttpMethods';
 import { ResponsePaginatedMovies } from '../../../src/types/themoviedb/queries/ResponsePaginatedMovies';
+import { getSearchMovies } from '../../../src/queries/themoviedb';
 
 /**
  * @swagger

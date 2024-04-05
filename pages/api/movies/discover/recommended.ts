@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethods } from '../../../../src/types/http/HttpMethods';
 import { MovieDiscoverType } from '../../../../src/types/themoviedb/MovieTypes';
-import { getAllIdMovies } from '../../../../src/queries/mongodb/queries';
-import { getRecommendations } from '../../../../src/queries/themoviedb/queries';
 import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 import { ResponsePaginatedMovies } from '../../../../src/types/themoviedb/queries/ResponsePaginatedMovies';
+import { getAllIdMovies } from '../../../../src/queries/mongodb';
+import { getRecommendations } from '../../../../src/queries/themoviedb';
 
 /**
  * @swagger
