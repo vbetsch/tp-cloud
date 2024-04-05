@@ -35,6 +35,7 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+          name: Install Jest dependencies
           command: npm install jest-junit
       - run:
           name: Run API tests
