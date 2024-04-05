@@ -8,7 +8,7 @@ import { ResponsePaginatedMovies } from '../../../../src/types/themoviedb/querie
 
 /**
  * @swagger
- * /movies/discover/recommended:
+ * /api/movies/discover/recommended:
  *   get:
  *     description: Returns recommended movies
  *     responses:
