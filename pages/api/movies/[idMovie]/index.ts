@@ -12,7 +12,7 @@ interface MovieOutputType extends MovieDetailsType {
 
 /**
  * @swagger
- * /api/movies/{idMovie}:
+ * /movies/{idMovie}:
  *   get:
  *     description: Returns movie by given id
  *     parameters:

@@ -8,14 +8,14 @@ const swaggerDefinition = {
 	},
 	servers: [
 		{
-			url: '/',
+			url: '/api',
 		},
 	],
 };
 
 const options = {
 	swaggerDefinition,
-	apis: ['pages/api/**/*.ts'], // Chemin vers vos fichiers de route
+	apis: ['pages/**/*.ts'],
 };
 
 const swaggerSpec = swaggerJSDoc(options);

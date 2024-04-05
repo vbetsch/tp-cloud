@@ -6,7 +6,7 @@ import { ResponseVideosOfMovie } from '../../../../src/types/themoviedb/queries/
 
 /**
  * @swagger
- * /api/movies/{idMovie}/videos:
+ * /movies/{idMovie}/videos:
  *   get:
  *     description: Returns videos of movie
  *     parameters:

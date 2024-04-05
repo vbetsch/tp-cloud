@@ -12,7 +12,7 @@ export enum LikesActions {
 
 /**
  * @swagger
- * /api/movies/{idMovie}/likes:
+ * /movies/{idMovie}/likes:
  *   get:
  *     description: Returns likes of movie
  *     parameters:

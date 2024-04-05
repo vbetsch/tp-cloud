@@ -3,7 +3,7 @@ import swaggerSpec from '../../src/swagger';
 
 /**
  * @swagger
- * /api/doc:
+ * /doc:
  *   get:
  *     description: Returns documentation
  *     responses:

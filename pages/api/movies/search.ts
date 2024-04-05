@@ -6,7 +6,7 @@ import { ResponsePaginatedMovies } from '../../../src/types/themoviedb/queries/R
 
 /**
  * @swagger
- * /api/movies/search:
+ * /movies/search:
  *   get:
  *     description: Search a movie
  *     parameters:
