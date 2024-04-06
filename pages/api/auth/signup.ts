@@ -6,6 +6,35 @@ import { UserType } from '../../../src/types/mongodb/UserType';
 import { InsertOneResult } from 'mongodb';
 import { hashString } from '../../../src/services/bcrypt';
 
+/**
+ * @swagger
+ * /api/auth/signup:
+ *   post:
+ *     tags: [Auth]
+ *     description: Create a new user
+ *     consumes:
+ *       - application/x-www-form-urlencoded
+ *     parameters:
+ *       - in: body
+ *         name: email
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Email of new user
+ *       - in: body
+ *         name: password
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Password of new user
+ *     responses:
+ *       200:
+ *         description: Success Response
+ *       400:
+ *         description: Parameters 'email' and 'password' are required
+ *       500:
+ *         description: Unable to create user
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	const { email, password }: UserType = req.body;
 
