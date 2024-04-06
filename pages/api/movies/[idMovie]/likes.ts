@@ -3,7 +3,7 @@ import { InsertOneResult, UpdateResult } from 'mongodb';
 import { LikeType } from '../../../../src/types/mongodb/LikeType';
 import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 import { HttpMethods } from '../../../../src/types/http/HttpMethods';
-import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../src/queries/mongodb';
+import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../src/queries/mongodb/likes';
 
 export enum LikesActions {
 	LIKE = 'like',

@@ -2,10 +2,10 @@ import { describe, expect, it } from '@jest/globals';
 import { createMocks } from 'node-mocks-http';
 import handler from '../../../../pages/api/movies/discover/recommended';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getAllIdMovies } from '../../../../src/queries/mongodb';
 import { getRecommendations } from '../../../../src/queries/themoviedb';
 import { HttpMethods } from '../../../../src/types/http/HttpMethods';
 import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
+import { getAllIdMovies } from '../../../../src/queries/mongodb/likes';
 
 jest.mock('../../../../src/queries/themoviedb', () => ({
 	getRecommendations: jest.fn((id: number) => ({
@@ -34,7 +34,7 @@ jest.mock('../../../../src/queries/themoviedb', () => ({
 		total_results: 1,
 	})),
 }));
-jest.mock('../../../../src/queries/mongodb', () => ({
+jest.mock('../../../../src/queries/mongodb/likes', () => ({
 	getAllIdMovies: jest.fn(),
 }));
 

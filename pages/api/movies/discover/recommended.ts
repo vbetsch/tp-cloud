@@ -3,8 +3,8 @@ import { HttpMethods } from '../../../../src/types/http/HttpMethods';
 import { MovieDiscoverType } from '../../../../src/types/themoviedb/MovieTypes';
 import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 import { ResponsePaginatedMovies } from '../../../../src/types/themoviedb/queries/ResponsePaginatedMovies';
-import { getAllIdMovies } from '../../../../src/queries/mongodb';
 import { getRecommendations } from '../../../../src/queries/themoviedb';
+import { getAllIdMovies } from '../../../../src/queries/mongodb/likes';
 
 /**
  * @swagger

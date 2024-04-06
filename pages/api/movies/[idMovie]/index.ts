@@ -4,7 +4,7 @@ import { LikeType } from '../../../../src/types/mongodb/LikeType';
 import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 import { HttpMethods } from '../../../../src/types/http/HttpMethods';
 import { getMovieById } from '../../../../src/queries/themoviedb';
-import { findOneLikeById } from '../../../../src/queries/mongodb';
+import { findOneLikeById } from '../../../../src/queries/mongodb/likes';
 
 interface MovieOutputType extends MovieDetailsType {
 	likes?: number;
