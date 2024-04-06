@@ -134,7 +134,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				let resMongo: InsertOneResult<Document>;
 				try {
 					resMongo = await insertOneLike({
-						idTMDB: idMovie,
+						idTMDB: idMovie.toString(),
 						likeCounter: 0,
 					});
 				} catch (e) {
