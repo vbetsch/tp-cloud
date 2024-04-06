@@ -8,6 +8,7 @@ import { getTopRatedMovies } from '../../../../src/queries/themoviedb';
  * @swagger
  * /api/movies/discover/toprated:
  *   get:
+ *     tags: [Discover]
  *     description: Returns top rated movies
  *     parameters:
  *       - in: query

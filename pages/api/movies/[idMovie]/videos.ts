@@ -8,6 +8,7 @@ import { getVideosOfMovie } from '../../../../src/queries/themoviedb';
  * @swagger
  * /api/movies/{idMovie}/videos:
  *   get:
+ *     tags: [Movies]
  *     description: Returns videos of movie
  *     parameters:
  *       - in: path

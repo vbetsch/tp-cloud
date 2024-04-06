@@ -8,6 +8,7 @@ import { getMoviesDiscover } from '../../../src/queries/themoviedb';
  * @swagger
  * /api/movies:
  *   get:
+ *     tags: [Movies]
  *     description: Returns movies to discover
  *     parameters:
  *       - in: query

@@ -8,6 +8,7 @@ import { getSearchMovies } from '../../../src/queries/themoviedb';
  * @swagger
  * /api/movies/search:
  *   get:
+ *     tags: [Movies]
  *     description: Search a movie
  *     parameters:
  *       - in: query

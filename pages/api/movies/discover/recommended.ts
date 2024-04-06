@@ -10,6 +10,7 @@ import { getAllIdMovies } from '../../../../src/queries/mongodb/likes';
  * @swagger
  * /api/movies/discover/recommended:
  *   get:
+ *     tags: [Discover]
  *     description: Returns recommended movies
  *     responses:
  *       200:

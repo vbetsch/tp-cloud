@@ -14,6 +14,7 @@ export enum LikesActions {
  * @swagger
  * /api/movies/{idMovie}/likes:
  *   get:
+ *     tags: [Movies]
  *     description: Returns likes of movie
  *     parameters:
  *       - in: path
@@ -30,6 +31,7 @@ export enum LikesActions {
  *       500:
  *         description: Unable to get likes
  *   patch:
+ *     tags: [Movies]
  *     description: Create or increment likes of movie
  *     parameters:
  *       - in: path
