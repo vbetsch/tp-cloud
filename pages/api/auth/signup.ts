@@ -35,12 +35,13 @@ import { hashString } from '../../../src/services/bcrypt';
  *       400:
  *         description: Parameters 'email' and 'password' are required
  *       500:
- *         description: Unable to create user
+ *         description: Internal Server Error
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	const { email, password }: UserType = req.body;
 
 	let errorMessage: string;
+	let hashPassword: string;
 	let response: InsertOneResult;
 	switch (req.method) {
 		case HttpMethods.POST:
@@ -51,9 +52,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 
 			try {
+				hashPassword = await hashString(password);
+			} catch (e) {
+				const errorMessage: string = 'Unable to hash password';
+				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
+				return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
+			}
+
+			try {
 				response = await createUser({
 					email,
-					password: hashString(password),
+					password: hashPassword,
 				});
 			} catch (e) {
 				const errorMessage: string = 'Unable to create user';
