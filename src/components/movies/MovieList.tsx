@@ -17,27 +17,28 @@ export default function MovieList(props: MoviesListProperties): React.JSX.Elemen
 	};
 	return (
 		<ImageList sx={{ width: 'auto', height: 700, margin: 0 }} cols={3}>
-			{props.movies.map((movie: MovieDiscoverType, key: number) =>
-				props.loading ? (
-					<ImageListItem key={key}>
-						<Skeleton
+			{props.movies &&
+				props.movies.map((movie: MovieDiscoverType, key: number) =>
+					props.loading ? (
+						<ImageListItem key={key}>
+							<Skeleton
+								key={key}
+								variant="rectangular"
+								width={`${imageSize.width}px`}
+								height={`${imageSize.height}px`}
+							/>
+						</ImageListItem>
+					) : (
+						<MovieItem
 							key={key}
-							variant="rectangular"
-							width={`${imageSize.width}px`}
-							height={`${imageSize.height}px`}
+							title={movie.title}
+							releaseDate={movie.release_date}
+							imagePath={`${TMDB_MOVIES.IMAGEURL}/w500${movie.backdrop_path}`}
+							imageWidth={imageSize.width}
+							imageHeight={imageSize.height}
 						/>
-					</ImageListItem>
-				) : (
-					<MovieItem
-						key={key}
-						title={movie.title}
-						releaseDate={movie.release_date}
-						imagePath={`${TMDB_MOVIES.IMAGEURL}/w500${movie.backdrop_path}`}
-						imageWidth={imageSize.width}
-						imageHeight={imageSize.height}
-					/>
-				),
-			)}
+					),
+				)}
 		</ImageList>
 	);
 }

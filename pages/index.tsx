@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Pagination } from '@mui/material';
 import { MovieDiscoverType } from '../src/types/themoviedb/MovieTypes';
 import Title from '../src/components/Title';
 import MovieList from '../src/components/movies/MovieList';
-import Pagination from '../src/components/Pagination';
 import { getMovies } from '../src/queries/api';
 import Navbar from '../src/components/Navbar';
 
@@ -11,7 +10,10 @@ export default function Home(): React.JSX.Element {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [page, setPage] = useState<number>(1);
 	const [movies, setMovies] = useState<MovieDiscoverType[]>([]);
-	const [totalPages, setTotalPages] = useState<number>(0);
+
+	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+		setPage(value);
+	};
 
 	const getData = () => {
 		setLoading(true);
@@ -19,7 +21,6 @@ export default function Home(): React.JSX.Element {
 			.then(data => {
 				if (data) {
 					setMovies(data.results);
-					setTotalPages(data.total_pages);
 				} else {
 					console.warn('No movies were found');
 				}
@@ -43,12 +44,7 @@ export default function Home(): React.JSX.Element {
 			<Box height="100vh" width="100%">
 				<Box height="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
 					<MovieList movies={movies} loading={loading} />
-					<Pagination
-						currentPage={page}
-						totalPages={totalPages}
-						setPage={setPage}
-						loading={loading}
-					></Pagination>
+					<Pagination count={500} onChange={handleChange} color="primary" disabled={loading} />
 				</Box>
 			</Box>
 		</>
