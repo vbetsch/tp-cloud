@@ -22,6 +22,7 @@ export enum LikesActions {
  *         required: true
  *         schema:
  *           type: number
+ *           example: 693134
  *         description: ID movie
  *     responses:
  *       200:
@@ -39,6 +40,7 @@ export enum LikesActions {
  *         required: true
  *         schema:
  *           type: number
+ *           example: 693134
  *         description: ID movie
  *       - in: query
  *         name: action

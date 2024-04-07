@@ -16,12 +16,14 @@ import { getSearchMovies } from '../../../src/queries/themoviedb';
  *         required: true
  *         schema:
  *           type: string
+ *           example: dune
  *         description: Search input
  *       - in: query
  *         name: page
  *         required: false
  *         schema:
  *           type: number
+ *           example: 2
  *         description: Page number
  *     responses:
  *       200:

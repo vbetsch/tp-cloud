@@ -16,6 +16,7 @@ import { getMoviesDiscover } from '../../../src/queries/themoviedb';
  *         required: false
  *         schema:
  *           type: number
+ *           example: 2
  *         description: Page number
  *     responses:
  *       200:

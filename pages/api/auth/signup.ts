@@ -20,12 +20,14 @@ import { hashString } from '../../../src/services/bcrypt';
  *         required: true
  *         schema:
  *           type: string
+ *           example: john@scott.com
  *         description: Email of new user
  *       - in: body
  *         name: password
  *         required: true
  *         schema:
  *           type: string
+ *           example: j0hnSc0tt
  *         description: Password of new user
  *     responses:
  *       200:

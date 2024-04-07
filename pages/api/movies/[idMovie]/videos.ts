@@ -16,6 +16,7 @@ import { getVideosOfMovie } from '../../../../src/queries/themoviedb';
  *         required: true
  *         schema:
  *           type: number
+ *           example: 693134
  *         description: ID movie
  *     responses:
  *       200:
