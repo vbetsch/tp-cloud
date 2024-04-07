@@ -17,15 +17,17 @@ import { createInvalidCookie } from '../../../src/services/cookie';
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	let errorMessage: string;
+	let cookie: string;
 	switch (req.method) {
 		case HttpMethods.POST:
 			try {
-				res.setHeader('Set-Cookie', await createInvalidCookie());
+				cookie = await createInvalidCookie();
 			} catch (e) {
 				const errorMessage: string = 'Unable to delete cookie';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 				return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
 			}
+			res.setHeader('Set-Cookie', cookie);
 			return res.status(HttpCodeStatus.OK).json({ message: 'You have been successfully disconnected' });
 		default:
 			errorMessage = 'Method Not Allowed';
