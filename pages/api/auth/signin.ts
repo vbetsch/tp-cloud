@@ -10,6 +10,44 @@ interface SignInBodyRequest extends UserType {
 	remember: boolean;
 }
 
+/**
+ * @swagger
+ * /api/auth/signin:
+ *   post:
+ *     tags: [Auth]
+ *     description: Log in a new user
+ *     consumes:
+ *       - application/x-www-form-urlencoded
+ *     parameters:
+ *       - in: body
+ *         name: email
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: john@scott.com
+ *         description: Email of new user
+ *       - in: body
+ *         name: password
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: j0hnSc0tt
+ *         description: Password of new user
+ *       - in: body
+ *         name: remember
+ *         required: false
+ *         schema:
+ *           type: boolean
+ *           example: 'false'
+ *         description: Enable if you accept cookies
+ *     responses:
+ *       200:
+ *         description: Success Response
+ *       400:
+ *         description: Parameters 'email' and 'password' are required
+ *       500:
+ *         description: Internal Server Error
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
 	const { email, password, remember }: SignInBodyRequest = req.body;
 
@@ -42,7 +80,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					cookie = createCookie(token);
 					res.setHeader('Set-Cookie', cookie);
 				} catch (e) {
-					const errorMessage: string = 'Unable to create jwt';
+					const errorMessage: string = 'Unable to create cookie';
 					console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 					return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
 				}
