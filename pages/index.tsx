@@ -5,6 +5,7 @@ import Title from '../src/components/Title';
 import MovieList from '../src/components/movies/MovieList';
 import Pagination from '../src/components/Pagination';
 import { getMovies } from '../src/queries/api';
+import Navbar from '../src/components/Navbar';
 
 export default function Home(): React.JSX.Element {
 	const [loading, setLoading] = useState<boolean>(false);
@@ -38,6 +39,7 @@ export default function Home(): React.JSX.Element {
 	return (
 		<>
 			<Title />
+			<Navbar />
 			<Box height="100vh" width="100%">
 				<Box height="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
 					<MovieList movies={movies} loading={loading} />
