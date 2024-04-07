@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	switch (req.method) {
 		case HttpMethods.POST:
 			try {
-				res.setHeader('Set-Cookie', createInvalidCookie());
+				res.setHeader('Set-Cookie', await createInvalidCookie());
 			} catch (e) {
 				const errorMessage: string = 'Unable to delete cookie';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
