@@ -16,7 +16,7 @@ export default function MovieList(props: MoviesListProperties): React.JSX.Elemen
 		height: 300,
 	};
 	return (
-		<ImageList sx={{ width: 'auto', height: 800, margin: 0 }}>
+		<ImageList sx={{ width: 'auto', height: 700, margin: 0 }} cols={3}>
 			{props.movies.map((movie: MovieDiscoverType, key: number) =>
 				props.loading ? (
 					<ImageListItem key={key}>
