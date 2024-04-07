@@ -8,6 +8,7 @@ import { getVideosOfMovie } from '../../../../src/queries/themoviedb';
  * @swagger
  * /api/movies/{idMovie}/videos:
  *   get:
+ *     tags: [Movies]
  *     description: Returns videos of movie
  *     parameters:
  *       - in: path
@@ -15,6 +16,7 @@ import { getVideosOfMovie } from '../../../../src/queries/themoviedb';
  *         required: true
  *         schema:
  *           type: number
+ *           example: 693134
  *         description: ID movie
  *     responses:
  *       200:

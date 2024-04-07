@@ -1,11 +1,11 @@
-import { Db, Document, InsertOneResult, OptionalId, UpdateFilter, UpdateResult } from 'mongodb';
-import { DatabaseCollections, getMongoDatabase } from '../config/mongodb';
-import { LikeType } from '../types/mongodb/LikeType';
+import { DatabaseCollections, getMongoDatabase } from '../../config/mongodb';
+import { Db, InsertOneResult, UpdateFilter, UpdateResult } from 'mongodb';
+import { LikeType } from '../../types/mongodb/LikeType';
 
 const getAllIdMovies = async (): Promise<number[]> => {
 	const db: Db = await getMongoDatabase();
 	console.info('INFO: Get all id movies');
-	return db.collection(DatabaseCollections.LIKES).distinct('idTMDB');
+	return await db.collection(DatabaseCollections.LIKES).distinct('idTMDB');
 };
 
 const findOneLikeById = async (idTMDB: number): Promise<LikeType | null> => {
@@ -27,11 +27,10 @@ const updateOneLikeById = async (
 	return result;
 };
 
-const insertOneLike = async (doc: OptionalId<Document>): Promise<InsertOneResult> => {
+const insertOneLike = async (data: LikeType): Promise<InsertOneResult> => {
 	const db: Db = await getMongoDatabase();
-	const result: InsertOneResult = await db.collection(DatabaseCollections.LIKES).insertOne(doc);
 	console.info('INFO: Insert one like');
-	return result;
+	return await db.collection(DatabaseCollections.LIKES).insertOne(data);
 };
 
 export { getAllIdMovies, findOneLikeById, updateOneLikeById, insertOneLike };

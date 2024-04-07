@@ -24,7 +24,7 @@ jobs:
           command: npm run prettier:w
       - run:
           name: Run linter
-          command: npm run eslint:quiet
+          command: npm run eslint
 
   unit_tests:
     executor: node/default

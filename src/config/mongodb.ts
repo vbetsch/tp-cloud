@@ -12,6 +12,7 @@ const getMongoDatabase = async (): Promise<Db> => {
 
 enum DatabaseCollections {
 	LIKES = 'likes',
+	USERS = 'users',
 }
 
 export { getMongoDatabase, DatabaseCollections };

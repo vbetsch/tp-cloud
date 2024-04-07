@@ -3,7 +3,7 @@ import { InsertOneResult, UpdateResult } from 'mongodb';
 import { LikeType } from '../../../../src/types/mongodb/LikeType';
 import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 import { HttpMethods } from '../../../../src/types/http/HttpMethods';
-import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../src/queries/mongodb';
+import { findOneLikeById, insertOneLike, updateOneLikeById } from '../../../../src/queries/mongodb/likes';
 
 export enum LikesActions {
 	LIKE = 'like',
@@ -14,6 +14,7 @@ export enum LikesActions {
  * @swagger
  * /api/movies/{idMovie}/likes:
  *   get:
+ *     tags: [Movies]
  *     description: Returns likes of movie
  *     parameters:
  *       - in: path
@@ -21,6 +22,7 @@ export enum LikesActions {
  *         required: true
  *         schema:
  *           type: number
+ *           example: 693134
  *         description: ID movie
  *     responses:
  *       200:
@@ -30,6 +32,7 @@ export enum LikesActions {
  *       500:
  *         description: Unable to get likes
  *   patch:
+ *     tags: [Movies]
  *     description: Create or increment likes of movie
  *     parameters:
  *       - in: path
@@ -37,12 +40,14 @@ export enum LikesActions {
  *         required: true
  *         schema:
  *           type: number
+ *           example: 693134
  *         description: ID movie
  *       - in: query
  *         name: action
  *         required: true
  *         schema:
  *           type: string
+ *           enum: [like, unlike]
  *         description: Action
  *     responses:
  *       201:
@@ -134,7 +139,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				let resMongo: InsertOneResult<Document>;
 				try {
 					resMongo = await insertOneLike({
-						idTMDB: idMovie,
+						idTMDB: idMovie.toString(),
 						likeCounter: 0,
 					});
 				} catch (e) {

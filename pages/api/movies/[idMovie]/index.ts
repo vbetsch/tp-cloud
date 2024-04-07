@@ -4,7 +4,7 @@ import { LikeType } from '../../../../src/types/mongodb/LikeType';
 import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
 import { HttpMethods } from '../../../../src/types/http/HttpMethods';
 import { getMovieById } from '../../../../src/queries/themoviedb';
-import { findOneLikeById } from '../../../../src/queries/mongodb';
+import { findOneLikeById } from '../../../../src/queries/mongodb/likes';
 
 interface MovieOutputType extends MovieDetailsType {
 	likes?: number;
@@ -14,6 +14,7 @@ interface MovieOutputType extends MovieDetailsType {
  * @swagger
  * /api/movies/{idMovie}:
  *   get:
+ *     tags: [Movies]
  *     description: Returns movie by given id
  *     parameters:
  *       - in: path
@@ -21,6 +22,7 @@ interface MovieOutputType extends MovieDetailsType {
  *         required: true
  *         schema:
  *           type: number
+ *           example: 693134
  *         description: ID movie
  *     responses:
  *       200:
