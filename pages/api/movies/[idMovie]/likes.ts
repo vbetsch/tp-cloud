@@ -47,6 +47,7 @@ export enum LikesActions {
  *         required: true
  *         schema:
  *           type: string
+ *           enum: [like, unlike]
  *         description: Action
  *     responses:
  *       201:
