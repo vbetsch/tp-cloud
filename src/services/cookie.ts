@@ -1,13 +1,23 @@
 import { CookieSerializeOptions, serialize } from 'cookie';
 
+const COOKIE_NAME = 'session';
 const OPTIONS: CookieSerializeOptions = {
 	httpOnly: true,
-	maxAge: 60 * 60 * 24 * 7, // One week
 	path: '/',
 };
 
-const createCookie = (token: string): string => {
-	return serialize('session', token, OPTIONS);
+const createOneWeekCookie = (token: string): string => {
+	return serialize(COOKIE_NAME, token, {
+		...OPTIONS,
+		maxAge: 60 * 60 * 24 * 7, // One week
+	});
 };
 
-export { createCookie };
+const createInvalidCookie = (): string => {
+	return serialize(COOKIE_NAME, '', {
+		...OPTIONS,
+		maxAge: -1,
+	});
+};
+
+export { createOneWeekCookie, createInvalidCookie };

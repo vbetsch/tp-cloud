@@ -4,7 +4,7 @@ import { HttpMethods } from '../../../src/types/http/HttpMethods';
 import { HttpCodeStatus } from '../../../src/types/http/HttpCodeStatus';
 import { signJwt } from '../../../src/services/jsonwebtoken';
 import { hashString } from '../../../src/services/bcrypt';
-import { createCookie } from '../../../src/services/cookie';
+import { createOneWeekCookie } from '../../../src/services/cookie';
 
 interface SignInBodyRequest extends UserType {
 	remember: boolean;
@@ -63,7 +63,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				return res.status(HttpCodeStatus.BAD_REQUEST).json({ error: errorMessage });
 			}
 
-			hashPassword = hashString(password);
+			try {
+				hashPassword = hashString(password);
+			} catch (e) {
+				const errorMessage: string = 'Unable to hash password';
+				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
+				return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
+			}
 
 			try {
 				token = signJwt('SECRET_JWT', { email, hashPassword });
@@ -77,7 +83,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				return res.status(HttpCodeStatus.OK).json({ token });
 			} else {
 				try {
-					cookie = createCookie(token);
+					cookie = createOneWeekCookie(token);
 					res.setHeader('Set-Cookie', cookie);
 				} catch (e) {
 					const errorMessage: string = 'Unable to create cookie';
