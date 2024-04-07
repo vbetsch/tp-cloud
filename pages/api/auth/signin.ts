@@ -64,7 +64,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 
 			try {
-				hashPassword = hashString(password);
+				hashPassword = await hashString(password);
 			} catch (e) {
 				const errorMessage: string = 'Unable to hash password';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
@@ -72,7 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 
 			try {
-				token = signJwt('SECRET_JWT', { email, hashPassword });
+				token = await signJwt('SECRET_JWT', { email, hashPassword });
 			} catch (e) {
 				const errorMessage: string = 'Unable to create jwt';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
@@ -83,13 +83,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				return res.status(HttpCodeStatus.OK).json({ token });
 			} else {
 				try {
-					cookie = createOneWeekCookie(token);
-					res.setHeader('Set-Cookie', cookie);
+					cookie = await createOneWeekCookie(token);
 				} catch (e) {
 					const errorMessage: string = 'Unable to create cookie';
 					console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 					return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
 				}
+				res.setHeader('Set-Cookie', cookie);
 				return res.status(HttpCodeStatus.OK).json({ token, cookie });
 			}
 

@@ -1,130 +1,130 @@
 version: 2.1
 orbs:
-  node: circleci/node@5.2.0
+    node: circleci/node@5.2.0
 jobs:
-  install_dependencies:
-    executor: node/default
-    steps:
-      - checkout
-      - node/install-packages:
-          pkg-manager: npm
-      - persist_to_workspace:
-          root: .
-          paths:
-            - node_modules
+    install_dependencies:
+        executor: node/default
+        steps:
+            - checkout
+            - node/install-packages:
+                  pkg-manager: npm
+            - persist_to_workspace:
+                  root: .
+                  paths:
+                      - node_modules
 
-  check_linter:
-    executor: node/default
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - run:
-          name: Run formatter
-          command: npm run prettier:w
-      - run:
-          name: Run linter
-          command: npm run eslint
+    check_linter:
+        executor: node/default
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: .
+            - run:
+                  name: Run formatter
+                  command: npm run prettier:w
+            - run:
+                  name: Run linter
+                  command: npm run eslint
 
-  unit_tests:
-    executor: node/default
-    environment:
-      JEST_JUNIT_OUTPUT_DIR: ./test-results/
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - run:
-          name: Install Jest dependencies
-          command: npm install jest-junit
-      - run:
-          name: Run API tests
-          command: npm run test:api:ci
-      #      - run:
-      #          name: Run UI tests
-      #          command: npm run test:ui:ci
-      - run:
-          name: Run coverage
-          command: npm run test:coverage:ci
-      - store_test_results:
-          path: ./test-results/
+    unit_tests:
+        executor: node/default
+        environment:
+            JEST_JUNIT_OUTPUT_DIR: ./test-results/
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: .
+            - run:
+                  name: Install Jest dependencies
+                  command: npm install jest-junit
+            - run:
+                  name: Run API tests
+                  command: npm run test:api:ci
+            #      - run:
+            #          name: Run UI tests
+            #          command: npm run test:ui:ci
+            - run:
+                  name: Run coverage
+                  command: npm run test:coverage:ci
+            - store_test_results:
+                  path: ./test-results/
 
-  build_and_deploy_dev:
-    docker:
-      - image: cimg/node:20.5.0
-    working_directory: ~/tp-cloud
-    environment:
-      ENVIRONMENT: preview
-    steps:
-      - checkout
-      - run:
-          name: Install Vercel CLI
-          command: sudo npm install --global vercel@latest
-      - run:
-          name: Pull Vercel Environment Information
-          command: sudo vercel pull --yes --environment=$ENVIRONMENT --token=$VERCEL_TOKEN
-      - run:
-          name: Build Project Artifacts
-          command: sudo vercel build --token=$VERCEL_TOKEN
-      - run:
-          name: Deploy Project Artifacts to Vercel
-          command: sudo vercel deploy --prebuilt --token=$VERCEL_TOKEN
+    build_and_deploy_dev:
+        docker:
+            - image: cimg/node:20.5.0
+        working_directory: ~/tp-cloud
+        environment:
+            ENVIRONMENT: preview
+        steps:
+            - checkout
+            - run:
+                  name: Install Vercel CLI
+                  command: sudo npm install --global vercel@latest
+            - run:
+                  name: Pull Vercel Environment Information
+                  command: sudo vercel pull --yes --environment=$ENVIRONMENT --token=$VERCEL_TOKEN
+            - run:
+                  name: Build Project Artifacts
+                  command: sudo vercel build --token=$VERCEL_TOKEN
+            - run:
+                  name: Deploy Project Artifacts to Vercel
+                  command: sudo vercel deploy --prebuilt --token=$VERCEL_TOKEN
 
-  build_and_deploy_prod:
-    docker:
-      - image: cimg/node:20.5.0
-    working_directory: ~/tp-cloud
-    environment:
-      ENVIRONMENT: production
-    steps:
-      - checkout
-      - run:
-          name: Install Vercel CLI
-          command: sudo npm install --global vercel@latest
-      - run:
-          name: Pull Vercel Environment Information
-          command: sudo vercel pull --yes --environment=$ENVIRONMENT --token=$VERCEL_TOKEN
-      - run:
-          name: Build Project Artifacts
-          command: sudo vercel build --prod --token=$VERCEL_TOKEN
-      - run:
-          name: Deploy Project Artifacts to Vercel
-          command: sudo vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+    build_and_deploy_prod:
+        docker:
+            - image: cimg/node:20.5.0
+        working_directory: ~/tp-cloud
+        environment:
+            ENVIRONMENT: production
+        steps:
+            - checkout
+            - run:
+                  name: Install Vercel CLI
+                  command: sudo npm install --global vercel@latest
+            - run:
+                  name: Pull Vercel Environment Information
+                  command: sudo vercel pull --yes --environment=$ENVIRONMENT --token=$VERCEL_TOKEN
+            - run:
+                  name: Build Project Artifacts
+                  command: sudo vercel build --prod --token=$VERCEL_TOKEN
+            - run:
+                  name: Deploy Project Artifacts to Vercel
+                  command: sudo vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
 
 workflows:
-  version: 2
-  build-test-deploy:
-    jobs:
-      - install_dependencies:
-          filters:
-            branches:
-              ignore:
-                - lesson
-      - check_linter:
-          requires:
-            - install_dependencies
-          filters:
-            branches:
-              ignore:
-                - lesson
-      - unit_tests:
-          requires:
-            - check_linter
-          filters:
-            branches:
-              ignore:
-                - lesson
-      - build_and_deploy_dev:
-          requires:
-            - unit_tests
-          filters:
-            branches:
-              only:
-                - develop
-      - build_and_deploy_prod:
-          requires:
-            - unit_tests
-          filters:
-            branches:
-              only:
-                - main
+    version: 2
+    build-test-deploy:
+        jobs:
+            - install_dependencies:
+                  filters:
+                      branches:
+                          ignore:
+                              - lesson
+            - check_linter:
+                  requires:
+                      - install_dependencies
+                  filters:
+                      branches:
+                          ignore:
+                              - lesson
+            - unit_tests:
+                  requires:
+                      - check_linter
+                  filters:
+                      branches:
+                          ignore:
+                              - lesson
+            - build_and_deploy_dev:
+                  requires:
+                      - unit_tests
+                  filters:
+                      branches:
+                          only:
+                              - develop
+            - build_and_deploy_prod:
+                  requires:
+                      - unit_tests
+                  filters:
+                      branches:
+                          only:
+                              - main

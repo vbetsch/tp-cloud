@@ -116,7 +116,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 			idMovie: MOVIEID,
 		});
 	});
-	it('PATCH - should return like incremented', async () => {
+	it('PATCH - should return like incremented - like', async () => {
 		const _like = {
 			idTMDB: MOVIEID,
 			likeCounter: COUNTERLIKE,
@@ -148,6 +148,40 @@ describe('[API] /movies/{idMovie}/likes', () => {
 			idMovie: MOVIEID,
 			previousValue: COUNTERLIKE,
 			newValue: COUNTERLIKE + 1,
+		});
+	});
+	it('PATCH - should return like incremented - unlike', async () => {
+		const _like = {
+			idTMDB: MOVIEID,
+			likeCounter: COUNTERLIKE,
+		};
+
+		(findOneLikeById as jest.Mock).mockResolvedValue(_like);
+		(updateOneLikeById as jest.Mock).mockResolvedValue({
+			acknowledged: true,
+			modifiedCount: 1,
+			upsertedId: null,
+			upsertedCount: 0,
+			matchedCount: 1,
+		});
+
+		const { req, res } = createMocks({
+			method: HttpMethods.PATCH,
+			query: {
+				idMovie: MOVIEID,
+				action: LikesActions.UNLIKE,
+			},
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res.statusCode).toBe(HttpCodeStatus.CREATED);
+		expect(res._isEndCalled()).toBeTruthy();
+		expect(res._getJSONData()).toStrictEqual({
+			action: 'likeCounter incremented',
+			idMovie: MOVIEID,
+			previousValue: COUNTERLIKE,
+			newValue: COUNTERLIKE - 1,
 		});
 	});
 	it('PATCH - should return 400', async () => {

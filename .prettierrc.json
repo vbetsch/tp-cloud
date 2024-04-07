@@ -1,12 +1,1 @@
-{
-	"semi": true,
-	"trailingComma": "all",
-	"singleQuote": true,
-	"printWidth": 120,
-	"tabWidth": 4,
-	"endOfLine": "auto",
-	"bracketSpacing": true,
-	"useTabs": true,
-	"htmlWhitespaceSensitivity": "strict",
-	"arrowParens": "avoid"
-}
+{	"semi": true,	"trailingComma": "all",	"singleQuote": true,	"printWidth": 120,	"tabWidth": 4,	"endOfLine": "auto",	"bracketSpacing": true,	"useTabs": true,	"htmlWhitespaceSensitivity": "strict",	"arrowParens": "avoid"}
