@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import Link from 'next/link';
 import { MovieDiscoverType } from '../src/types/themoviedb/MovieTypes';
 import Title from '../src/components/Title';
 import MovieList from '../src/components/movies/MovieList';
