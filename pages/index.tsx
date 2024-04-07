@@ -41,8 +41,6 @@ export default function Home(): React.JSX.Element {
 			<Title />
 			<Box height="100vh" width="100%">
 				<Box height="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-					<Link href="/api/movies">API</Link>
-					<Link href="/docs">Swagger</Link>
 					<MovieList movies={movies} loading={loading} />
 					<Pagination
 						currentPage={page}
