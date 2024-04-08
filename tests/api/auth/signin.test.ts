@@ -52,7 +52,7 @@ describe('[API] /auth/signin', () => {
 
 		expect(res._getStatusCode()).toBe(HttpCodeStatus.OK);
 		expect(res._isEndCalled()).toBeTruthy();
-		expect(res._getJSONData()).toStrictEqual({ token: TOKEN });
+		expect(res._getJSONData()).toStrictEqual({ userData: USER, token: TOKEN });
 	});
 	it('POST - should return 200 without cookie - remember false', async () => {
 		(findUserByEmail as jest.Mock).mockResolvedValue(USER);
@@ -71,7 +71,7 @@ describe('[API] /auth/signin', () => {
 
 		expect(res._getStatusCode()).toBe(HttpCodeStatus.OK);
 		expect(res._isEndCalled()).toBeTruthy();
-		expect(res._getJSONData()).toStrictEqual({ token: TOKEN });
+		expect(res._getJSONData()).toStrictEqual({ userData: USER, token: TOKEN });
 	});
 	it('POST - should return 200 with cookie', async () => {
 		(findUserByEmail as jest.Mock).mockResolvedValue(USER);
@@ -91,7 +91,7 @@ describe('[API] /auth/signin', () => {
 
 		expect(res._getStatusCode()).toBe(HttpCodeStatus.OK);
 		expect(res._isEndCalled()).toBeTruthy();
-		expect(res._getJSONData()).toStrictEqual({ token: TOKEN, cookie: COOKIE });
+		expect(res._getJSONData()).toStrictEqual({ userData: USER, token: TOKEN, cookie: COOKIE });
 	});
 	it('POST - no params should return 400', async () => {
 		const { req, res } = createMocks({

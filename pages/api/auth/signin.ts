@@ -104,7 +104,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 
 			if (!remember) {
-				return res.status(HttpCodeStatus.OK).json({ token });
+				return res.status(HttpCodeStatus.OK).json({ userData: userFound, token });
 			} else {
 				try {
 					cookie = await createOneWeekCookie(token);
@@ -114,7 +114,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 					return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
 				}
 				res.setHeader('Set-Cookie', cookie);
-				return res.status(HttpCodeStatus.OK).json({ token, cookie });
+				return res.status(HttpCodeStatus.OK).json({ userData: userFound, token, cookie });
 			}
 
 		default:
