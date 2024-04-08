@@ -96,7 +96,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 
 			try {
-				token = await signJwt('SECRET_JWT', userFound);
+				token = await signJwt(userFound);
 			} catch (e) {
 				const errorMessage: string = 'Unable to create jwt';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
