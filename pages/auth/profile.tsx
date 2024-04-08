@@ -14,15 +14,15 @@ export default function Profile() {
 	useEffect(() => {
 		async function fetchUser() {
 			if (!state.currentUser) {
+				console.warn('You must be logged in to access this page. You will be redirected...');
 				await router.push('/auth/sign-in');
 			}
-			console.log('(08/04/2024 02:15)  @reyks  [ profile.tsx:19 ]  state.currentUser  ', state.currentUser);
 		}
 
 		fetchUser()
 			.then()
 			.catch(e => console.error(e));
-	}, [state?.currentUser, router]);
+	}, [state?.currentUser]);
 
 	return (
 		<ThemeProvider theme={defaultTheme}>
