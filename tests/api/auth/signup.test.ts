@@ -5,13 +5,14 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpCodeStatus } from '../../../src/types/http/HttpCodeStatus';
 import handler from '../../../pages/api/auth/signup';
 import { hashString } from '../../../src/services/bcrypt';
-import { createUser } from '../../../src/queries/mongodb/users';
+import { createUser, findUserByEmail } from '../../../src/queries/mongodb/users';
 import { UserType } from '../../../src/types/mongodb/UserType';
 
 jest.mock('../../../src/services/bcrypt', () => ({
 	hashString: jest.fn(),
 }));
 jest.mock('../../../src/queries/mongodb/users', () => ({
+	findUserByEmail: jest.fn(),
 	createUser: jest.fn(),
 }));
 
@@ -32,6 +33,7 @@ describe('[API] /auth/signup', () => {
 		};
 
 		(hashString as jest.Mock).mockResolvedValue(HASH_PASSWORD);
+		(findUserByEmail as jest.Mock).mockResolvedValue(null);
 		(createUser as jest.Mock).mockResolvedValue(_result);
 
 		const { req, res } = createMocks({
@@ -84,7 +86,38 @@ describe('[API] /auth/signup', () => {
 		expect(res._isEndCalled()).toBeTruthy();
 		expect(res._getJSONData()).toStrictEqual(BAD_REQUEST_ERROR);
 	});
+	it('POST - account exist should return 401', async () => {
+		(findUserByEmail as jest.Mock).mockResolvedValue(USER_INPUT);
+
+		const { req, res } = createMocks({
+			method: HttpMethods.POST,
+			body: USER_INPUT,
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.UNAUTHORIZED);
+		expect(res._isEndCalled()).toBeTruthy();
+		expect(res._getJSONData()).toStrictEqual({
+			error: 'An account is already linked to this email address',
+		});
+	});
+	it('POST - findUserByEmail error should return 500', async () => {
+		(findUserByEmail as jest.Mock).mockRejectedValue(new Error('TEST'));
+
+		const { req, res } = createMocks({
+			method: HttpMethods.POST,
+			body: USER_INPUT,
+		});
+
+		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
+
+		expect(res._getStatusCode()).toBe(HttpCodeStatus.INTERNAL_SERVER_ERROR);
+		expect(res._isEndCalled()).toBeTruthy();
+		expect(res._getJSONData()).toStrictEqual({ error: 'Unable to find user' });
+	});
 	it('POST - hashString error should return 500', async () => {
+		(findUserByEmail as jest.Mock).mockResolvedValue(null);
 		(hashString as jest.Mock).mockRejectedValue(new Error('TEST'));
 
 		const { req, res } = createMocks({
@@ -99,6 +132,7 @@ describe('[API] /auth/signup', () => {
 		expect(res._getJSONData()).toStrictEqual({ error: 'Unable to hash password' });
 	});
 	it('POST - createUser error should return 500', async () => {
+		(findUserByEmail as jest.Mock).mockResolvedValue(null);
 		(hashString as jest.Mock).mockResolvedValue(HASH_PASSWORD);
 		(createUser as jest.Mock).mockRejectedValue(new Error('TEST'));
 
