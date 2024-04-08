@@ -3,8 +3,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethods } from '../../../src/types/http/HttpMethods';
 import { HttpCodeStatus } from '../../../src/types/http/HttpCodeStatus';
 import { signJwt } from '../../../src/services/jsonwebtoken';
-import { hashString } from '../../../src/services/bcrypt';
 import { createOneWeekCookie } from '../../../src/services/cookie';
+import { findUserByEmail } from '../../../src/queries/mongodb/users';
+import { compareHash } from '../../../src/services/bcrypt';
 
 interface SignInBodyRequest extends UserType {
 	remember: boolean;
@@ -45,6 +46,8 @@ interface SignInBodyRequest extends UserType {
  *         description: Success Response
  *       400:
  *         description: Parameters 'email' and 'password' are required
+ *       401:
+ *         description: The information you have entered does not correspond to any user
  *       500:
  *         description: Internal Server Error
  */
@@ -52,7 +55,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	const { email, password, remember }: SignInBodyRequest = req.body;
 
 	let errorMessage: string;
-	let hashPassword: string;
+	let userFound: UserType | null;
+	let userValid: boolean;
 	let token: string;
 	let cookie: string;
 	switch (req.method) {
@@ -64,15 +68,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 
 			try {
-				hashPassword = await hashString(password);
+				userFound = await findUserByEmail(email);
 			} catch (e) {
-				const errorMessage: string = 'Unable to hash password';
+				const errorMessage: string = 'Unable to find user';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 				return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
 			}
 
+			if (userFound === null) {
+				errorMessage = 'The information you have entered does not correspond to any user';
+				console.error('ERROR: ' + errorMessage);
+				return res.status(HttpCodeStatus.UNAUTHORIZED).json({ error: errorMessage });
+			}
+
 			try {
-				token = await signJwt('SECRET_JWT', { email, hashPassword });
+				userValid = await compareHash(password, userFound.password);
+			} catch (e) {
+				const errorMessage: string = 'Unable to compare hash';
+				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
+				return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
+			}
+
+			if (!userValid) {
+				errorMessage = 'The information you have entered does not correspond to any user';
+				console.error('ERROR: ' + errorMessage);
+				return res.status(HttpCodeStatus.UNAUTHORIZED).json({ error: errorMessage });
+			}
+
+			try {
+				token = await signJwt('SECRET_JWT', userFound);
 			} catch (e) {
 				const errorMessage: string = 'Unable to create jwt';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);

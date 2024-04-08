@@ -4,7 +4,7 @@ import { DatabaseCollections, getMongoDatabase } from '../../config/mongodb';
 
 const findUserByEmail = async (email: string): Promise<UserType | null> => {
 	const db: Db = await getMongoDatabase();
-	console.info('INFO: Find user');
+	console.info('INFO: Find user by email');
 	return await db.collection(DatabaseCollections.USERS).findOne<UserType>({ email: { $eq: email } });
 };
 
