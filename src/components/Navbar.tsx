@@ -8,6 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { useRouter } from 'next/router';
 
 // const Search = styled('div')(({ theme }) => ({
 // 	position: 'relative',
@@ -51,7 +52,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 
 export default function Navbar() {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
+	const router = useRouter();
 	const isMenuOpen = Boolean(anchorEl);
 
 	const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -60,6 +61,11 @@ export default function Navbar() {
 
 	const handleMenuClose = () => {
 		setAnchorEl(null);
+	};
+
+	const navigateToSignIn = () => {
+		router.push('/auth/sign-up');
+		handleMenuClose();
 	};
 
 	const menuId = 'primary-search-account-menu';
@@ -79,7 +85,7 @@ export default function Navbar() {
 			open={isMenuOpen}
 			onClose={handleMenuClose}
 		>
-			<MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+			<MenuItem onClick={navigateToSignIn}>Profile</MenuItem>
 			<MenuItem onClick={handleMenuClose}>Logout</MenuItem>
 		</Menu>
 	);
