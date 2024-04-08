@@ -63,8 +63,8 @@ export default function Navbar() {
 		setAnchorEl(null);
 	};
 
-	const navigateToSignIn = () => {
-		router.push('/auth/sign-up');
+	const navigateToProfile = () => {
+		router.push('/auth/profile');
 		handleMenuClose();
 	};
 
@@ -85,7 +85,7 @@ export default function Navbar() {
 			open={isMenuOpen}
 			onClose={handleMenuClose}
 		>
-			<MenuItem onClick={navigateToSignIn}>Profile</MenuItem>
+			<MenuItem onClick={navigateToProfile}>Profile</MenuItem>
 			<MenuItem onClick={handleMenuClose}>Logout</MenuItem>
 		</Menu>
 	);

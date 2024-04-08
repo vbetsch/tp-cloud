@@ -5,16 +5,29 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../src/providers/AuthProvider';
-import { getAuthUser } from '../../src/queries/api/auth';
-import { JwtPayload } from 'jsonwebtoken';
+import { getAuthUser, logOut, signIn } from '../../src/queries/api/auth';
 import { AuthActionEnum } from '../../src/reducers/AuthReducer';
 
 export default function Profile() {
-	const [user, setUser] = useState<JwtPayload | null>(null);
-	const [loading, setLoading] = useState<boolean>(false);
 	const { state, dispatch } = useAuth();
+	const [loading, setLoading] = useState<boolean>(false);
 	const router = useRouter();
 	const defaultTheme = createTheme();
+
+	const clickOnLogOut = async () => {
+		setLoading(true);
+		try {
+			await logOut();
+		} catch (e) {
+			console.error(e);
+		} finally {
+			dispatch({
+				type: AuthActionEnum.LOGOUT,
+				payload: undefined,
+			});
+			setLoading(false);
+		}
+	};
 
 	const fetchUser = async () => {
 		setLoading(true);
@@ -24,58 +37,49 @@ export default function Profile() {
 		} catch (e) {
 			console.error(e);
 		}
-		if (!result) {
+		setLoading(false);
+		if (!result || typeof result.user === 'string') {
+			console.error('ERROR: Case not implemented');
 			return;
 		}
-		if (typeof result.user === 'string') {
-			console.error('ERROR: Case not implemented');
-			setLoading(false);
-		} else {
-			setUser(result.user);
-			setLoading(false);
-			return result.user;
-		}
+		await signIn({
+			email: result.user?.email,
+			password: result.user?.password,
+			remember: true,
+		});
 	};
 
 	const fetchData = async () => {
-		if (!state.currentUser) {
-			const _user = await fetchUser();
+		await fetchUser();
 
-			if (!_user) {
-				console.warn('You must be logged in to access this page. You will be redirected...');
-				await router.push('/auth/sign-in');
-			} else {
-				setLoading(true);
-				try {
-					const response = await fetch('/api/auth/signin', {
-						method: 'POST',
-						body: JSON.stringify({
-							email: _user.email,
-							password: _user.password,
-							remember: true,
-						}),
-						headers: {
-							'Content-Type': 'application/json',
+		if (!state.currentUser) {
+			console.warn('You must be logged in to access this page. You will be redirected...');
+			await router.push('/auth/sign-in');
+		} else {
+			setLoading(true);
+			try {
+				const response = await signIn({
+					email: state.currentUser.data.email,
+					password: state.currentUser.data.password,
+					remember: true,
+				});
+				if (response.status === 200) {
+					const data = await response.json();
+					dispatch({
+						type: AuthActionEnum.LOGIN,
+						payload: {
+							data: data.userData,
+							token: data.token,
 						},
 					});
-					if (response.status === 200) {
-						const data = await response.json();
-						dispatch({
-							type: AuthActionEnum.LOGIN,
-							payload: {
-								data: data.userData,
-								token: data.token,
-							},
-						});
-						await router.push('/auth/profile');
-					} else {
-						console.error('Failed to sign in : ', response);
-					}
-				} catch (error) {
-					console.error('Error signing in:', error);
-				} finally {
-					setLoading(false);
+					await router.push('/auth/profile');
+				} else {
+					console.error('Failed to sign in : ', response);
 				}
+			} catch (error) {
+				console.error('Error signing in:', error);
+			} finally {
+				setLoading(false);
 			}
 		}
 	};
@@ -84,7 +88,7 @@ export default function Profile() {
 		fetchData()
 			.then()
 			.catch(e => console.error(e));
-	}, [state?.currentUser]);
+	}, [state.currentUser]);
 
 	return (
 		<ThemeProvider theme={defaultTheme}>
@@ -92,11 +96,12 @@ export default function Profile() {
 				<span>Loading...</span>
 			) : (
 				<div>
-					{state?.currentUser || user ? (
+					{state?.currentUser ? (
 						<Container component="main" maxWidth="xs">
 							<CssBaseline />
-							<p>Email : {state?.currentUser?.data?.email || user?.email}</p>
-							<p>Password : {state?.currentUser?.data?.password || user?.password}</p>
+							<p>Email : {state?.currentUser?.data.email}</p>
+							<p>Password : {state?.currentUser?.data.password}</p>
+							<button onClick={clickOnLogOut}>Logout</button>
 						</Container>
 					) : (
 						<p>User not found</p>

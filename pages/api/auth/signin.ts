@@ -7,7 +7,7 @@ import { createOneWeekCookie } from '../../../src/services/cookie';
 import { findUserByEmail } from '../../../src/queries/mongodb/users';
 import { compareHash } from '../../../src/services/bcrypt';
 
-interface SignInBodyRequest extends UserType {
+export interface SignInBodyRequest extends UserType {
 	remember: boolean;
 }
 
