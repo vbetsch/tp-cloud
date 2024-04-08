@@ -1,7 +1,6 @@
 import { createMocks } from 'node-mocks-http';
 import handler, { LikesActions } from '../../../../pages/api/movies/[idMovie]/likes';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { ObjectId } from 'bson';
 import { expect, it } from '@jest/globals';
 import { HttpMethods } from '../../../../src/types/http/HttpMethods';
 import { HttpCodeStatus } from '../../../../src/types/http/HttpCodeStatus';
@@ -95,7 +94,7 @@ describe('[API] /movies/{idMovie}/likes', () => {
 		(findOneLikeById as jest.Mock).mockResolvedValue(null);
 		(insertOneLike as jest.Mock).mockResolvedValue({
 			acknowledged: true,
-			insertedId: new ObjectId(_idLike),
+			insertedId: _idLike,
 		});
 
 		const { req, res } = createMocks({
