@@ -8,6 +8,12 @@ const API = {
 			BASE_URI: '/movies',
 			SUB_URIS: {},
 		},
+		AUTH: {
+			BASE_URI: '/auth',
+			SUB_URIS: {
+				USER: '/user',
+			},
+		},
 	},
 };
 

@@ -3,8 +3,8 @@ import { Box, Pagination } from '@mui/material';
 import { MovieDiscoverType } from '../src/types/themoviedb/MovieTypes';
 import Title from '../src/components/Title';
 import MovieList from '../src/components/movies/MovieList';
-import { getMovies } from '../src/queries/api';
 import Navbar from '../src/components/Navbar';
+import { getMovies } from '../src/queries/api/movies';
 
 export default function Home(): React.JSX.Element {
 	const [loading, setLoading] = useState<boolean>(false);
