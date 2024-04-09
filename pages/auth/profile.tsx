@@ -5,7 +5,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../src/providers/AuthProvider';
-import { getAuthUser, logOut, signIn } from '../../src/queries/api/auth';
+import { AuthUser, getAuthUser, logOut } from '../../src/queries/api/auth';
 import { AuthActionEnum } from '../../src/reducers/AuthReducer';
 
 export default function Profile() {
@@ -29,66 +29,36 @@ export default function Profile() {
 		}
 	};
 
-	const fetchUser = async () => {
+	const fetchData = async () => {
 		setLoading(true);
-		let result;
-		try {
-			result = await getAuthUser();
-		} catch (e) {
-			console.error(e);
-		}
+		const response: AuthUser = await getAuthUser();
 		setLoading(false);
-		if (!result || typeof result.user === 'string') {
+		if (typeof response?.user === 'string') {
 			console.error('ERROR: Case not implemented');
 			return;
 		}
-		await signIn({
-			email: result.user?.email,
-			password: result.user?.password,
-			remember: true,
-		});
-	};
-
-	const fetchData = async () => {
-		await fetchUser();
-
-		if (!state.currentUser) {
+		if (!response.user) {
 			console.warn('You must be logged in to access this page. You will be redirected...');
 			await router.push('/auth/sign-in');
-		} else {
-			setLoading(true);
-			try {
-				const response = await signIn({
-					email: state.currentUser.data.email,
-					password: state.currentUser.data.password,
-					remember: true,
-				});
-				if (response.status === 200) {
-					const data = await response.json();
-					dispatch({
-						type: AuthActionEnum.LOGIN,
-						payload: {
-							data: data.userData,
-							token: data.token,
-						},
-					});
-					await router.push('/auth/profile');
-				} else {
-					console.error('Failed to sign in : ', response);
-				}
-			} catch (error) {
-				console.error('Error signing in:', error);
-			} finally {
-				setLoading(false);
-			}
+			return;
 		}
+		dispatch({
+			type: AuthActionEnum.LOGIN,
+			payload: {
+				data: {
+					email: response.user.email,
+					password: response.user.password,
+				},
+				token: response.token,
+			},
+		});
 	};
 
 	useEffect(() => {
 		fetchData()
 			.then()
 			.catch(e => console.error(e));
-	}, [state.currentUser]);
+	}, []);
 
 	return (
 		<ThemeProvider theme={defaultTheme}>

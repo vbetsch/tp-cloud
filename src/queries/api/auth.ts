@@ -3,7 +3,12 @@ import { JwtPayload } from 'jsonwebtoken';
 import { SignInBodyRequest } from '../../../pages/api/auth/signin';
 import { UserType } from '../../types/mongodb/UserType';
 
-const getAuthUser = async (): Promise<{ user: JwtPayload | string | null }> => {
+export interface AuthUser {
+	user: JwtPayload | string | null;
+	token: string;
+}
+
+const getAuthUser = async (): Promise<AuthUser> => {
 	const url: string = `${API.BASEURL}${API.URIS.AUTH.BASE_URI}${API.URIS.AUTH.SUB_URIS.USER}`;
 	return await getAPIDataFromUrl(url, 'Get user authenticated');
 };

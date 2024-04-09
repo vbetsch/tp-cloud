@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 				return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
 			}
 
-			return res.status(HttpCodeStatus.OK).json({ user: result });
+			return res.status(HttpCodeStatus.OK).json({ user: result, token: token });
 		default:
 			errorMessage = 'Method Not Allowed';
 			console.error('ERROR: ' + errorMessage);
