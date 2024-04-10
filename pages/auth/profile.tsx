@@ -1,26 +1,17 @@
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import React, { useState } from 'react';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
-import * as React from 'react';
-import { useEffect, useState } from 'react';
-import { useAuth } from '../../src/providers/AuthProvider';
-import { AuthUser, getAuthUser, logOut } from '../../src/queries/api/auth';
+import AuthPage from '../../src/templates/AuthPage';
+import { logOut } from '../../src/queries/api/auth';
 import { AuthActionEnum } from '../../src/reducers/AuthReducer';
-import { RememberValues } from './sign-in';
-import { getRememberInLocalStorage, removeRememberInLocalStorage } from '../../src/services/localstorage';
+import { removeRememberInLocalStorage } from '../../src/services/localstorage';
+import { useAuth } from '../../src/providers/AuthProvider';
 import { useRouter } from 'next/router';
 
 export default function Profile() {
+	const router = useRouter();
 	const { state, dispatch } = useAuth();
 	const [loading, setLoading] = useState<boolean>(false);
-	const [remember, setRemember] = useState<RememberValues | null>(null);
-	const router = useRouter();
-	const defaultTheme = createTheme();
-
-	const redirectToSignIn = async () => {
-		console.warn('You must be logged in to access this page. You will be redirected...');
-		await router.push('/auth/sign-in');
-	};
 
 	const clickOnLogOut = async () => {
 		setLoading(true);
@@ -37,9 +28,13 @@ export default function Profile() {
 			setLoading(false);
 		}
 
-		if (remember) {
+		if (state?.remember) {
 			setLoading(true);
 			try {
+				dispatch({
+					type: AuthActionEnum.SET_REMEMBER,
+					payload: null,
+				});
 				await removeRememberInLocalStorage();
 			} catch (e) {
 				console.error(e);
@@ -51,7 +46,8 @@ export default function Profile() {
 
 		setLoading(true);
 		try {
-			await redirectToSignIn();
+			console.warn('You must be logged in to access this page. You will be redirected...');
+			await router.push('/auth/sign-in');
 		} catch (e) {
 			console.error(e);
 			return;
@@ -59,86 +55,22 @@ export default function Profile() {
 			setLoading(false);
 		}
 	};
-
-	const fetchData = async () => {
-		let response: AuthUser;
-		setLoading(true);
-		try {
-			response = await getAuthUser();
-		} catch (e) {
-			console.error(e);
-			return;
-		} finally {
-			setLoading(false);
-		}
-
-		if (typeof response?.user === 'string') {
-			console.error('ERROR: Case not implemented');
-			return;
-		}
-		if (!response.user) {
-			await redirectToSignIn();
-			return;
-		}
-
-		dispatch({
-			type: AuthActionEnum.LOGIN,
-			payload: {
-				data: {
-					email: response.user.email,
-					password: response.user.password,
-				},
-				token: response.token,
-			},
-		});
-	};
-
-	useEffect(() => {
-		getRememberInLocalStorage()
-			.then(data => {
-				setRemember(data as RememberValues | null);
-				switch (data) {
-					case null:
-						redirectToSignIn()
-							.then()
-							.catch(e => console.error(e));
-						break;
-					case RememberValues.TRUE:
-						fetchData()
-							.then()
-							.catch(e => console.error(e));
-						break;
-					case RememberValues.FALSE:
-						if (state.currentUser) {
-							return;
-						}
-						redirectToSignIn()
-							.then()
-							.catch(e => console.error(e));
-						break;
-				}
-			})
-			.catch(e => console.error(e));
-	}, []);
 
 	return (
-		<ThemeProvider theme={defaultTheme}>
+		<AuthPage>
 			<Container component="main" maxWidth="xs">
-				{loading || !state?.currentUser ? (
-					<div>
-						<CssBaseline />
-						<p>Loading...</p>
-					</div>
+				{loading ? (
+					<p>Loading...</p>
 				) : (
 					<div>
 						<CssBaseline />
 						<p>Email : {state?.currentUser?.data.email}</p>
 						<p>Password : {state?.currentUser?.data.password}</p>
-						<p>Remember: {remember}</p>
+						<p>Remember: {state?.remember}</p>
 						<button onClick={clickOnLogOut}>Logout</button>
 					</div>
 				)}
 			</Container>
-		</ThemeProvider>
+		</AuthPage>
 	);
 }
