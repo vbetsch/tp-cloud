@@ -28,8 +28,7 @@
 			{
 				"argsIgnorePattern": "^_"
 			}
-		],
-		"@typescript-eslint/no-unused-imports": "error"
+		]
 	},
 	"settings": {
 		"react": {
