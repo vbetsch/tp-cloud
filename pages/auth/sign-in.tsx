@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -16,6 +15,10 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../../src/providers/AuthProvider';
 import { AuthActionEnum } from '../../src/reducers/AuthReducer';
 import { setRememberInLocalStorage } from '../../src/services/localstorage';
+import { useState } from 'react';
+import { signIn } from '../../src/queries/api/auth';
+import Alert from '@mui/material/Alert';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 export enum RememberValues {
 	TRUE = 'accepted',
@@ -26,38 +29,61 @@ export default function SignIn() {
 	const defaultTheme = createTheme();
 	const { dispatch } = useAuth();
 	const router = useRouter();
+
+	const [loading, setLoading] = useState<boolean>(false);
+	const [error, setError] = useState<string | null>(null);
+
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		const formData = new FormData(event.currentTarget);
+		const remember: boolean = !!formData.get('remember');
+
+		let data;
+		setError(null);
+		setLoading(true);
 		try {
-			const remember = formData.get('remember');
-			const response = await fetch('/api/auth/signin', {
-				method: 'POST',
-				body: JSON.stringify({
-					email: formData.get('email'),
-					password: formData.get('password'),
-					remember,
-				}),
-				headers: {
-					'Content-Type': 'application/json',
-				},
+			data = await signIn({
+				email: formData.get('email') as string,
+				password: formData.get('password') as string,
+				remember: remember,
 			});
-			if (response.status === 200) {
-				const data = await response.json();
-				dispatch({
-					type: AuthActionEnum.LOGIN,
-					payload: {
-						data: data.userData,
-						token: data.token,
-					},
-				});
-				await setRememberInLocalStorage(remember ? RememberValues.TRUE : RememberValues.FALSE);
-				await router.push('/auth/profile');
-			} else {
-				console.error('Failed to sign in : ', response);
-			}
-		} catch (error) {
-			console.error('Error signing in:', error);
+		} catch (e) {
+			console.error(e);
+			return;
+		} finally {
+			setLoading(false);
+		}
+
+		if (data.error) {
+			setError(data.error);
+			return;
+		}
+		dispatch({
+			type: AuthActionEnum.LOGIN,
+			payload: {
+				data: data.userData,
+				token: data.token,
+			},
+		});
+
+		setLoading(true);
+		try {
+			await setRememberInLocalStorage(remember ? RememberValues.TRUE : RememberValues.FALSE);
+		} catch (e) {
+			console.error(e);
+			return;
+		} finally {
+			setLoading(false);
+		}
+
+		setLoading(true);
+		try {
+			await router.push('/auth/profile');
+		} catch (e) {
+			console.error(e);
+			return;
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -80,11 +106,17 @@ export default function SignIn() {
 						Sign in
 					</Typography>
 					<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+						{error && (
+							<Alert variant="filled" severity="error">
+								{error}
+							</Alert>
+						)}
 						<TextField
 							margin="normal"
 							required
 							fullWidth
 							id="email"
+							type="email"
 							label="Email Address"
 							name="email"
 							autoComplete="email"
@@ -94,16 +126,22 @@ export default function SignIn() {
 							margin="normal"
 							required
 							fullWidth
+							type="password"
 							name="password"
 							label="Password"
-							type="password"
 							id="password"
 							autoComplete="current-password"
 						/>
 						<FormControlLabel control={<Checkbox name="remember" color="primary" />} label="Remember me" />
-						<Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+						<LoadingButton
+							loading={loading}
+							type="submit"
+							fullWidth
+							variant="contained"
+							sx={{ mt: 3, mb: 2 }}
+						>
 							Sign In
-						</Button>
+						</LoadingButton>
 						<Grid container>
 							<Grid item xs>
 								<Link href="#" variant="body2">
