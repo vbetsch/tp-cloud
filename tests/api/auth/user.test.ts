@@ -17,6 +17,8 @@ const USER: UserType = {
 	password: 'test',
 };
 const JWT_PAYLOAD: JwtPayload = { ...USER, iat: 1712610070 };
+const TOKEN: string =
+	'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJoYXNoUGFzc3dvcmQiOiIkMmIkMTAkVmZ1a3BrT0J6QVVuVlh0aUdTSnZPLjhZTHZpWlJNSHFsM2ZIVzh2TG9BRi9TVXRlWmdPcW0iLCJpYXQiOjE3MTI1MjM5MTJ9.lrSorJWJ_R2hOcFBC_3kYabaWsj7Ll8DbVqyUu7RDRI';
 
 describe('[API] /auth/user', () => {
 	it('GET - should return 200 - no user', async () => {
@@ -36,16 +38,17 @@ describe('[API] /auth/user', () => {
 		const { req, res } = createMocks({
 			method: HttpMethods.GET,
 			cookies: {
-				session:
-					'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJoYXNoUGFzc3dvcmQiOiIkMmIkMTAkVmZ1a3BrT0J6QVVuVlh0aUdTSnZPLjhZTHZpWlJNSHFsM2ZIVzh2TG9BRi9TVXRlWmdPcW0iLCJpYXQiOjE3MTI1MjM5MTJ9.lrSorJWJ_R2hOcFBC_3kYabaWsj7Ll8DbVqyUu7RDRI',
+				session: TOKEN,
 			},
 		});
 
 		await handler(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
 
+		console.log('(10/04/2024 20:22)  @reyks  [ user.test.ts:46 ]  res._getJSONData()  ', res._getJSONData());
+
 		expect(res._getStatusCode()).toBe(HttpCodeStatus.OK);
 		expect(res._isEndCalled()).toBeTruthy();
-		expect(res._getJSONData()).toStrictEqual({ user: JWT_PAYLOAD });
+		expect(res._getJSONData()).toStrictEqual({ user: JWT_PAYLOAD, token: TOKEN });
 	});
 	it('GET - should return 500', async () => {
 		(verifyJwt as jest.Mock).mockRejectedValue(new Error('TEST'));
