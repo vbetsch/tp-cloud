@@ -43,7 +43,7 @@ const postAPIDataFromUrl = async (url: string, infoText: string, body?: SignInBo
 		method: HttpMethods.POST,
 		body: JSON.stringify(body),
 		headers: {
-			accept: 'application/json',
+			'Content-Type': 'application/json',
 		},
 	};
 	return await doAPIDataFromUrl(url, infoText, options);
