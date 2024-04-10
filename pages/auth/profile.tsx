@@ -49,29 +49,14 @@ export default function Profile() {
 			}
 		}
 
-		switch (remember) {
-			case RememberValues.TRUE:
-				setLoading(true);
-				try {
-					await fetchData();
-				} catch (e) {
-					console.error(e);
-					return;
-				} finally {
-					setLoading(false);
-				}
-				break;
-			case RememberValues.FALSE:
-				setLoading(true);
-				try {
-					await redirectToSignIn();
-				} catch (e) {
-					console.error(e);
-					return;
-				} finally {
-					setLoading(false);
-				}
-				break;
+		setLoading(true);
+		try {
+			await redirectToSignIn();
+		} catch (e) {
+			console.error(e);
+			return;
+		} finally {
+			setLoading(false);
 		}
 	};
 
