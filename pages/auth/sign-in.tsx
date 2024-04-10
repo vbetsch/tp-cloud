@@ -15,6 +15,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../src/providers/AuthProvider';
 import { AuthActionEnum } from '../../src/reducers/AuthReducer';
+import { setRememberInLocalStorage } from '../../src/services/localstorage';
+
+export enum RememberValues {
+	TRUE = 'accepted',
+	FALSE = 'refused',
+}
 
 export default function SignIn() {
 	const defaultTheme = createTheme();
@@ -24,12 +30,13 @@ export default function SignIn() {
 		event.preventDefault();
 		const formData = new FormData(event.currentTarget);
 		try {
+			const remember = formData.get('remember');
 			const response = await fetch('/api/auth/signin', {
 				method: 'POST',
 				body: JSON.stringify({
 					email: formData.get('email'),
 					password: formData.get('password'),
-					remember: formData.get('remember'),
+					remember,
 				}),
 				headers: {
 					'Content-Type': 'application/json',
@@ -44,6 +51,7 @@ export default function SignIn() {
 						token: data.token,
 					},
 				});
+				await setRememberInLocalStorage(remember ? RememberValues.TRUE : RememberValues.FALSE);
 				await router.push('/auth/profile');
 			} else {
 				console.error('Failed to sign in : ', response);
