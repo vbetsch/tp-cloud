@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import AuthPage from '../../src/templates/AuthPage';
@@ -9,6 +10,7 @@ import { useAuth } from '../../src/providers/AuthProvider';
 import { useRouter } from 'next/router';
 
 export default function Profile() {
+	const defaultTheme = createTheme();
 	const router = useRouter();
 	const { state, dispatch } = useAuth();
 	const [loading, setLoading] = useState<boolean>(false);
@@ -57,20 +59,22 @@ export default function Profile() {
 	};
 
 	return (
-		<AuthPage>
-			<Container component="main" maxWidth="xs">
-				{loading ? (
-					<p>Loading...</p>
-				) : (
-					<div>
-						<CssBaseline />
-						<p>Email : {state?.currentUser?.data.email}</p>
-						<p>Password : {state?.currentUser?.data.password}</p>
-						<p>Remember: {state?.remember}</p>
-						<button onClick={clickOnLogOut}>Logout</button>
-					</div>
-				)}
-			</Container>
-		</AuthPage>
+		<ThemeProvider theme={defaultTheme}>
+			<AuthPage>
+				<Container component="main" maxWidth="xs">
+					{loading ? (
+						<p>Loading...</p>
+					) : (
+						<div>
+							<CssBaseline />
+							<p>Email : {state?.currentUser?.data.email}</p>
+							<p>Password : {state?.currentUser?.data.password}</p>
+							<p>Remember: {state?.remember}</p>
+							<button onClick={clickOnLogOut}>Logout</button>
+						</div>
+					)}
+				</Container>
+			</AuthPage>
+		</ThemeProvider>
 	);
 }

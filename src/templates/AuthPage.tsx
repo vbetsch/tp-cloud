@@ -3,11 +3,9 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../providers/AuthProvider';
 import { RememberValues } from '../../pages/auth/sign-in';
 import { useRouter } from 'next/router';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthUser, getAuthUser } from '../queries/api/auth';
 import { AuthActionEnum } from '../reducers/AuthReducer';
 import { getRememberInLocalStorage } from '../services/localstorage';
-import Container from '@mui/material/Container';
 
 export interface AuthPageProperties {
 	children: ReactElement;
@@ -17,7 +15,6 @@ export default function AuthPage(props: AuthPageProperties) {
 	const { state, dispatch } = useAuth();
 	const [loading, setLoading] = useState<boolean>(false);
 	const router = useRouter();
-	const defaultTheme = createTheme();
 
 	const redirectToSignIn = async () => {
 		console.warn('You must be logged in to access this page. You will be redirected...');
@@ -88,11 +85,5 @@ export default function AuthPage(props: AuthPageProperties) {
 			.catch(e => console.error(e));
 	}, []);
 
-	return (
-		<ThemeProvider theme={defaultTheme}>
-			<Container component="main" maxWidth="xs">
-				{loading || !state?.currentUser ? <p>Loading...</p> : props.children}
-			</Container>
-		</ThemeProvider>
-	);
+	return loading || !state?.currentUser ? <p>Loading...</p> : props.children;
 }
