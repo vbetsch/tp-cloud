@@ -123,23 +123,22 @@ export default function Profile() {
 
 	return (
 		<ThemeProvider theme={defaultTheme}>
-			{loading ? (
-				<span>Loading...</span>
-			) : (
-				<div>
-					{state?.currentUser ? (
-						<Container component="main" maxWidth="xs">
-							<CssBaseline />
-							<p>Email : {state?.currentUser?.data.email}</p>
-							<p>Password : {state?.currentUser?.data.password}</p>
-							<p>Remember: {remember}</p>
-							<button onClick={clickOnLogOut}>Logout</button>
-						</Container>
-					) : (
-						<p>User not found</p>
-					)}
-				</div>
-			)}
+			<Container component="main" maxWidth="xs">
+				{loading || !state?.currentUser ? (
+					<div>
+						<CssBaseline />
+						<p>Loading...</p>
+					</div>
+				) : (
+					<div>
+						<CssBaseline />
+						<p>Email : {state?.currentUser?.data.email}</p>
+						<p>Password : {state?.currentUser?.data.password}</p>
+						<p>Remember: {remember}</p>
+						<button onClick={clickOnLogOut}>Logout</button>
+					</div>
+				)}
+			</Container>
 		</ThemeProvider>
 	);
 }
