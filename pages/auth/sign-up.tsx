@@ -11,31 +11,50 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { signUp } from '../../src/queries/api/auth';
+import Alert from '@mui/material/Alert';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 export default function SignIn() {
 	const defaultTheme = createTheme();
 	const router = useRouter();
+
+	const [loading, setLoading] = useState<boolean>(false);
+	const [error, setError] = useState<string | null>(null);
+
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		const formData = new FormData(event.currentTarget);
+
+		let data;
+		setError(null);
+		setLoading(true);
 		try {
-			const response = await fetch('/api/auth/signup', {
-				method: 'POST',
-				body: JSON.stringify({
-					email: formData.get('email'),
-					password: formData.get('password'),
-				}),
-				headers: {
-					'Content-Type': 'application/json',
-				},
+			data = await signUp({
+				email: formData.get('email') as string,
+				password: formData.get('password') as string,
 			});
-			if (response.status === 200) {
-				await router.push('/auth/sign-in');
-			} else {
-				console.error('Failed to sign up : ', response);
-			}
-		} catch (error) {
-			console.error('Error signing up:', error);
+		} catch (e) {
+			console.error(e);
+			return;
+		} finally {
+			setLoading(false);
+		}
+
+		if (data.error) {
+			setError(data.error);
+			return;
+		}
+
+		setLoading(true);
+		try {
+			await router.push('/auth/sign-in');
+		} catch (e) {
+			console.error(e);
+			return;
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -58,6 +77,11 @@ export default function SignIn() {
 						Sign up
 					</Typography>
 					<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+						{error && (
+							<Alert variant="filled" severity="error">
+								{error}
+							</Alert>
+						)}
 						<TextField
 							margin="normal"
 							required
@@ -78,15 +102,21 @@ export default function SignIn() {
 							id="password"
 							autoComplete="current-password"
 						/>
-						<Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+						<LoadingButton
+							loading={loading}
+							type="submit"
+							fullWidth
+							variant="contained"
+							sx={{ mt: 3, mb: 2 }}
+						>
 							Sign Up
-						</Button>
+						</LoadingButton>
 						<Grid container>
-							<Grid item xs>
-								<Link href="#" variant="body2">
-									Forgot password?
-								</Link>
-							</Grid>
+							{/*<Grid item xs>*/}
+							{/*	<Link href="#" variant="body2">*/}
+							{/*		Forgot password?*/}
+							{/*	</Link>*/}
+							{/*</Grid>*/}
 							<Grid item>
 								<Link href="/auth/sign-in" variant="body2">
 									{'Already an account? Sign In'}

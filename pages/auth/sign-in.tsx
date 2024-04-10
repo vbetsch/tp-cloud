@@ -58,6 +58,7 @@ export default function SignIn() {
 			setError(data.error);
 			return;
 		}
+
 		dispatch({
 			type: AuthActionEnum.LOGIN,
 			payload: {
@@ -143,11 +144,6 @@ export default function SignIn() {
 							Sign In
 						</LoadingButton>
 						<Grid container>
-							<Grid item xs>
-								<Link href="#" variant="body2">
-									Forgot password?
-								</Link>
-							</Grid>
 							<Grid item>
 								<Link href="/auth/sign-up" variant="body2">
 									{"Don't have an account? Sign Up"}
