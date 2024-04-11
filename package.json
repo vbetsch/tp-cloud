@@ -23,6 +23,7 @@
         "@emotion/server": "latest",
         "@emotion/styled": "latest",
         "@mui/icons-material": "latest",
+        "@mui/lab": "^5.0.0-alpha.170",
         "@mui/material": "latest",
         "@mui/material-nextjs": "latest",
         "bcrypt": "^5.1.1",

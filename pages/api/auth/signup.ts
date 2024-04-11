@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethods } from '../../../src/types/http/HttpMethods';
 import { HttpCodeStatus } from '../../../src/types/http/HttpCodeStatus';
-import { createUser } from '../../../src/queries/mongodb/users';
+import { createUser, findUserByEmail } from '../../../src/queries/mongodb/users';
 import { UserType } from '../../../src/types/mongodb/UserType';
 import { InsertOneResult } from 'mongodb';
 import { hashString } from '../../../src/services/bcrypt';
@@ -34,6 +34,8 @@ import { hashString } from '../../../src/services/bcrypt';
  *         description: Success Response
  *       400:
  *         description: Parameters 'email' and 'password' are required
+ *       401:
+ *         description: An account is already linked to this email address
  *       500:
  *         description: Internal Server Error
  */
@@ -43,6 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	let errorMessage: string;
 	let hashPassword: string;
 	let response: InsertOneResult;
+	let userFound: UserType | null;
 	switch (req.method) {
 		case HttpMethods.POST:
 			if (!email || !password) {
@@ -52,11 +55,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 			}
 
 			try {
+				userFound = await findUserByEmail(email);
+			} catch (e) {
+				const errorMessage: string = 'Unable to find user';
+				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
+				return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
+			}
+
+			try {
 				hashPassword = await hashString(password);
 			} catch (e) {
 				const errorMessage: string = 'Unable to hash password';
 				console.error(`ERROR: ${errorMessage} -> ${e instanceof Error ? e.message : e}`);
 				return res.status(HttpCodeStatus.INTERNAL_SERVER_ERROR).json({ error: errorMessage });
+			}
+
+			if (userFound !== null) {
+				errorMessage = 'An account is already linked to this email address';
+				console.error('ERROR: ' + errorMessage);
+				return res.status(HttpCodeStatus.UNAUTHORIZED).json({ error: errorMessage });
 			}
 
 			try {

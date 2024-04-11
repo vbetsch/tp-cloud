@@ -26,8 +26,8 @@ const getTMDBDataFromUrl = async (url: string, infoText: string) => {
 			Authorization: 'Bearer ' + process.env.API_TOKEN,
 		},
 	};
-	const result = await fetchJsonByUrl(url, options);
-	console.info('INFO: ' + infoText);
+	const result = await fetchJsonByUrl(TMDB_MOVIES.BASEURL + url, options);
+	console.info(`(${url}) INFO: ${infoText}`);
 	return result;
 };
 

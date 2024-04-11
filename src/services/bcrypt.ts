@@ -6,4 +6,8 @@ const hashString = async (str: string): Promise<string> => {
 	return bcrypt.hashSync(str, SALT_ROUNDS);
 };
 
-export { hashString };
+const compareHash = async (str: string, hash: string): Promise<boolean> => {
+	return bcrypt.compareSync(str, hash);
+};
+
+export { hashString, compareHash };

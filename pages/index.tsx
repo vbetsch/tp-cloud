@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
-import Link from 'next/link';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Box, Pagination } from '@mui/material';
 import { MovieDiscoverType } from '../src/types/themoviedb/MovieTypes';
-import Title from '../src/components/Title';
 import MovieList from '../src/components/movies/MovieList';
-import Pagination from '../src/components/Pagination';
-import { getMovies } from '../src/queries/api';
+import { getMovies } from '../src/queries/api/movies';
+import AuthPage from '../src/templates/AuthPage';
+import NavbarPage from '../src/templates/NavbarPage';
 
 export default function Home(): React.JSX.Element {
+	const defaultTheme = createTheme();
 	const [loading, setLoading] = useState<boolean>(false);
 	const [page, setPage] = useState<number>(1);
 	const [movies, setMovies] = useState<MovieDiscoverType[]>([]);
-	const [totalPages, setTotalPages] = useState<number>(0);
+
+	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+		setPage(value);
+	};
 
 	const getData = () => {
 		setLoading(true);
@@ -19,7 +23,6 @@ export default function Home(): React.JSX.Element {
 			.then(data => {
 				if (data) {
 					setMovies(data.results);
-					setTotalPages(data.total_pages);
 				} else {
 					console.warn('No movies were found');
 				}
@@ -37,21 +40,23 @@ export default function Home(): React.JSX.Element {
 	}, [page]);
 
 	return (
-		<>
-			<Title />
-			<Box height="100vh" width="100%">
-				<Box height="100%" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-					<Link href="/api/movies">API</Link>
-					<Link href="/docs">Swagger</Link>
-					<MovieList movies={movies} loading={loading} />
-					<Pagination
-						currentPage={page}
-						totalPages={totalPages}
-						setPage={setPage}
-						loading={loading}
-					></Pagination>
-				</Box>
-			</Box>
-		</>
+		<ThemeProvider theme={defaultTheme}>
+			<AuthPage>
+				<NavbarPage>
+					<Box height="100vh" width="100%">
+						<Box
+							height="100%"
+							display="flex"
+							flexDirection="column"
+							alignItems="center"
+							justifyContent="center"
+						>
+							<MovieList movies={movies} loading={loading} />
+							<Pagination count={500} onChange={handleChange} color="primary" disabled={loading} />
+						</Box>
+					</Box>
+				</NavbarPage>
+			</AuthPage>
+		</ThemeProvider>
 	);
 }

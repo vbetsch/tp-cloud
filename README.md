@@ -16,23 +16,66 @@ Emerging streaming platform specializing in movie recommendations based on user 
 ![CircleCI](https://img.shields.io/badge/circle%20ci-%23161616.svg?style=for-the-badge&logo=circleci&logoColor=white)
 ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
 
+## Links
+
+- [User Interface](https://tp-cloud.vercel.app) (UI)
+- [API Documentation](https://tp-cloud.vercel.app/docs) (Swagger)
+
 ## Roadmap
-- [X]  Create API routes
-    - [X]  /movies
-    - [X]  /movies/search
-    - [X]  /movies/discover/recommended
-    - [X]  /movies/discover/toprated
-    - [X]  /movies/[idMovie]
-    - [X]  /movies/[idMovie]/likes
-    - [X]  /movies/[idMovie]/videos
-- [X]  Create API unit tests
-- [X]  Create index page
-- [ ]  Create unit test for index page
-- [ ]  Create UI functionalities
-    - [ ]  Movie details page
-    - [ ]  Search bar
-    - [ ]  Discover Page
-- [ ]  Create unit tests for each previous features
+
+### API endpoints
+
+- [X]  /auth/signup
+- [X]  /auth/signin
+- [X]  /auth/logout
+- [X]  /movies
+- [X]  /movies/search
+- [X]  /movies/discover/recommended
+- [X]  /movies/discover/toprated
+- [X]  /movies/[idMovie]
+- [X]  /movies/[idMovie]/likes
+- [X]  /movies/[idMovie]/videos
+
+### UI
+
+- [ ]  Navbar
+- [X]  Home page
+    - [ ]  search bar
+    - [ ]  like button
+- [ ]  Authentication pages
+- [ ]  Movie details page
+- [ ]  Favorite movies page
+- [ ]  Discover page
+
+### Unit tests
+
+#### UI
+
+- [ ]  Navbar
+- [ ]  Home Page
+    - [ ]  search bar
+    - [ ]  like button
+- [ ]  Authentication pages
+- [ ]  Movie details page
+- [ ]  Favorite movies page
+- [ ]  Discover page
+
+#### Swagger
+
+- [ ]  Swagger UI
+
+#### API
+
+- [X]  /auth/signup
+- [X]  /auth/signin
+- [X]  /auth/logout
+- [X]  /movies
+- [X]  /movies/search
+- [X]  /movies/discover/recommended
+- [X]  /movies/discover/toprated
+- [X]  /movies/[idMovie]
+- [X]  /movies/[idMovie]/likes
+- [X]  /movies/[idMovie]/videos
 
 ## Windows & MacOS & Linux
 
@@ -78,6 +121,7 @@ Emerging streaming platform specializing in movie recommendations based on user 
   ```
 
 ### Test
+
 - Launch all Jest tests
   ```bash
   npm run test 
