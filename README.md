@@ -27,6 +27,7 @@ Emerging streaming platform specializing in movie recommendations based on user 
 
 - [X]  /auth/signup
 - [X]  /auth/signin
+- [X]  /auth/user
 - [X]  /auth/logout
 - [X]  /movies
 - [X]  /movies/search
@@ -36,18 +37,43 @@ Emerging streaming platform specializing in movie recommendations based on user 
 - [X]  /movies/[idMovie]/likes
 - [X]  /movies/[idMovie]/videos
 
+### Swagger
+
+- [X]  Swagger UI
+
 ### UI
 
-- [ ]  Navbar
+- [X]  Navbar
 - [X]  Home page
     - [ ]  search bar
     - [ ]  like button
-- [ ]  Authentication pages
+- [X]  Authentication pages
+    - [X] Sign-up
+    - [X] Sign-in
+    - [X] Profile
 - [ ]  Movie details page
 - [ ]  Favorite movies page
 - [ ]  Discover page
 
 ### Unit tests
+
+#### API
+
+- [X]  /auth/signup
+- [X]  /auth/signin
+- [X]  /auth/user
+- [X]  /auth/logout
+- [X]  /movies
+- [X]  /movies/search
+- [X]  /movies/discover/recommended
+- [X]  /movies/discover/toprated
+- [X]  /movies/[idMovie]
+- [X]  /movies/[idMovie]/likes
+- [X]  /movies/[idMovie]/videos
+
+#### Swagger
+
+- [ ]  Swagger UI
 
 #### UI
 
@@ -56,26 +82,12 @@ Emerging streaming platform specializing in movie recommendations based on user 
     - [ ]  search bar
     - [ ]  like button
 - [ ]  Authentication pages
+    - [ ] Sign-up
+    - [ ] Sign-in
+    - [ ] Profile
 - [ ]  Movie details page
 - [ ]  Favorite movies page
 - [ ]  Discover page
-
-#### Swagger
-
-- [ ]  Swagger UI
-
-#### API
-
-- [X]  /auth/signup
-- [X]  /auth/signin
-- [X]  /auth/logout
-- [X]  /movies
-- [X]  /movies/search
-- [X]  /movies/discover/recommended
-- [X]  /movies/discover/toprated
-- [X]  /movies/[idMovie]
-- [X]  /movies/[idMovie]/likes
-- [X]  /movies/[idMovie]/videos
 
 ## Windows & MacOS & Linux
 
