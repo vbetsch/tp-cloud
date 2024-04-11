@@ -3,11 +3,14 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import AuthPage from '../../src/templates/AuthPage';
+import NavbarPage from '../../src/templates/NavbarPage';
 import { logOut } from '../../src/queries/api/auth';
 import { AuthActionEnum } from '../../src/reducers/AuthReducer';
 import { removeRememberInLocalStorage } from '../../src/services/localstorage';
 import { useAuth } from '../../src/providers/AuthProvider';
 import { useRouter } from 'next/router';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { RememberValues } from './sign-in';
 
 export default function Profile() {
 	const defaultTheme = createTheme();
@@ -61,19 +64,27 @@ export default function Profile() {
 	return (
 		<ThemeProvider theme={defaultTheme}>
 			<AuthPage>
-				<Container component="main" maxWidth="xs">
-					{loading ? (
-						<p>Loading...</p>
-					) : (
-						<div>
-							<CssBaseline />
-							<p>Email : {state?.currentUser?.data.email}</p>
-							<p>Password : {state?.currentUser?.data.password}</p>
-							<p>Remember: {state?.remember}</p>
-							<button onClick={clickOnLogOut}>Logout</button>
-						</div>
-					)}
-				</Container>
+				<NavbarPage title={'Profile'}>
+					<Container component="main" maxWidth="xs">
+						{loading ? (
+							<p>Loading...</p>
+						) : (
+							<div>
+								<CssBaseline />
+								<p>
+									<b>Email :</b> {state?.currentUser?.data.email}
+								</p>
+								<p>
+									<b>Cookies: </b>
+									{state?.remember === RememberValues.TRUE ? 'acceptés' : 'refusés'}
+								</p>
+								<LoadingButton loading={loading} onClick={clickOnLogOut} variant="contained">
+									Logout
+								</LoadingButton>
+							</div>
+						)}
+					</Container>
+				</NavbarPage>
 			</AuthPage>
 		</ThemeProvider>
 	);

@@ -9,6 +9,13 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { logOut } from '../queries/api/auth';
+import { AuthActionEnum } from '../reducers/AuthReducer';
+import { removeRememberInLocalStorage } from '../services/localstorage';
+import { useState } from 'react';
+import { useAuth } from '../providers/AuthProvider';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 // const Search = styled('div')(({ theme }) => ({
 // 	position: 'relative',
@@ -51,7 +58,9 @@ import { useRouter } from 'next/router';
 // }));
 
 export default function Navbar() {
+	const { state, dispatch } = useAuth();
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+	const [loading, setLoading] = useState<boolean>(false);
 	const router = useRouter();
 	const isMenuOpen = Boolean(anchorEl);
 
@@ -66,6 +75,50 @@ export default function Navbar() {
 	const navigateToProfile = () => {
 		router.push('/auth/profile');
 		handleMenuClose();
+	};
+
+	const clickOnLogOut = async () => {
+		setLoading(true);
+		try {
+			await logOut();
+		} catch (e) {
+			console.error(e);
+			return;
+		} finally {
+			dispatch({
+				type: AuthActionEnum.LOGOUT,
+				payload: undefined,
+			});
+			handleMenuClose();
+			setLoading(false);
+		}
+
+		if (state?.remember) {
+			setLoading(true);
+			try {
+				dispatch({
+					type: AuthActionEnum.SET_REMEMBER,
+					payload: null,
+				});
+				await removeRememberInLocalStorage();
+			} catch (e) {
+				console.error(e);
+				return;
+			} finally {
+				setLoading(false);
+			}
+		}
+
+		setLoading(true);
+		try {
+			console.warn('You must be logged in to access this page. You will be redirected...');
+			await router.push('/auth/sign-in');
+		} catch (e) {
+			console.error(e);
+			return;
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	const menuId = 'primary-search-account-menu';
@@ -86,7 +139,7 @@ export default function Navbar() {
 			onClose={handleMenuClose}
 		>
 			<MenuItem onClick={navigateToProfile}>Profile</MenuItem>
-			<MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+			<MenuItem onClick={clickOnLogOut}>Logout</MenuItem>
 		</Menu>
 	);
 
@@ -94,9 +147,11 @@ export default function Navbar() {
 		<Box sx={{ flexGrow: 1 }}>
 			<AppBar position="static">
 				<Toolbar>
-					<Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
-						TP Cloud
-					</Typography>
+					<Link href={'/'} style={{ textDecoration: 'none', color: 'white' }}>
+						<Typography variant="h6" noWrap component="div" sx={{ display: { xs: 'none', sm: 'block' } }}>
+							TP Cloud
+						</Typography>
+					</Link>
 					{/*<Search theme={theme}>*/}
 					{/*	<SearchIconWrapper theme={theme}>*/}
 					{/*		<SearchIcon />*/}
@@ -105,29 +160,37 @@ export default function Navbar() {
 					{/*</Search>*/}
 					<Box sx={{ flexGrow: 1 }} />
 					<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-						<IconButton
-							size="large"
-							edge="end"
-							aria-label="account of current user"
-							aria-controls={menuId}
-							aria-haspopup="true"
-							onClick={handleProfileMenuOpen}
-							color="inherit"
-						>
-							<AccountCircle />
-						</IconButton>
+						<LoadingButton loading={loading}>
+							{!loading && (
+								<IconButton
+									size="large"
+									edge="end"
+									aria-label="account of current user"
+									aria-controls={menuId}
+									aria-haspopup="true"
+									onClick={handleProfileMenuOpen}
+									sx={{ color: 'white' }}
+								>
+									<AccountCircle />
+								</IconButton>
+							)}
+						</LoadingButton>
 					</Box>
 					<Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-						<IconButton
-							size="large"
-							aria-label="show more"
-							aria-controls={menuId}
-							aria-haspopup="true"
-							onClick={handleProfileMenuOpen}
-							color="inherit"
-						>
-							<MenuIcon />
-						</IconButton>
+						<LoadingButton loading={loading}>
+							{!loading && (
+								<IconButton
+									size="large"
+									aria-label="show more"
+									aria-controls={menuId}
+									aria-haspopup="true"
+									onClick={handleProfileMenuOpen}
+									sx={{ color: 'white' }}
+								>
+									<MenuIcon />
+								</IconButton>
+							)}
+						</LoadingButton>
 					</Box>
 				</Toolbar>
 			</AppBar>

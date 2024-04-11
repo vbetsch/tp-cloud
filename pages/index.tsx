@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Box, Pagination } from '@mui/material';
 import { MovieDiscoverType } from '../src/types/themoviedb/MovieTypes';
-import Title from '../src/components/Title';
 import MovieList from '../src/components/movies/MovieList';
-import Navbar from '../src/components/Navbar';
 import { getMovies } from '../src/queries/api/movies';
 import AuthPage from '../src/templates/AuthPage';
+import NavbarPage from '../src/templates/NavbarPage';
 
 export default function Home(): React.JSX.Element {
 	const defaultTheme = createTheme();
@@ -43,9 +42,7 @@ export default function Home(): React.JSX.Element {
 	return (
 		<ThemeProvider theme={defaultTheme}>
 			<AuthPage>
-				<>
-					<Title />
-					<Navbar />
+				<NavbarPage>
 					<Box height="100vh" width="100%">
 						<Box
 							height="100%"
@@ -58,7 +55,7 @@ export default function Home(): React.JSX.Element {
 							<Pagination count={500} onChange={handleChange} color="primary" disabled={loading} />
 						</Box>
 					</Box>
-				</>
+				</NavbarPage>
 			</AuthPage>
 		</ThemeProvider>
 	);

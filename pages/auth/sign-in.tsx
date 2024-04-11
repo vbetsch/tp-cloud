@@ -19,6 +19,7 @@ import { useState } from 'react';
 import { signIn } from '../../src/queries/api/auth';
 import Alert from '@mui/material/Alert';
 import LoadingButton from '@mui/lab/LoadingButton';
+import NavbarPage from '../../src/templates/NavbarPage';
 
 export enum RememberValues {
 	TRUE = 'accepted',
@@ -90,69 +91,74 @@ export default function SignIn() {
 
 	return (
 		<ThemeProvider theme={defaultTheme}>
-			<Container component="main" maxWidth="xs">
-				<CssBaseline />
-				<Box
-					sx={{
-						marginTop: 8,
-						display: 'flex',
-						flexDirection: 'column',
-						alignItems: 'center',
-					}}
-				>
-					<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-						<LockOutlinedIcon />
-					</Avatar>
-					<Typography component="h1" variant="h5">
-						Sign in
-					</Typography>
-					<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-						{error && (
-							<Alert variant="filled" severity="error">
-								{error}
-							</Alert>
-						)}
-						<TextField
-							margin="normal"
-							required
-							fullWidth
-							id="email"
-							type="email"
-							label="Email Address"
-							name="email"
-							autoComplete="email"
-							autoFocus
-						/>
-						<TextField
-							margin="normal"
-							required
-							fullWidth
-							type="password"
-							name="password"
-							label="Password"
-							id="password"
-							autoComplete="current-password"
-						/>
-						<FormControlLabel control={<Checkbox name="remember" color="primary" />} label="Remember me" />
-						<LoadingButton
-							loading={loading}
-							type="submit"
-							fullWidth
-							variant="contained"
-							sx={{ mt: 3, mb: 2 }}
-						>
-							Sign In
-						</LoadingButton>
-						<Grid container>
-							<Grid item>
-								<Link href="/auth/sign-up" variant="body2">
-									{"Don't have an account? Sign Up"}
-								</Link>
+			<NavbarPage title={'Sign-In'}>
+				<Container component="main" maxWidth="xs">
+					<CssBaseline />
+					<Box
+						sx={{
+							marginTop: 8,
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+						}}
+					>
+						<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+							<LockOutlinedIcon />
+						</Avatar>
+						<Typography component="h1" variant="h5">
+							Sign in
+						</Typography>
+						<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+							{error && (
+								<Alert variant="filled" severity="error">
+									{error}
+								</Alert>
+							)}
+							<TextField
+								margin="normal"
+								required
+								fullWidth
+								id="email"
+								type="email"
+								label="Email Address"
+								name="email"
+								autoComplete="email"
+								autoFocus
+							/>
+							<TextField
+								margin="normal"
+								required
+								fullWidth
+								type="password"
+								name="password"
+								label="Password"
+								id="password"
+								autoComplete="current-password"
+							/>
+							<FormControlLabel
+								control={<Checkbox name="remember" color="primary" />}
+								label="Remember me"
+							/>
+							<LoadingButton
+								loading={loading}
+								type="submit"
+								fullWidth
+								variant="contained"
+								sx={{ mt: 3, mb: 2 }}
+							>
+								Sign In
+							</LoadingButton>
+							<Grid container>
+								<Grid item>
+									<Link href="/auth/sign-up" variant="body2">
+										{"Don't have an account? Sign Up"}
+									</Link>
+								</Grid>
 							</Grid>
-						</Grid>
+						</Box>
 					</Box>
-				</Box>
-			</Container>
+				</Container>
+			</NavbarPage>
 		</ThemeProvider>
 	);
 }
