@@ -2,7 +2,6 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
@@ -160,37 +159,22 @@ export default function Navbar() {
 					{/*</Search>*/}
 					<Box sx={{ flexGrow: 1 }} />
 					<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-						<LoadingButton loading={loading}>
-							{!loading && (
-								<IconButton
-									size="large"
-									edge="end"
-									aria-label="account of current user"
-									aria-controls={menuId}
-									aria-haspopup="true"
-									onClick={handleProfileMenuOpen}
-									sx={{ color: 'white' }}
-								>
-									<AccountCircle />
-								</IconButton>
-							)}
-						</LoadingButton>
+						<LoadingButton
+							size={'large'}
+							loading={loading}
+							onClick={handleProfileMenuOpen}
+							startIcon={<AccountCircle />}
+							sx={{ color: 'white' }}
+						></LoadingButton>
 					</Box>
 					<Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-						<LoadingButton loading={loading}>
-							{!loading && (
-								<IconButton
-									size="large"
-									aria-label="show more"
-									aria-controls={menuId}
-									aria-haspopup="true"
-									onClick={handleProfileMenuOpen}
-									sx={{ color: 'white' }}
-								>
-									<MenuIcon />
-								</IconButton>
-							)}
-						</LoadingButton>
+						<LoadingButton
+							size={'large'}
+							loading={loading}
+							onClick={handleProfileMenuOpen}
+							startIcon={<MenuIcon />}
+							sx={{ color: 'white' }}
+						></LoadingButton>
 					</Box>
 				</Toolbar>
 			</AppBar>
