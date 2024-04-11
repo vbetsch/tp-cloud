@@ -81,7 +81,7 @@ export default function SignIn() {
 
 		setLoading(true);
 		try {
-			await router.push('/auth/profile');
+			await router.push('/');
 		} catch (e) {
 			console.error(e);
 			return;
