@@ -15,10 +15,13 @@ import { signUp } from '../../src/queries/api/auth';
 import Alert from '@mui/material/Alert';
 import LoadingButton from '@mui/lab/LoadingButton';
 import NavbarPage from '../../src/templates/NavbarPage';
+import { useAuth } from '../../src/providers/AuthProvider';
+import { AuthActionEnum } from '../../src/reducers/AuthReducer';
 
 export default function SignIn() {
 	const defaultTheme = createTheme();
 	const router = useRouter();
+	const { dispatch } = useAuth();
 
 	const [loading, setLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
@@ -46,6 +49,11 @@ export default function SignIn() {
 			setError(data.error);
 			return;
 		}
+
+		dispatch({
+			type: AuthActionEnum.SET_OPEN_SNACKBAR,
+			payload: true,
+		});
 
 		setLoading(true);
 		try {

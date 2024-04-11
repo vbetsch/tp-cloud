@@ -17,6 +17,7 @@ import { AuthActionEnum } from '../../src/reducers/AuthReducer';
 import { setRememberInLocalStorage } from '../../src/services/localstorage';
 import { useState } from 'react';
 import { signIn } from '../../src/queries/api/auth';
+import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import LoadingButton from '@mui/lab/LoadingButton';
 import NavbarPage from '../../src/templates/NavbarPage';
@@ -28,7 +29,7 @@ export enum RememberValues {
 
 export default function SignIn() {
 	const defaultTheme = createTheme();
-	const { dispatch } = useAuth();
+	const { state, dispatch } = useAuth();
 	const router = useRouter();
 
 	const [loading, setLoading] = useState<boolean>(false);
@@ -89,11 +90,27 @@ export default function SignIn() {
 		}
 	};
 
+	const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+
+		dispatch({
+			type: AuthActionEnum.SET_OPEN_SNACKBAR,
+			payload: false,
+		});
+	};
+
 	return (
 		<ThemeProvider theme={defaultTheme}>
 			<NavbarPage title={'Sign-In'}>
 				<Container component="main" maxWidth="xs">
 					<CssBaseline />
+					<Snackbar open={state?.openSnackbar} autoHideDuration={6000} onClose={handleClose}>
+						<Alert onClose={handleClose} severity="success" variant="filled" sx={{ width: '100%' }}>
+							The account has been successfully created
+						</Alert>
+					</Snackbar>
 					<Box
 						sx={{
 							marginTop: 8,
